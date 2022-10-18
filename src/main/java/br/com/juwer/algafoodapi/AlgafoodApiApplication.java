@@ -1,9 +1,10 @@
 package br.com.juwer.algafoodapi;
 
+import br.com.juwer.algafoodapi.di.modelo.Cliente;
+import br.com.juwer.algafoodapi.di.notificacao.NotificadorEmail;
+import br.com.juwer.algafoodapi.di.service.AtivacaoClienteService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 public class AlgafoodApiApplication {
