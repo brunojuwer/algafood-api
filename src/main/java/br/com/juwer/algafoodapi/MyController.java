@@ -1,7 +1,6 @@
 package br.com.juwer.algafoodapi;
 
 import br.com.juwer.algafoodapi.di.modelo.Cliente;
-import br.com.juwer.algafoodapi.di.notificacao.NotificadorEmail;
 import br.com.juwer.algafoodapi.di.service.AtivacaoClienteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
