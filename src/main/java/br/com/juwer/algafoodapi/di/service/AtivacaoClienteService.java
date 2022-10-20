@@ -7,11 +7,14 @@ import br.com.juwer.algafoodapi.di.notificacao.TipoDoNotificador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 
 @Component
 public class AtivacaoClienteService {
 
-    @TipoDoNotificador(NivelUrgencia.URGENTE)
+    @TipoDoNotificador(NivelUrgencia.SEM_URGENCIA)
     @Autowired
     private Notificador notificador;
 
