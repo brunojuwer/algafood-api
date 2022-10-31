@@ -2,8 +2,6 @@ package br.com.juwer.algafoodapi.domain.model;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,7 +15,6 @@ public class Cozinha {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @JsonProperty("titulo")
     @Column(nullable = false)
     private String nome;
 }
