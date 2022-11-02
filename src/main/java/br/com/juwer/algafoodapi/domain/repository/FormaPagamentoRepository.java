@@ -13,5 +13,5 @@ public interface FormaPagamentoRepository {
 
     FormaPagamento salvar(FormaPagamento formaPagamento);
 
-    void remover(FormaPagamento formaPagamento);
+    void remover(Long formaPagamentoId);
 }

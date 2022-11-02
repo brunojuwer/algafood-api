@@ -5,7 +5,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.juwer.algafoodapi.domain.model.Permissao;
 import br.com.juwer.algafoodapi.domain.repository.PermissaoRepository;
@@ -28,14 +30,21 @@ public class PermissaRepositoryImpl implements PermissaoRepository {
     return entityManager.find(Permissao.class, id);
   }
 
+  @Transactional
   @Override
   public Permissao salvar(Permissao permissao) {
     return entityManager.merge(permissao);
   }
 
+  @Transactional
   @Override
-  public void remover(Permissao permissao) {
-    permissao = buscar(permissao.getId());
+  public void remover(Long permissaoId) {
+    Permissao permissao = buscar(permissaoId);
+
+    if (permissao == null) {
+      throw new EmptyResultDataAccessException(null, 1);
+    }
+    
     entityManager.remove(permissao);
   }
   

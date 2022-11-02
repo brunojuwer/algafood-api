@@ -2,6 +2,8 @@ package br.com.juwer.algafoodapi.infrastructure.repository;
 
 import br.com.juwer.algafoodapi.domain.model.Cozinha;
 import br.com.juwer.algafoodapi.domain.repository.CozinhaRepository;
+
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,8 +37,14 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
 
     @Override
     @Transactional
-    public void remover(Cozinha cozinha){
-        cozinha = buscar(cozinha.getId());
+    public void remover(Long cozinhaId){
+       Cozinha cozinha = buscar(cozinhaId);
+
+       if (cozinha == null) {
+            throw new EmptyResultDataAccessException(null, 1);
+        }
+
         entityManager.remove(cozinha);
+
     }
 }
