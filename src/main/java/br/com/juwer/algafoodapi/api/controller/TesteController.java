@@ -39,4 +39,9 @@ public class TesteController {
   public List<Restaurante> restaurantesPorNome(String nome, Long cozinhaId){
     return restauranteRepository.consultarPorNome(nome, cozinhaId);
   }
+
+  @GetMapping("/restaurantes/por-nome/taxa")
+  public List<Restaurante> restaurantesPorNomeETaxa(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal){
+    return restauranteRepository.find(nome, taxaFreteInicial, taxaFreteFinal);
+  }
 }
