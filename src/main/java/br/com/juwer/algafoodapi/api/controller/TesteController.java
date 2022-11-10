@@ -1,8 +1,5 @@
 package br.com.juwer.algafoodapi.api.controller;
 
-import static br.com.juwer.algafoodapi.infrastructure.specs.RestauranteSpecs.comFreteGratis;
-import static br.com.juwer.algafoodapi.infrastructure.specs.RestauranteSpecs.comNomeSemelhante;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -49,7 +46,6 @@ public class TesteController {
 
   @GetMapping("/restaurantes/com-frete-gratis")
   public List<Restaurante> restaurantesPorFreteGratis(String nome){
-    return restauranteRepository
-      .findAll(comFreteGratis().and(comNomeSemelhante(nome)));
+    return restauranteRepository.findComFreteGratis(nome);
   }
 }
