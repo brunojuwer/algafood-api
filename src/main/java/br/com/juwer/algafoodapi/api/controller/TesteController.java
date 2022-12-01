@@ -2,6 +2,7 @@ package br.com.juwer.algafoodapi.api.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,5 +48,15 @@ public class TesteController {
   @GetMapping("/restaurantes/com-frete-gratis")
   public List<Restaurante> restaurantesPorFreteGratis(String nome){
     return restauranteRepository.findComFreteGratis(nome);
+  }
+
+  @GetMapping("/restaurantes/primeiro")
+  public Optional<Restaurante> primeiroRestaurante() {
+    return restauranteRepository.buscarPrimeiro();
+  }
+
+  @GetMapping("/cozinhas/primeiro")
+  public Optional<Cozinha> primeiraCozinha() {
+    return cozinhaRepository.buscarPrimeiro();
   }
 }
