@@ -2,6 +2,7 @@ package br.com.juwer.algafoodapi.api.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,6 @@ import br.com.juwer.algafoodapi.domain.model.Cozinha;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
 import br.com.juwer.algafoodapi.domain.repository.CozinhaRepository;
 import br.com.juwer.algafoodapi.domain.repository.RestauranteRepository;
-
 
 @RestController
 @RequestMapping("/teste")
@@ -43,5 +43,20 @@ public class TesteController {
   @GetMapping("/restaurantes/por-nome/taxa")
   public List<Restaurante> restaurantesPorNomeETaxa(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal){
     return restauranteRepository.find(nome, taxaFreteInicial, taxaFreteFinal);
+  }
+
+  @GetMapping("/restaurantes/com-frete-gratis")
+  public List<Restaurante> restaurantesPorFreteGratis(String nome){
+    return restauranteRepository.findComFreteGratis(nome);
+  }
+
+  @GetMapping("/restaurantes/primeiro")
+  public Optional<Restaurante> primeiroRestaurante() {
+    return restauranteRepository.buscarPrimeiro();
+  }
+
+  @GetMapping("/cozinhas/primeiro")
+  public Optional<Cozinha> primeiraCozinha() {
+    return cozinhaRepository.buscarPrimeiro();
   }
 }
