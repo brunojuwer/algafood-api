@@ -65,7 +65,6 @@ public class Pedido {
   private Restaurante restaurante;
 
   @OneToMany(mappedBy = "pedido")
-  @JoinColumn(nullable = false)
   private List<ItemPedido> itens = new ArrayList<>();
 
 
