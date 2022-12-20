@@ -15,6 +15,10 @@ import br.com.juwer.algafoodapi.domain.repository.RestauranteRepository;
 @Service
 public class CadastroRestauranteService {
   
+  private static final String MSG_RESTAURANTE_EM_USO = "Restaurante de código %d não pode ser removido, pois está em uso";
+  private static final String MSG_RESTAURANTE_NAO_ECONTRADO = "Não existe um cadastro de restaurante com código %d";
+  private static final String MSG_COZINHA_NAO_ECONTRADA = "Não existe entidade de cozinha com o código: %d";
+
   @Autowired
   private RestauranteRepository restauranteRepository;
 
@@ -28,7 +32,7 @@ public class CadastroRestauranteService {
     Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
       .orElseThrow(() -> 
         new EntidadeNaoEncontradaException(String
-        .format("Não existe entidade de cozinha com o código: %d", cozinhaId)));
+        .format(MSG_COZINHA_NAO_ECONTRADA, cozinhaId)));
 
     restaurante.setCozinha(cozinha);
 
@@ -41,12 +45,18 @@ public class CadastroRestauranteService {
       restauranteRepository.deleteById(restauranteId);
     } catch (EmptyResultDataAccessException e) {
       throw new EntidadeNaoEncontradaException(
-          String.format("Não existe um cadastro de cidade com código %d", restauranteId)
+          String.format(MSG_RESTAURANTE_NAO_ECONTRADO, restauranteId)
         );
   } catch (DataIntegrityViolationException e) {
       throw new EntidadeEmUsoException(
-          String.format("Cidade de código %d não pode ser removida, pois está em uso", restauranteId)
+          String.format(MSG_RESTAURANTE_EM_USO, restauranteId)
         );
     }
+  }
+  
+  public Restaurante buscaOuFalha(Long restauranteId) {
+    return restauranteRepository.findById(restauranteId)
+             .orElseThrow(() -> new EntidadeNaoEncontradaException(
+                 String.format(MSG_RESTAURANTE_NAO_ECONTRADO, restauranteId)));
   }
 }
