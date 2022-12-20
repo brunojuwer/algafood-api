@@ -15,6 +15,10 @@ import br.com.juwer.algafoodapi.domain.repository.EstadoRepository;
 @Service
 public class CadastroCidadeService {
   
+  private static final String MSG_CIDADE_EM_USO = "Cidade de código %d não pode ser removida, pois está em uso";
+  private static final String MSG_CIDADE_NAO_ECONTRADA = "Não existe entidade cidade com o código: %d";
+  private static final String MSG_ESTADO_NAO_ECONTRADO = "Não existe entidade de estado com o código: %d";
+  
   @Autowired
   private CidadeRepository cidadeRepository;
 
@@ -27,7 +31,7 @@ public class CadastroCidadeService {
     Estado estado = estadoRepository.findById(estadoId)
       .orElseThrow(() ->
         new EntidadeNaoEncontradaException(
-        String.format("Não existe entidade de estado com o código: %d", estadoId)));
+        String.format(MSG_ESTADO_NAO_ECONTRADO, estadoId)));
 
     cidade.setEstado(estado);
     return cidadeRepository.save(cidade);
@@ -39,13 +43,19 @@ public class CadastroCidadeService {
       cidadeRepository.deleteById(cidadeId);
     } catch (EmptyResultDataAccessException e) {
         throw new EntidadeNaoEncontradaException(
-          String.format("Não existe entidade cidade com o código: %d", cidadeId)
+          String.format(MSG_CIDADE_NAO_ECONTRADA, cidadeId)
         );
     } catch(DataIntegrityViolationException e) {
         throw new EntidadeEmUsoException(
-          String.format("Cidade de código %d não pode ser removida, pois está em uso", cidadeId)
+          String.format(MSG_CIDADE_EM_USO, cidadeId)
         );
     }
   }
-
+  
+  public Cidade buscaOuFalha(Long cidadeId) {
+    return cidadeRepository.findById(cidadeId)
+            .orElseThrow(() -> new EntidadeNaoEncontradaException(
+                String.format(MSG_CIDADE_NAO_ECONTRADA, cidadeId)
+           ));
+  }
 }
