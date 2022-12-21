@@ -10,30 +10,25 @@ import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.model.Cidade;
 import br.com.juwer.algafoodapi.domain.model.Estado;
 import br.com.juwer.algafoodapi.domain.repository.CidadeRepository;
-import br.com.juwer.algafoodapi.domain.repository.EstadoRepository;
 
 @Service
 public class CadastroCidadeService {
   
   private static final String MSG_CIDADE_EM_USO = "Cidade de código %d não pode ser removida, pois está em uso";
   private static final String MSG_CIDADE_NAO_ECONTRADA = "Não existe entidade cidade com o código: %d";
-  private static final String MSG_ESTADO_NAO_ECONTRADO = "Não existe entidade de estado com o código: %d";
   
   @Autowired
   private CidadeRepository cidadeRepository;
 
   @Autowired
-  private EstadoRepository estadoRepository;
+  private CadastroEstadoService cadastroEstadoService;
 
 
   public Cidade salvar(Cidade cidade) {
     Long estadoId = cidade.getEstado().getId();
-    Estado estado = estadoRepository.findById(estadoId)
-      .orElseThrow(() ->
-        new EntidadeNaoEncontradaException(
-        String.format(MSG_ESTADO_NAO_ECONTRADO, estadoId)));
-
+    Estado estado = cadastroEstadoService.buscaOuFalha(estadoId);
     cidade.setEstado(estado);
+    
     return cidadeRepository.save(cidade);
   }
 

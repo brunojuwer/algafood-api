@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
+import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 import br.com.juwer.algafoodapi.domain.model.Cidade;
 import br.com.juwer.algafoodapi.domain.repository.CidadeRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroCidadeService;
@@ -42,7 +44,11 @@ public class CidadeController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public Cidade adicionar(@RequestBody Cidade cidade ) {
-    return cadastroCidadeService.salvar(cidade);
+    try {
+      return cadastroCidadeService.salvar(cidade);
+    } catch(EntidadeNaoEncontradaException e) {
+      throw new NegocioException(e.getMessage());
+    }
   }
 
   @PutMapping("/{cidadeId}")
@@ -50,12 +56,18 @@ public class CidadeController {
                   @RequestBody Cidade cidade) {
     Cidade cidadeAtual = cadastroCidadeService.buscaOuFalha(cidadeId);
     BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-    return cadastroCidadeService.salvar(cidadeAtual);
+
+    try {
+      return cadastroCidadeService.salvar(cidadeAtual);
+      
+    } catch (EntidadeNaoEncontradaException e) {
+      throw new NegocioException(e.getMessage());
+    }                  
   }
 
   @DeleteMapping("/{cidadeId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void remover(@PathVariable Long cidadeId) {
-      cadastroCidadeService.excluir(cidadeId);
+    cadastroCidadeService.excluir(cidadeId);
   }
 }
