@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
+import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
 import br.com.juwer.algafoodapi.domain.repository.RestauranteRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroRestauranteService;
@@ -31,7 +33,7 @@ public class RestauranteController {
   
   @Autowired
   private RestauranteRepository restauranteRepository;
-
+  
   @Autowired
   private CadastroRestauranteService restauranteService;
 
@@ -48,7 +50,11 @@ public class RestauranteController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public Restaurante adicionar(@RequestBody Restaurante restaurante) {
+    try {
       return restauranteService.salvar(restaurante);
+    } catch (EntidadeNaoEncontradaException e) {
+        throw new NegocioException(e.getMessage());
+    }
   }
 
 
@@ -59,8 +65,11 @@ public class RestauranteController {
     Restaurante restauranteAtual = restauranteService.buscaOuFalha(restauranteId);
     BeanUtils.copyProperties(restaurante, restauranteAtual,
         "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
-
-    return restauranteService.salvar(restauranteAtual);
+    try {
+      return restauranteService.salvar(restauranteAtual);
+    } catch (EntidadeNaoEncontradaException e) {
+        throw new NegocioException(e.getMessage());
+    }
   }
 
 

@@ -9,7 +9,6 @@ import br.com.juwer.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.model.Cozinha;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
-import br.com.juwer.algafoodapi.domain.repository.CozinhaRepository;
 import br.com.juwer.algafoodapi.domain.repository.RestauranteRepository;
 
 @Service
@@ -17,23 +16,18 @@ public class CadastroRestauranteService {
   
   private static final String MSG_RESTAURANTE_EM_USO = "Restaurante de código %d não pode ser removido, pois está em uso";
   private static final String MSG_RESTAURANTE_NAO_ECONTRADO = "Não existe um cadastro de restaurante com código %d";
-  private static final String MSG_COZINHA_NAO_ECONTRADA = "Não existe entidade de cozinha com o código: %d";
 
   @Autowired
   private RestauranteRepository restauranteRepository;
 
   @Autowired
-  private CozinhaRepository cozinhaRepository;
+  private CadastroCozinhaService cadastroCozinhaService;
 
 
   public Restaurante salvar(Restaurante restaurante) {
     
     Long cozinhaId = restaurante.getCozinha().getId();
-    Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
-      .orElseThrow(() -> 
-        new EntidadeNaoEncontradaException(String
-        .format(MSG_COZINHA_NAO_ECONTRADA, cozinhaId)));
-
+    Cozinha cozinha = cadastroCozinhaService.buscaOuFalha(cozinhaId);
     restaurante.setCozinha(cozinha);
 
     return restauranteRepository.save(restaurante);
