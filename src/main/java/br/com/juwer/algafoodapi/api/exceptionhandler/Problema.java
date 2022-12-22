@@ -11,6 +11,4 @@ public class Problema {
   
   private LocalDateTime dataHora;
   private String mensagem;
-
-
 }
