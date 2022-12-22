@@ -41,7 +41,7 @@ public class ApiExceptionHandler {
       .dataHora(LocalDateTime.now())
       .mensagem("Tipo de mídia não suportado").build();
 
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
       .body(problema);
   }
 }
