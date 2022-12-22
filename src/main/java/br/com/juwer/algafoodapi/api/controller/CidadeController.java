@@ -1,5 +1,6 @@
 package br.com.juwer.algafoodapi.api.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.juwer.algafoodapi.api.exceptionhandler.Problema;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 import br.com.juwer.algafoodapi.domain.model.Cidade;
@@ -76,14 +78,21 @@ public class CidadeController {
   @ExceptionHandler(EntidadeNaoEncontradaException.class)
   public ResponseEntity<?> tratarEntidadeNaoEncontrada(
       EntidadeNaoEncontradaException e) {
+    Problema problema = Problema.builder()
+      .dataHora(LocalDateTime.now())
+      .mensagem(e.getMessage()).build();
 
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
-      .body(e.getMessage());
+      .body(problema);
   }
 
   @ExceptionHandler(NegocioException.class)
   public ResponseEntity<?> tratarNegocioException(NegocioException e) {
+    Problema problema = Problema.builder()
+      .dataHora(LocalDateTime.now())
+      .mensagem(e.getMessage()).build();
+
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-      .body(e.getMessage());
+      .body(problema);
   }
 }
