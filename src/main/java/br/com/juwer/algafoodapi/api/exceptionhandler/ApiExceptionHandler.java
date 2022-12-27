@@ -8,6 +8,7 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import br.com.juwer.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 
@@ -33,6 +34,16 @@ public class ApiExceptionHandler {
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
       .body(problema);
+  }
+
+  @ExceptionHandler(EntidadeEmUsoException.class)
+  public ResponseEntity<?> handleEntidadeEmUsoException(NegocioException ex) {
+    Problema problema = Problema.builder()
+      .dataHora(LocalDateTime.now())
+      .mensagem(ex.getMessage())
+      .build();
+
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(problema);
   }
 
   @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
