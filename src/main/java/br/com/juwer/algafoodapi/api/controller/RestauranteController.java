@@ -4,9 +4,14 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +42,9 @@ public class RestauranteController {
   @Autowired
   private CadastroRestauranteService restauranteService;
 
+  @Autowired
+  private ObjectMapper objectMapper;
+  
   @GetMapping
   public List<Restaurante> listar(){
     return restauranteRepository.findAll();
@@ -81,28 +89,38 @@ public class RestauranteController {
 
   @PatchMapping("/{restauranteId}")
   public Restaurante atualizarParcial(@PathVariable Long restauranteId,
-    @RequestBody Map<String, Object> campos) {
+    @RequestBody Map<String, Object> campos, HttpServletRequest request) {
     
     Restaurante restauranteAtual = restauranteService.buscaOuFalha(restauranteId);
     
-    merge(campos, restauranteAtual);
+    merge(campos, restauranteAtual, request);
 
     return atualizar(restauranteId, restauranteAtual);
   }
 
-  private void merge(Map<String, Object> camposOrigem, Restaurante restaranteDestino){
-    ObjectMapper objectMapper = new ObjectMapper();
-    Restaurante restauranteOrigem = objectMapper.convertValue(camposOrigem, Restaurante.class);
+  @SuppressWarnings("null")
+  private void merge(Map<String, Object> camposOrigem, Restaurante restaranteDestino,
+    HttpServletRequest request) {
+//    ObjectMapper objectMapper = new ObjectMapper();
+      ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
 
-    camposOrigem.forEach((nomePropriedade, valorPropriedade) -> {
+    try {
+      Restaurante restauranteOrigem = objectMapper.convertValue(camposOrigem, Restaurante.class);
       
-      Field field = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
-      field.setAccessible(true);
+      camposOrigem.forEach((nomePropriedade, valorPropriedade) -> {
+        
+        Field field = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
+        field.setAccessible(true);
+        
+        Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
+        
+        ReflectionUtils.setField(field, restaranteDestino, novoValor);
+      });
+      
+    } catch (IllegalArgumentException ex) {
+      Throwable rootCause = ExceptionUtils.getRootCause(ex);
 
-      Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
-
-      ReflectionUtils.setField(field, restaranteDestino, novoValor);
-
-    });
+        throw new HttpMessageNotReadableException(ex.getMessage(), rootCause, serverHttpRequest);
+    }
   }
 }
