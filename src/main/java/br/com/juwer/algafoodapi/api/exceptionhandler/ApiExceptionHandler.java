@@ -79,7 +79,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
     
     String detail = "O corpo da requisição está inválido. Verifique erro de sintaxe";
-    ProblemType problemType = ProblemType.MESAGEM_INCOMPREENSIVEL;
+    ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
     
     Problem problem = createProblemBuilder(status, problemType, detail).build();
     
@@ -108,7 +108,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
       ProblemType problem, String detail){
     return Problem.builder()
             .status(status.value())
-            .type(problem.getUri())
+            .type(problem.getUrl())
             .title(problem.getTitle())
             .detail(detail);
   }
@@ -122,7 +122,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         + "que é de um tipo inválido. Corrija e informe o valor compátivel com o tipo '%s'", 
         path, ex.getValue(), ex.getTargetType().getSimpleName());
     
-    ProblemType problemType = ProblemType.MESAGEM_INCOMPREENSIVEL;
+    ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
     Problem problem = createProblemBuilder(status, problemType, detail).build();
     
     return handleExceptionInternal(ex, problem, headers, status, request);
@@ -133,7 +133,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
   String path = joinPath(ex.getPath());
   
-  ProblemType problemType = ProblemType.MESAGEM_INCOMPREENSIVEL;
+  ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
   String detail = String.format("A propriedade '%s' não existe. "
           + "Corrija ou remova essa propriedade e tente novamente.", path);
 
