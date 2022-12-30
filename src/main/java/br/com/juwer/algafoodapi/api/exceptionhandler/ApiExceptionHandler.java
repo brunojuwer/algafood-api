@@ -1,5 +1,6 @@
 package br.com.juwer.algafoodapi.api.exceptionhandler;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,18 +29,22 @@ import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+  private final String MSG_ERRO_GENERICA_USUARIO_FINAL = 
+    "Ocorreu um erro interno inesperado no sistema. "
+  + "Tente novamente e se o problema persistir, entre em contato "
+  + "com o administrador do sistema.";
 
 @ExceptionHandler(Exception.class)
 public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest request){
   
   HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
-  String detail = "Ocorreu um erro interno inesperado no sistema. "
-  + "Tente novamente e se o problema persistir, entre em contato "
-  + "com o administrador do sistema.";
+  String detail = MSG_ERRO_GENERICA_USUARIO_FINAL;
 
   ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
-  Problem problem = createProblemBuilder(status, problemType, detail).build();
+  Problem problem = createProblemBuilder(
+    status, problemType, detail, detail, LocalDateTime.now())
+    .build();
 
   ex.printStackTrace();
 
@@ -53,10 +58,12 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
       EntidadeNaoEncontradaException ex, WebRequest request) {
     
     ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
-    String detailString = ex.getMessage();
+    String detail = ex.getMessage();
     HttpStatus status = HttpStatus.NOT_FOUND;
     
-    Problem problem = createProblemBuilder(status, problemType, detailString).build();
+    Problem problem = createProblemBuilder(
+      status, problemType, detail, detail, LocalDateTime.now())
+      .build();
     
     return handleExceptionInternal(
         ex, problem, new HttpHeaders(), status, request);
@@ -70,7 +77,9 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
     HttpStatus status = HttpStatus.BAD_REQUEST;
     ProblemType problemType = ProblemType.ERRO_NEGOCIO;
     
-    Problem problem = createProblemBuilder(status, problemType, detail).build();
+    Problem problem = createProblemBuilder(
+      status, problemType, detail, detail, LocalDateTime.now())
+      .build();
     
     return handleExceptionInternal(
         ex, problem, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
@@ -83,7 +92,9 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
     HttpStatus status = HttpStatus.CONFLICT;
     ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
     
-    Problem problem = createProblemBuilder(status, problemType, detail).build();
+    Problem problem = createProblemBuilder(
+      status, problemType, detail, detail, LocalDateTime.now())
+      .build();
     
     return handleExceptionInternal(
           ex, problem, new HttpHeaders(), HttpStatus.CONFLICT, request);
@@ -104,7 +115,9 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
     String detail = "O corpo da requisição está inválido. Verifique erro de sintaxe";
     ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
     
-    Problem problem = createProblemBuilder(status, problemType, detail).build();
+    Problem problem = createProblemBuilder(
+      status, problemType, detail, MSG_ERRO_GENERICA_USUARIO_FINAL, LocalDateTime.now())
+      .build();
     
     return handleExceptionInternal(ex, problem, headers, status, request);
   }
@@ -119,7 +132,9 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
         path, ex.getValue(), ex.getTargetType().getSimpleName());
     
     ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
-    Problem problem = createProblemBuilder(status, problemType, detail).build();
+    Problem problem = createProblemBuilder(
+      status, problemType, detail, MSG_ERRO_GENERICA_USUARIO_FINAL, LocalDateTime.now())
+      .build();
     
     return handleExceptionInternal(ex, problem, headers, status, request);
   }
@@ -133,7 +148,9 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
     String detail = String.format("A propriedade '%s' não existe. "
             + "Corrija ou remova essa propriedade e tente novamente.", path);
 
-    Problem problem = createProblemBuilder(status, problemType, detail).build();
+    Problem problem = createProblemBuilder(
+      status, problemType, detail, MSG_ERRO_GENERICA_USUARIO_FINAL, LocalDateTime.now())
+      .build();
     
     return handleExceptionInternal(ex, problem, headers, status, request);
   } 
@@ -161,7 +178,9 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
       "Corrija e informe um valor compatível com o tipo %s.", 
       ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
 
-    Problem problem = createProblemBuilder(status, problemType, detail).build();
+    Problem problem = createProblemBuilder(
+      status, problemType, detail, MSG_ERRO_GENERICA_USUARIO_FINAL, LocalDateTime.now())
+      .build();
     
     return handleExceptionInternal(ex, problem, headers, status, request);
   }
@@ -176,7 +195,9 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
       .format("O recurso %s, que você tentou acessar, é inexistente.", 
       ex.getRequestURL());
 
-    Problem problem = createProblemBuilder(status, problemType, detail).build();
+    Problem problem = createProblemBuilder(
+      status, problemType, detail, detail, LocalDateTime.now())
+      .build();
 
 
     return handleExceptionInternal(ex, problem, headers, status, request);
@@ -188,23 +209,35 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
         HttpStatus status, WebRequest request) {
     
     if (body == null) {
-      body = Problem.builder().title(status.getReasonPhrase())
-          .status(status.value()).build();
+      body = Problem.builder()
+        .title(status.getReasonPhrase())
+        .status(status.value())
+        .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+        .timestamp(LocalDateTime.now())
+        .build();
     } else if (body instanceof String) {
-      body = Problem.builder().title((String) body)
-          .status(status.value()).build();
+      body = Problem.builder()
+        .title((String) body)
+        .status(status.value())
+        .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+        .timestamp(LocalDateTime.now())
+        .build();
     }
     
     return super.handleExceptionInternal(ex, body, headers, status, request);
   }
   
   private Problem.ProblemBuilder createProblemBuilder(HttpStatus status,
-      ProblemType problem, String detail){
+      ProblemType problem, String detail, String userMessage, 
+      LocalDateTime timestamp){
+
     return Problem.builder()
+            .timestamp(timestamp)
             .status(status.value())
             .type(problem.getUrl())
             .title(problem.getTitle())
-            .detail(detail);
+            .detail(detail)
+            .userMessage(userMessage);
   }
   
   private String joinPath(List<Reference> references) {
