@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.lang.Nullable;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -48,7 +49,7 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
     .build();
 
   ex.printStackTrace();
-
+ 
   return handleExceptionInternal
     (ex, problem, new HttpHeaders(), status, request);
 }
@@ -102,15 +103,28 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
   }
   
   @Override
-  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
-      HttpStatus status, WebRequest request) {
+  protected ResponseEntity<Object> handleMethodArgumentNotValid(
+    MethodArgumentNotValidException ex, HttpHeaders headers,
+    HttpStatus status, WebRequest request) {
 
-      String detail = "Um ou mais campos estão inválidos." +
-        "Faça o preenchimento correto e tente novamente";
-        
-      ProblemType problemType = ProblemType.DADOS_INVALIDOS;
-      Problem problem = createProblemBuilder(
-        status, problemType, detail, detail, LocalDateTime.now()).build();
+    BindingResult bindingResult = ex.getBindingResult();
+
+    List<Problem.Field> problemFields = bindingResult.getFieldErrors()
+      .stream()
+      .map(fieldError -> Problem.Field.builder()
+        .name(fieldError.getField())
+        .userMessage(fieldError.getDefaultMessage())
+        .build())
+      .collect(Collectors.toList());
+
+
+    String detail = "Um ou mais campos estão inválidos." +
+    "Faça o preenchimento correto e tente novamente";
+      
+    ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+    Problem problem = createProblemBuilder(
+      status, problemType, detail, detail, LocalDateTime.now()).fields(problemFields)
+      .build();
 
     return handleExceptionInternal(ex, problem, headers, status, request);
   }
