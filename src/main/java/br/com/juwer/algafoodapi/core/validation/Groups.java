@@ -1,4 +1,4 @@
-package br.com.juwer.algafoodapi;
+package br.com.juwer.algafoodapi.core.validation;
 
 public interface Groups {
   
