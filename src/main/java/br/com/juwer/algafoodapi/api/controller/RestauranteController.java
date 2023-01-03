@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
@@ -13,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.juwer.algafoodapi.Groups;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
@@ -60,7 +59,7 @@ public class RestauranteController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public Restaurante adicionar(
-    @RequestBody @Validated(Groups.CadastroRestaurante.class) 
+    @RequestBody @Valid 
     Restaurante restaurante) {
 
     try {
@@ -73,7 +72,7 @@ public class RestauranteController {
 
   @PutMapping("/{restauranteId}")
   public Restaurante atualizar(@PathVariable Long restauranteId,
-                       @RequestBody Restaurante restaurante) {
+                       @RequestBody @Valid Restaurante restaurante) {
       
     Restaurante restauranteAtual = restauranteService.buscaOuFalha(restauranteId);
     BeanUtils.copyProperties(restaurante, restauranteAtual,
@@ -106,7 +105,6 @@ public class RestauranteController {
   @SuppressWarnings("null")
   private void merge(Map<String, Object> camposOrigem, Restaurante restaranteDestino,
     HttpServletRequest request) {
-//    ObjectMapper objectMapper = new ObjectMapper();
       ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
 
     try {

@@ -18,8 +18,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -40,20 +41,18 @@ public class Restaurante {
     @EqualsAndHashCode.Include
     private Long id;
 
-    // @NotNull
-    // @NotEmpty
-    @NotBlank(groups = Groups.CadastroRestaurante.class)
+    @NotBlank
     @Column(nullable = false)
     private String nome;
     
-    // @DecimalMin("1")
-    @PositiveOrZero(groups = Groups.CadastroRestaurante.class)
+    
+    @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
-    // @JsonIgnoreProperties("hibernateLazyInitializer")
+    
     @Valid
-    @NotNull(groups = Groups.CadastroRestaurante.class)
+    @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
     @ManyToOne
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
