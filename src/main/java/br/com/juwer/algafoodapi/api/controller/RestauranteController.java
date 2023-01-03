@@ -72,7 +72,7 @@ public class RestauranteController {
 
   @PutMapping("/{restauranteId}")
   public Restaurante atualizar(@PathVariable Long restauranteId,
-                       @RequestBody Restaurante restaurante) {
+                       @RequestBody @Valid Restaurante restaurante) {
       
     Restaurante restauranteAtual = restauranteService.buscaOuFalha(restauranteId);
     BeanUtils.copyProperties(restaurante, restauranteAtual,
@@ -105,7 +105,6 @@ public class RestauranteController {
   @SuppressWarnings("null")
   private void merge(Map<String, Object> camposOrigem, Restaurante restaranteDestino,
     HttpServletRequest request) {
-//    ObjectMapper objectMapper = new ObjectMapper();
       ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
 
     try {
