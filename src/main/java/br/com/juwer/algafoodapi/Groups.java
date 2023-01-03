@@ -2,6 +2,6 @@ package br.com.juwer.algafoodapi;
 
 public interface Groups {
   
-  public interface CadastroRestaurante {}
-  public interface CadastroCidade {}
+  public interface CozinhaId {}
+  public interface EstadoId {}
 }
