@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -115,13 +116,19 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
 
     BindingResult bindingResult = ex.getBindingResult();
 
-    List<Problem.Field> problemFields = bindingResult.getFieldErrors()
+    List<Problem.Object> problemFields = bindingResult.getAllErrors()
       .stream()
-      .map(fieldError -> {
-        String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+      .map(objectError -> {
+        String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
+        String name = objectError.getObjectName();
 
-        return Problem.Field.builder()
-        .name(fieldError.getField())
+        // entra no if se for um FieldError
+        if (objectError instanceof FieldError){
+          name = ((FieldError) objectError).getField(); // faz o casting para um fieldError
+        }
+
+        return Problem.Object.builder()
+        .name(name)
         .userMessage(message)
         .build();
       }) 
@@ -133,7 +140,7 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
       
     ProblemType problemType = ProblemType.DADOS_INVALIDOS;
     Problem problem = createProblemBuilder(
-      status, problemType, detail, detail, LocalDateTime.now()).fields(problemFields)
+      status, problemType, detail, detail, LocalDateTime.now()).objects(problemFields)
       .build();
 
     return handleExceptionInternal(ex, problem, headers, status, request);
