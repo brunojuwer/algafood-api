@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 
+import br.com.juwer.algafoodapi.core.validation.ValidacaoException;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
@@ -109,12 +110,22 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
           ex, problem, new HttpHeaders(), HttpStatus.CONFLICT, request);
   }
   
+  @ExceptionHandler(ValidacaoException.class)
+  public ResponseEntity<Object> handleValidacaoParcial(ValidacaoException ex, WebRequest request) {
+    return handleValidationInternal(ex, HttpStatus.BAD_REQUEST, ex.getBindingResult(), request, new HttpHeaders());
+  }
+  
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
     MethodArgumentNotValidException ex, HttpHeaders headers,
     HttpStatus status, WebRequest request) {
+    
+    return handleValidationInternal(ex, status, ex.getBindingResult(), request, headers);
+    
+  }
 
-    BindingResult bindingResult = ex.getBindingResult();
+  public ResponseEntity<Object> handleValidationInternal(Exception ex, HttpStatus status, 
+      BindingResult bindingResult, WebRequest request, HttpHeaders headers) {
 
     List<Problem.Object> problemFields = bindingResult.getAllErrors()
       .stream()
@@ -122,9 +133,8 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
         String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
         String name = objectError.getObjectName();
 
-        // entra no if se for um FieldError
         if (objectError instanceof FieldError){
-          name = ((FieldError) objectError).getField(); // faz o casting para um fieldError
+          name = ((FieldError) objectError).getField();
         }
 
         return Problem.Object.builder()
@@ -145,7 +155,7 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
 
     return handleExceptionInternal(ex, problem, headers, status, request);
   }
-
+  
 
   @Override
   protected ResponseEntity<Object> handleHttpMessageNotReadable(
