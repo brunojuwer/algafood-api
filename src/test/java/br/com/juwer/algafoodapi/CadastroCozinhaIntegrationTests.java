@@ -1,5 +1,7 @@
 package br.com.juwer.algafoodapi;
 
+import br.com.juwer.algafoodapi.domain.exception.CozinhaNaoEncontradaException;
+import br.com.juwer.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.juwer.algafoodapi.domain.model.Cozinha;
 import br.com.juwer.algafoodapi.domain.service.CadastroCozinhaService;
 import org.junit.jupiter.api.Assertions;
@@ -18,7 +20,7 @@ class CadastroCozinhaIntegrationTests {
 	CadastroCozinhaService cadastroCozinhaService;
 
 	@Test
-	void deveTestarCadastroCozinhaComSucesso() {
+	public void deveTestarCadastroCozinhaComSucesso() {
 		// cenário
 		Cozinha cozinha = new Cozinha();
 		cozinha.setNome("Japonesa");
@@ -32,7 +34,7 @@ class CadastroCozinhaIntegrationTests {
 	}
 
 	@Test
-	public void testarCadastroCozinhaSemNome() {
+	public void deveFalhar_QuandoCadastroCozinhaSemNome() {
 		Cozinha novaCozinha = new Cozinha();
 		novaCozinha.setNome(null);
 
@@ -44,4 +46,24 @@ class CadastroCozinhaIntegrationTests {
 		assertThat(erroEsperado).isNotNull();
 	}
 
+	@Test
+	public void deveFalhar_QuandoExcluirCozinhaEmUso() {
+
+		EntidadeEmUsoException erroEsperado =
+				Assertions.assertThrows(EntidadeEmUsoException.class, () -> {
+					cadastroCozinhaService.excluir(1L);
+				});
+
+		assertThat(erroEsperado).isNotNull();
+	}
+
+	@Test
+	public void deveFalhar_QuandoExcluirCozinhaInexistente() {
+
+		CozinhaNaoEncontradaException erroEsperado =
+				Assertions.assertThrows(CozinhaNaoEncontradaException.class, () -> {
+					cadastroCozinhaService.excluir(134L);
+				});
+		assertThat(erroEsperado).isNotNull();
+	}
 }
