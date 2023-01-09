@@ -29,9 +29,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.juwer.algafoodapi.core.validation.Groups;
+import br.com.juwer.algafoodapi.core.validation.ValorZeroIncluiDescricao;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@ValorZeroIncluiDescricao(campo = "taxaFrete", 
+    descricaoCampo = "nome", descricaoObrigatoria = "Frete Grátis")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -51,7 +54,6 @@ public class Restaurante {
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
-    
     @Valid
     @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
     @ManyToOne

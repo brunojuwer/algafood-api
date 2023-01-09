@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.juwer.algafoodapi.core.validation.ValidacaoException;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
@@ -46,6 +49,9 @@ public class RestauranteController {
   @Autowired
   private ObjectMapper objectMapper;
   
+  @Autowired
+  private SmartValidator smartValidator;
+
   @GetMapping
   public List<Restaurante> listar(){
     return restauranteRepository.findAll();
@@ -83,30 +89,33 @@ public class RestauranteController {
         throw new NegocioException(e.getMessage());
     }
   }
-
-
-  @DeleteMapping("/{restauranteId}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void excluir(@PathVariable Long restauranteId) {
-      restauranteService.excluir(restauranteId);
-  }
-
+  
   @PatchMapping("/{restauranteId}")
   public Restaurante atualizarParcial(@PathVariable Long restauranteId,
-    @RequestBody Map<String, Object> campos, HttpServletRequest request) {
+  @RequestBody Map<String, Object> campos, HttpServletRequest request) {
     
     Restaurante restauranteAtual = restauranteService.buscaOuFalha(restauranteId);
     
     merge(campos, restauranteAtual, request);
+    validate(restauranteAtual, "restaurante");
 
     return atualizar(restauranteId, restauranteAtual);
   }
 
+  private void validate(Restaurante restaurante, String objectName) {
+    var bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
+    smartValidator.validate(restaurante, bindingResult);
+    
+    if(bindingResult.hasErrors()) {
+      throw new ValidacaoException(bindingResult);
+    }
+  }
+  
   @SuppressWarnings("null")
-  private void merge(Map<String, Object> camposOrigem, Restaurante restaranteDestino,
-    HttpServletRequest request) {
-      ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
-
+  private void merge(Map<String, Object> camposOrigem, Restaurante restauranteDestino,
+  HttpServletRequest request) {
+    ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
+    
     try {
       Restaurante restauranteOrigem = objectMapper.convertValue(camposOrigem, Restaurante.class);
       
@@ -117,13 +126,19 @@ public class RestauranteController {
         
         Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
         
-        ReflectionUtils.setField(field, restaranteDestino, novoValor);
+        ReflectionUtils.setField(field, restauranteDestino, novoValor);
       });
       
     } catch (IllegalArgumentException ex) {
       Throwable rootCause = ExceptionUtils.getRootCause(ex);
-
-        throw new HttpMessageNotReadableException(ex.getMessage(), rootCause, serverHttpRequest);
+      
+      throw new HttpMessageNotReadableException(ex.getMessage(), rootCause, serverHttpRequest);
     }
+  }
+
+  @DeleteMapping("/{restauranteId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void excluir(@PathVariable Long restauranteId) {
+      restauranteService.excluir(restauranteId);
   }
 }

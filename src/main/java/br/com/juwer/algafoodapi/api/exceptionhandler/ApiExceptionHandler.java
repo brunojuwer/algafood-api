@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 
+import br.com.juwer.algafoodapi.core.validation.ValidacaoException;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
@@ -108,20 +110,35 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
           ex, problem, new HttpHeaders(), HttpStatus.CONFLICT, request);
   }
   
+  @ExceptionHandler(ValidacaoException.class)
+  public ResponseEntity<Object> handleValidacaoParcial(ValidacaoException ex, WebRequest request) {
+    return handleValidationInternal(ex, HttpStatus.BAD_REQUEST, ex.getBindingResult(), request, new HttpHeaders());
+  }
+  
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
     MethodArgumentNotValidException ex, HttpHeaders headers,
     HttpStatus status, WebRequest request) {
+    
+    return handleValidationInternal(ex, status, ex.getBindingResult(), request, headers);
+    
+  }
 
-    BindingResult bindingResult = ex.getBindingResult();
+  public ResponseEntity<Object> handleValidationInternal(Exception ex, HttpStatus status, 
+      BindingResult bindingResult, WebRequest request, HttpHeaders headers) {
 
-    List<Problem.Field> problemFields = bindingResult.getFieldErrors()
+    List<Problem.Object> problemFields = bindingResult.getAllErrors()
       .stream()
-      .map(fieldError -> {
-        String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+      .map(objectError -> {
+        String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
+        String name = objectError.getObjectName();
 
-        return Problem.Field.builder()
-        .name(fieldError.getField())
+        if (objectError instanceof FieldError){
+          name = ((FieldError) objectError).getField();
+        }
+
+        return Problem.Object.builder()
+        .name(name)
         .userMessage(message)
         .build();
       }) 
@@ -133,12 +150,12 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
       
     ProblemType problemType = ProblemType.DADOS_INVALIDOS;
     Problem problem = createProblemBuilder(
-      status, problemType, detail, detail, LocalDateTime.now()).fields(problemFields)
+      status, problemType, detail, detail, LocalDateTime.now()).objects(problemFields)
       .build();
 
     return handleExceptionInternal(ex, problem, headers, status, request);
   }
-
+  
 
   @Override
   protected ResponseEntity<Object> handleHttpMessageNotReadable(
