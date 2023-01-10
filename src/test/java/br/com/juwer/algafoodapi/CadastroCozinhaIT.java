@@ -1,7 +1,7 @@
 package br.com.juwer.algafoodapi;
 
-import br.com.juwer.algafoodapi.domain.exception.CozinhaNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeEmUsoException;
+import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.model.Cozinha;
 import br.com.juwer.algafoodapi.domain.service.CadastroCozinhaService;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +14,7 @@ import javax.validation.ConstraintViolationException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class CadastroCozinhaIntegrationTests {
+class CadastroCozinhaIT {
 
 	@Autowired
 	CadastroCozinhaService cadastroCozinhaService;
@@ -60,8 +60,8 @@ class CadastroCozinhaIntegrationTests {
 	@Test
 	public void deveFalhar_QuandoExcluirCozinhaInexistente() {
 
-		CozinhaNaoEncontradaException erroEsperado =
-				Assertions.assertThrows(CozinhaNaoEncontradaException.class, () -> {
+		EntidadeNaoEncontradaException erroEsperado =
+				Assertions.assertThrows(EntidadeNaoEncontradaException.class, () -> {
 					cadastroCozinhaService.excluir(134L);
 				});
 		assertThat(erroEsperado).isNotNull();
