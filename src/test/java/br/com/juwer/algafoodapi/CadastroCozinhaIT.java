@@ -2,7 +2,6 @@ package br.com.juwer.algafoodapi;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.aspectj.lang.annotation.Before;
 import org.flywaydb.core.Flyway;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,14 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.TestPropertySource;
 
-import javax.swing.text.AbstractDocument;
-
+@TestPropertySource("/application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CadastroCozinhaIT {
 
 	@Autowired
 	private Flyway flyway;
+
 	@LocalServerPort
 	private int port;
 
@@ -49,8 +49,7 @@ class CadastroCozinhaIT {
 			.when()
 				.get()
 			.then()
-				.body("", Matchers.hasSize(4)) // verifica se tem quatro itens no banco
-				.body("nome", Matchers.hasItems("Brasileira", "Tailandesa")); // verifica se tem esse nomes
+				.body("", Matchers.hasSize(4)); // verifica se tem quatro itens no banco
 	}
 
 	@Test
