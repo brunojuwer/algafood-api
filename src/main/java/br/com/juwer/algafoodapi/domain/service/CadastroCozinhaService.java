@@ -9,6 +9,7 @@ import br.com.juwer.algafoodapi.domain.exception.CozinhaNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.juwer.algafoodapi.domain.model.Cozinha;
 import br.com.juwer.algafoodapi.domain.repository.CozinhaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CadastroCozinhaService {
@@ -18,10 +19,12 @@ public class CadastroCozinhaService {
   @Autowired
   private CozinhaRepository cozinhaRepository;
 
+  @Transactional
   public Cozinha salvar(Cozinha cozinha) {
     return cozinhaRepository.save(cozinha);
   }
 
+  @Transactional
   public void excluir(Long cozinhaId) {
 
     try {
