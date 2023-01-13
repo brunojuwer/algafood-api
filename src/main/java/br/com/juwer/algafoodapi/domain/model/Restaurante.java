@@ -19,8 +19,6 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@ValorZeroIncluiDescricao(campo = "taxaFrete", 
-    descricaoCampo = "nome", descricaoObrigatoria = "Frete Grátis")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -31,17 +29,12 @@ public class Restaurante {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @NotBlank
     @Column(nullable = false)
     private String nome;
     
-    @NotNull
-    @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
-    @Valid
-    @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
     @ManyToOne
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
