@@ -1,9 +1,12 @@
 package br.com.juwer.algafoodapi.api.exceptionhandler;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import br.com.juwer.algafoodapi.core.validation.ValidacaoException;
+import br.com.juwer.algafoodapi.domain.exception.EntidadeEmUsoException;
+import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
+import br.com.juwer.algafoodapi.domain.exception.NegocioException;
+import com.fasterxml.jackson.databind.JsonMappingException.Reference;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +27,9 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.fasterxml.jackson.databind.JsonMappingException.Reference;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.fasterxml.jackson.databind.exc.PropertyBindingException;
-
-import br.com.juwer.algafoodapi.core.validation.ValidacaoException;
-import br.com.juwer.algafoodapi.domain.exception.EntidadeEmUsoException;
-import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
-import br.com.juwer.algafoodapi.domain.exception.NegocioException;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -53,7 +51,7 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
 
   ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
   Problem problem = createProblemBuilder(
-    status, problemType, detail, detail, LocalDateTime.now())
+    status, problemType, detail, detail, OffsetDateTime.now())
     .build();
 
   ex.printStackTrace();
@@ -72,7 +70,7 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
     HttpStatus status = HttpStatus.NOT_FOUND;
     
     Problem problem = createProblemBuilder(
-      status, problemType, detail, detail, LocalDateTime.now())
+      status, problemType, detail, detail, OffsetDateTime.now())
       .build();
     
     return handleExceptionInternal(
@@ -88,7 +86,7 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
     ProblemType problemType = ProblemType.ERRO_NEGOCIO;
     
     Problem problem = createProblemBuilder(
-      status, problemType, detail, detail, LocalDateTime.now())
+      status, problemType, detail, detail, OffsetDateTime.now())
       .build();
     
     return handleExceptionInternal(
@@ -103,7 +101,7 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
     ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
     
     Problem problem = createProblemBuilder(
-      status, problemType, detail, detail, LocalDateTime.now())
+      status, problemType, detail, detail, OffsetDateTime.now())
       .build();
     
     return handleExceptionInternal(
@@ -150,7 +148,7 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
       
     ProblemType problemType = ProblemType.DADOS_INVALIDOS;
     Problem problem = createProblemBuilder(
-      status, problemType, detail, detail, LocalDateTime.now()).objects(problemFields)
+      status, problemType, detail, detail, OffsetDateTime.now()).objects(problemFields)
       .build();
 
     return handleExceptionInternal(ex, problem, headers, status, request);
@@ -173,7 +171,7 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
     ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
     
     Problem problem = createProblemBuilder(
-      status, problemType, detail, MSG_ERRO_GENERICA_USUARIO_FINAL, LocalDateTime.now())
+      status, problemType, detail, MSG_ERRO_GENERICA_USUARIO_FINAL, OffsetDateTime.now())
       .build();
     
     return handleExceptionInternal(ex, problem, headers, status, request);
@@ -190,7 +188,7 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
     
     ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
     Problem problem = createProblemBuilder(
-      status, problemType, detail, MSG_ERRO_GENERICA_USUARIO_FINAL, LocalDateTime.now())
+      status, problemType, detail, MSG_ERRO_GENERICA_USUARIO_FINAL, OffsetDateTime.now())
       .build();
     
     return handleExceptionInternal(ex, problem, headers, status, request);
@@ -206,7 +204,7 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
             + "Corrija ou remova essa propriedade e tente novamente.", path);
 
     Problem problem = createProblemBuilder(
-      status, problemType, detail, MSG_ERRO_GENERICA_USUARIO_FINAL, LocalDateTime.now())
+      status, problemType, detail, MSG_ERRO_GENERICA_USUARIO_FINAL, OffsetDateTime.now())
       .build();
     
     return handleExceptionInternal(ex, problem, headers, status, request);
@@ -236,7 +234,7 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
       ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
 
     Problem problem = createProblemBuilder(
-      status, problemType, detail, MSG_ERRO_GENERICA_USUARIO_FINAL, LocalDateTime.now())
+      status, problemType, detail, MSG_ERRO_GENERICA_USUARIO_FINAL, OffsetDateTime.now())
       .build();
     
     return handleExceptionInternal(ex, problem, headers, status, request);
@@ -253,7 +251,7 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
       ex.getRequestURL());
 
     Problem problem = createProblemBuilder(
-      status, problemType, detail, detail, LocalDateTime.now())
+      status, problemType, detail, detail, OffsetDateTime.now())
       .build();
 
 
@@ -270,14 +268,14 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
         .title(status.getReasonPhrase())
         .status(status.value())
         .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
-        .timestamp(LocalDateTime.now())
+        .timestamp(OffsetDateTime.now())
         .build();
     } else if (body instanceof String) {
       body = Problem.builder()
         .title((String) body)
         .status(status.value())
         .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
-        .timestamp(LocalDateTime.now())
+        .timestamp(OffsetDateTime.now())
         .build();
     }
     
@@ -285,8 +283,7 @@ public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest re
   }
   
   private Problem.ProblemBuilder createProblemBuilder(HttpStatus status,
-      ProblemType problem, String detail, String userMessage, 
-      LocalDateTime timestamp){
+      ProblemType problem, String detail, String userMessage, OffsetDateTime timestamp){
 
     return Problem.builder()
             .timestamp(timestamp)
