@@ -53,7 +53,7 @@ public class RestauranteController {
   public RestauranteDTO adicionar(@RequestBody @Valid RestauranteDTOInput restauranteDTOInput) {
 
     try {
-      Restaurante restaurante = restauranteDTODisassembler.convertDTOInToRestaurante(restauranteDTOInput);
+      Restaurante restaurante = restauranteDTODisassembler.convertDTOInputToRestaurante(restauranteDTOInput);
       return restauranteDTOAssembler.convertToDTO(restauranteService.salvar(restaurante));
     } catch (EntidadeNaoEncontradaException e) {
         throw new NegocioException(e.getMessage());
@@ -65,7 +65,7 @@ public class RestauranteController {
                        @RequestBody @Valid RestauranteDTOInput restauranteDTOIn) {
       
     Restaurante restauranteAtual = restauranteService.buscaOuFalha(restauranteId);
-    Restaurante restaurante = restauranteDTODisassembler.convertDTOInToRestaurante(restauranteDTOIn);
+    Restaurante restaurante = restauranteDTODisassembler.convertDTOInputToRestaurante(restauranteDTOIn);
     BeanUtils.copyProperties(restaurante, restauranteAtual,
         "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
     try {

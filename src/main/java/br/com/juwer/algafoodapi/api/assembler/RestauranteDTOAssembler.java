@@ -1,8 +1,9 @@
 package br.com.juwer.algafoodapi.api.assembler;
 
-import br.com.juwer.algafoodapi.api.model.dto.CozinhaDTO;
 import br.com.juwer.algafoodapi.api.model.dto.RestauranteDTO;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -10,18 +11,12 @@ import java.util.stream.Collectors;
 
 @Component
 public class RestauranteDTOAssembler {
+
+    @Autowired
+    private ModelMapper modelMapper;
+
     public RestauranteDTO convertToDTO(Restaurante restaurante) {
-        RestauranteDTO restauranteDTO = new RestauranteDTO();
-
-        CozinhaDTO cozinhaDTO = new CozinhaDTO();
-        cozinhaDTO.setId(restaurante.getCozinha().getId());
-        cozinhaDTO.setNome(restaurante.getCozinha().getNome());
-
-        restauranteDTO.setId(restaurante.getId());
-        restauranteDTO.setNome(restaurante.getNome());
-        restauranteDTO.setTaxaFrete(restaurante.getTaxaFrete());
-        restauranteDTO.setCozinhaDTO(cozinhaDTO);
-        return restauranteDTO;
+        return modelMapper.map(restaurante, RestauranteDTO.class);
     }
 
     public List<RestauranteDTO> convertToDtoList(List<Restaurante> restaurantes) {
