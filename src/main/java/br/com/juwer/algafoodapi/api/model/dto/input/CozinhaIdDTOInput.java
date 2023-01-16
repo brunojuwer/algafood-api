@@ -3,12 +3,12 @@ package br.com.juwer.algafoodapi.api.model.dto.input;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class CozinhaDTOInput {
+public class CozinhaIdDTOInput {
 
-    @NotBlank
-    private String nome;
+    @NotNull
+    private Long id;
 }
