@@ -1,4 +1,4 @@
-package br.com.juwer.algafoodapi.api.assembler.generic;
+package br.com.juwer.algafoodapi.api.assembler;
 
 import lombok.Getter;
 import org.modelmapper.ModelMapper;

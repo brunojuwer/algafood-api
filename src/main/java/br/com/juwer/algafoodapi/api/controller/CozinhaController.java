@@ -32,19 +32,19 @@ public class CozinhaController {
 
   @GetMapping()
   public List<CozinhaDTO> listar(){
-    return cozinhaDTOAssembler.convertToDtoList(cozinhaRepository.findAll());
+    return cozinhaDTOAssembler.toCollectionModel(cozinhaRepository.findAll());
   }
 
   @GetMapping("/{cozinhaId}")
   public CozinhaDTO buscar(@PathVariable Long cozinhaId){
-    return cozinhaDTOAssembler.convertToDTO(cozinhaService.buscaOuFalha(cozinhaId));
+    return cozinhaDTOAssembler.toModel(cozinhaService.buscaOuFalha(cozinhaId));
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public CozinhaDTO adicionar(@RequestBody @Valid CozinhaDTOInput cozinhaIdDTOInput){
-      Cozinha cozinha = cozinhaDTODisassembler.convertDTOInputToCozinha(cozinhaIdDTOInput);
-      return cozinhaDTOAssembler.convertToDTO(cozinhaService.salvar(cozinha));
+      Cozinha cozinha = cozinhaDTODisassembler.toDomainObject(cozinhaIdDTOInput);
+      return cozinhaDTOAssembler.toModel(cozinhaService.salvar(cozinha));
   }
 
   @PutMapping("/{cozinhaId}")
@@ -54,7 +54,7 @@ public class CozinhaController {
       Cozinha cozinhaAtual = cozinhaService.buscaOuFalha(cozinhaId);
       cozinhaDTODisassembler.copyToDomainObject(cozinha, cozinhaAtual);
 
-      return cozinhaDTOAssembler.convertToDTO(cozinhaService.salvar(cozinhaAtual));
+      return cozinhaDTOAssembler.toModel(cozinhaService.salvar(cozinhaAtual));
   }
 
   @DeleteMapping("/{cozinhaId}")

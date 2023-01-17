@@ -38,13 +38,13 @@ public class RestauranteController {
 
   @GetMapping
   public List<RestauranteDTO> listar(){
-    return restauranteDTOAssembler.convertToDtoList(restauranteRepository.findAll());
+    return restauranteDTOAssembler.toCollectionModel(restauranteRepository.findAll());
   }
 
   @GetMapping("/{restauranteId}")
   public RestauranteDTO buscar(@PathVariable Long restauranteId) {
     Restaurante restaurante = restauranteService.buscaOuFalha(restauranteId);
-    return restauranteDTOAssembler.convertToDTO(restaurante);
+    return restauranteDTOAssembler.toModel(restaurante);
   }
 
   @PostMapping
@@ -52,8 +52,8 @@ public class RestauranteController {
   public RestauranteDTO adicionar(@RequestBody @Valid RestauranteDTOInput restauranteDTOInput) {
 
     try {
-      Restaurante restaurante = restauranteDTODisassembler.convertDTOInputToRestaurante(restauranteDTOInput);
-      return restauranteDTOAssembler.convertToDTO(restauranteService.salvar(restaurante));
+      Restaurante restaurante = restauranteDTODisassembler.toDomainObject(restauranteDTOInput);
+      return restauranteDTOAssembler.toModel(restauranteService.salvar(restaurante));
     } catch (EntidadeNaoEncontradaException e) {
         throw new NegocioException(e.getMessage());
     }
@@ -67,7 +67,7 @@ public class RestauranteController {
     restauranteDTODisassembler.copyToDomainObject(restauranteDTOInput, restauranteAtual);
 
     try {
-      return restauranteDTOAssembler.convertToDTO(restauranteService.salvar(restauranteAtual));
+      return restauranteDTOAssembler.toModel(restauranteService.salvar(restauranteAtual));
     } catch (EntidadeNaoEncontradaException e) {
         throw new NegocioException(e.getMessage());
     }
