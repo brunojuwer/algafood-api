@@ -4,6 +4,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import br.com.juwer.algafoodapi.api.assembler.CidadeDTOAssembler;
+import br.com.juwer.algafoodapi.api.disassembler.CidadeDTODisassembler;
+import br.com.juwer.algafoodapi.api.model.dto.CidadeDTO;
+import br.com.juwer.algafoodapi.api.model.dto.input.CidadeDTOInput;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,35 +37,41 @@ public class CidadeController {
   @Autowired 
   private CadastroCidadeService cadastroCidadeService;
 
+  @Autowired
+  private CidadeDTOAssembler cidadeDTOAssembler;
+
+  @Autowired
+  private CidadeDTODisassembler cidadeDTODisassembler;
+
   @GetMapping
-  public List<Cidade> listar(){
-    return cidadeRepository.findAll();
+  public List<CidadeDTO> listar(){
+    return cidadeDTOAssembler.convertToDTOList(cidadeRepository.findAll());
   }
   
   @GetMapping("/{cidadeId}")
-  private Cidade buscar(@PathVariable Long cidadeId) {
-    return cadastroCidadeService.buscaOuFalha(cidadeId);
+  private CidadeDTO buscar(@PathVariable Long cidadeId) {
+    return cidadeDTOAssembler.convertToCidadeDTO(cadastroCidadeService.buscaOuFalha(cidadeId));
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public Cidade adicionar(@RequestBody @Valid Cidade cidade ) {
+  public CidadeDTO adicionar(@RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
     try {
-      return cadastroCidadeService.salvar(cidade);
+      Cidade cidade = cidadeDTODisassembler.convertToDomainModel(cidadeDTOInput);
+      return cidadeDTOAssembler.convertToCidadeDTO(cadastroCidadeService.salvar(cidade));
     } catch(EntidadeNaoEncontradaException e) {
       throw new NegocioException(e.getMessage());
     }
   }
 
   @PutMapping("/{cidadeId}")
-  public Cidade atualizar(@PathVariable Long cidadeId,
-                  @RequestBody @Valid Cidade cidade) {
+  public CidadeDTO atualizar(@PathVariable Long cidadeId,
+                  @RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
     Cidade cidadeAtual = cadastroCidadeService.buscaOuFalha(cidadeId);
-    BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+    cidadeDTODisassembler.copyToDomainObject(cidadeDTOInput, cidadeAtual);
 
     try {
-      return cadastroCidadeService.salvar(cidadeAtual);
-      
+      return cidadeDTOAssembler.convertToCidadeDTO(cadastroCidadeService.salvar(cidadeAtual));
     } catch (EntidadeNaoEncontradaException e) {
       throw new NegocioException(e.getMessage(), e);
     }                  

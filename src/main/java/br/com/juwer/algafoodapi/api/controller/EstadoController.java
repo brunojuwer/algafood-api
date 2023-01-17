@@ -4,6 +4,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import br.com.juwer.algafoodapi.api.assembler.EstadoDTOAssembler;
+import br.com.juwer.algafoodapi.api.disassembler.EstadoDTODIsassembler;
+import br.com.juwer.algafoodapi.api.model.dto.EstadoDTO;
+import br.com.juwer.algafoodapi.api.model.dto.input.EstadoDTOInput;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,28 +35,39 @@ public class EstadoController {
   @Autowired
   private CadastroEstadoService cadastroEstadoService;
 
+  @Autowired
+  private EstadoDTOAssembler estadoDTOAssembler;
+
+  @Autowired
+  private EstadoDTODIsassembler estadoDTODIsassembler;
+
   @GetMapping
-  public List<Estado> listar() {
-    return estadoRepository.findAll();
+  public List<EstadoDTO> listar() {
+    List<Estado> estados = estadoRepository.findAll();
+    return estadoDTOAssembler.convertToDTOList(estados);
   }
 
   @GetMapping("/{estadoId}")
-  public Estado buscar(@PathVariable Long estadoId) {
-    return cadastroEstadoService.buscaOuFalha(estadoId);
+  public EstadoDTO buscar(@PathVariable Long estadoId) {
+    Estado estado = cadastroEstadoService.buscaOuFalha(estadoId);
+    return estadoDTOAssembler.convertToEstadoDTO(estado);
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public Estado adicionar(@RequestBody @Valid Estado estado) {
-    return cadastroEstadoService.salvar(estado);
+  public EstadoDTO adicionar(@RequestBody @Valid EstadoDTOInput estadoDTOInput) {
+    Estado estado = estadoDTODIsassembler.convertToDomainModel(estadoDTOInput);
+    Estado estadoSalvo = cadastroEstadoService.salvar(estado);
+    return estadoDTOAssembler.convertToEstadoDTO(estadoSalvo);
   }
 
   @PutMapping("/{estadoId}")
-  public Estado atualizar(@PathVariable Long estadoId, 
-          @RequestBody @Valid Estado estado) {
+  public EstadoDTO atualizar(@PathVariable Long estadoId,
+          @RequestBody @Valid EstadoDTOInput estadoDTOInput) {
     Estado estadoAtual = cadastroEstadoService.buscaOuFalha(estadoId);
-    BeanUtils.copyProperties(estado, estadoAtual, "id");
-    return cadastroEstadoService.salvar(estadoAtual);
+    estadoDTODIsassembler.copyToDomainModel(estadoDTOInput, estadoAtual);
+
+    return estadoDTOAssembler.convertToEstadoDTO(cadastroEstadoService.salvar(estadoAtual));
   }
 
   @DeleteMapping("/{estadoId}")

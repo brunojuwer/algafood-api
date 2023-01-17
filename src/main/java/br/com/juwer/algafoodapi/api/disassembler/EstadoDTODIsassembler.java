@@ -1,6 +1,5 @@
 package br.com.juwer.algafoodapi.api.disassembler;
 
-import br.com.juwer.algafoodapi.api.model.dto.input.EstadoDTOIdInput;
 import br.com.juwer.algafoodapi.api.model.dto.input.EstadoDTOInput;
 import br.com.juwer.algafoodapi.domain.model.Estado;
 import org.modelmapper.ModelMapper;
@@ -17,7 +16,7 @@ public class EstadoDTODIsassembler {
         return modelMapper.map(estadoDTOInput, Estado.class);
     }
 
-    public void copyToDomainModel(EstadoDTOIdInput estadoDTOIdInput, Estado estado) {
-        modelMapper.map(estadoDTOIdInput, estado);
+    public void copyToDomainModel(EstadoDTOInput estadoDTOInput, Estado estado) {
+        modelMapper.map(estadoDTOInput, estado);
     }
 }
