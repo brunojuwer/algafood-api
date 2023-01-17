@@ -1,5 +1,7 @@
-package br.com.juwer.algafoodapi.api.assembler.generic;
+package br.com.juwer.algafoodapi.api.disassembler;
 
+import br.com.juwer.algafoodapi.api.model.dto.input.CidadeDTOInput;
+import br.com.juwer.algafoodapi.domain.model.Cidade;
 import lombok.Getter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,6 @@ import java.lang.reflect.ParameterizedType;
 public abstract class GenericDisassembler<I, D> {
 
     @Autowired
-    @Getter
     protected ModelMapper modelMapper;
 
     private final Class<D> domainObject;
@@ -21,7 +22,7 @@ public abstract class GenericDisassembler<I, D> {
         this.domainObject = (Class<D>) type.getActualTypeArguments()[1];
     }
 
-    public D toModel(I inputObject) {
+    public D toDomainObject(I inputObject) {
         return this.modelMapper.map(inputObject, this.domainObject);
     }
 

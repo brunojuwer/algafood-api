@@ -57,7 +57,7 @@ public class CidadeController {
   @ResponseStatus(HttpStatus.CREATED)
   public CidadeDTO adicionar(@RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
     try {
-      Cidade cidade = cidadeDTODisassembler.convertToDomainModel(cidadeDTOInput);
+      Cidade cidade = cidadeDTODisassembler.toDomainObject(cidadeDTOInput);
       return cidadeDTOAssembler.toModel(cadastroCidadeService.salvar(cidade));
     } catch(EntidadeNaoEncontradaException e) {
       throw new NegocioException(e.getMessage());
