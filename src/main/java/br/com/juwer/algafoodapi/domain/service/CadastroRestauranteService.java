@@ -39,6 +39,7 @@ public class CadastroRestauranteService {
     
     try {
       restauranteRepository.deleteById(restauranteId);
+      restauranteRepository.flush();
     } catch (EmptyResultDataAccessException e) {
       throw new RestauranteNaoEncontradoException(restauranteId);
   } catch (DataIntegrityViolationException e) {
