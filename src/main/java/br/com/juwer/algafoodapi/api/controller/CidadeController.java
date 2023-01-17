@@ -45,12 +45,12 @@ public class CidadeController {
 
   @GetMapping
   public List<CidadeDTO> listar(){
-    return cidadeDTOAssembler.convertToDTOList(cidadeRepository.findAll());
+    return cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAll());
   }
   
   @GetMapping("/{cidadeId}")
   private CidadeDTO buscar(@PathVariable Long cidadeId) {
-    return cidadeDTOAssembler.convertToCidadeDTO(cadastroCidadeService.buscaOuFalha(cidadeId));
+    return cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
   }
 
   @PostMapping
@@ -58,7 +58,7 @@ public class CidadeController {
   public CidadeDTO adicionar(@RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
     try {
       Cidade cidade = cidadeDTODisassembler.convertToDomainModel(cidadeDTOInput);
-      return cidadeDTOAssembler.convertToCidadeDTO(cadastroCidadeService.salvar(cidade));
+      return cidadeDTOAssembler.toModel(cadastroCidadeService.salvar(cidade));
     } catch(EntidadeNaoEncontradaException e) {
       throw new NegocioException(e.getMessage());
     }
@@ -71,7 +71,7 @@ public class CidadeController {
     cidadeDTODisassembler.copyToDomainObject(cidadeDTOInput, cidadeAtual);
 
     try {
-      return cidadeDTOAssembler.convertToCidadeDTO(cadastroCidadeService.salvar(cidadeAtual));
+      return cidadeDTOAssembler.toModel(cadastroCidadeService.salvar(cidadeAtual));
     } catch (EntidadeNaoEncontradaException e) {
       throw new NegocioException(e.getMessage(), e);
     }                  

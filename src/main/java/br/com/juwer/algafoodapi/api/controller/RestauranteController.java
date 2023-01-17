@@ -10,7 +10,6 @@ import br.com.juwer.algafoodapi.domain.model.Restaurante;
 import br.com.juwer.algafoodapi.domain.repository.RestauranteRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroRestauranteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
