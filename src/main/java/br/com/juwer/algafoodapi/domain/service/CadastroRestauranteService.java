@@ -1,5 +1,6 @@
 package br.com.juwer.algafoodapi.domain.service;
 
+import br.com.juwer.algafoodapi.domain.model.Cidade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -24,12 +25,19 @@ public class CadastroRestauranteService {
   @Autowired
   private CadastroCozinhaService cadastroCozinhaService;
 
+  @Autowired
+  private CadastroCidadeService cadastroCidadeService;
+
   @Transactional
   public Restaurante salvar(Restaurante restaurante) {
     
     Long cozinhaId = restaurante.getCozinha().getId();
     Cozinha cozinha = cadastroCozinhaService.buscaOuFalha(cozinhaId);
+    Long cidadeId = restaurante.getEndereco().getCidade().getId();
+    Cidade cidade = cadastroCidadeService.buscaOuFalha(cidadeId);
+
     restaurante.setCozinha(cozinha);
+    restaurante.getEndereco().setCidade(cidade);
 
     return restauranteRepository.save(restaurante);
   }
