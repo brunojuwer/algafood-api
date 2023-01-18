@@ -1,5 +1,6 @@
 package br.com.juwer.algafoodapi.api.model.dto;
 
+import br.com.juwer.algafoodapi.api.model.dto.input.EnderecoDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,4 +15,5 @@ public class RestauranteDTO {
     private BigDecimal taxaFrete;
     private CozinhaDTO cozinha;
     private Boolean ativo;
+    private EnderecoDTO endereco;
 }
