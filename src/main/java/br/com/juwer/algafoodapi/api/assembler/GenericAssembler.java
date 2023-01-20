@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +28,7 @@ public abstract class GenericAssembler <M, D> {
         return this.modelMapper.map(domainObject, this.modelObject);
     }
 
-    public List<M> toCollectionModel(List<D> listOfDomainObjects) {
+    public List<M> toCollectionModel(Collection<D> listOfDomainObjects) {
         return listOfDomainObjects.stream().map(this::toModel).collect(Collectors.toList());
     }
 }

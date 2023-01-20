@@ -1,16 +1,16 @@
 package br.com.juwer.algafoodapi.domain.service;
 
+import br.com.juwer.algafoodapi.domain.exception.EntidadeEmUsoException;
+import br.com.juwer.algafoodapi.domain.exception.RestauranteNaoEncontradoException;
 import br.com.juwer.algafoodapi.domain.model.Cidade;
+import br.com.juwer.algafoodapi.domain.model.Cozinha;
+import br.com.juwer.algafoodapi.domain.model.FormaPagamento;
+import br.com.juwer.algafoodapi.domain.model.Restaurante;
+import br.com.juwer.algafoodapi.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-
-import br.com.juwer.algafoodapi.domain.exception.EntidadeEmUsoException;
-import br.com.juwer.algafoodapi.domain.exception.RestauranteNaoEncontradoException;
-import br.com.juwer.algafoodapi.domain.model.Cozinha;
-import br.com.juwer.algafoodapi.domain.model.Restaurante;
-import br.com.juwer.algafoodapi.domain.repository.RestauranteRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -27,6 +27,9 @@ public class CadastroRestauranteService {
 
   @Autowired
   private CadastroCidadeService cadastroCidadeService;
+
+  @Autowired
+  private CadastroFormaPagamentoService cadastroFormaPagamentoService;
 
   @Transactional
   public Restaurante salvar(Restaurante restaurante) {
@@ -67,6 +70,22 @@ public class CadastroRestauranteService {
   public void inativar(Long restauranteId){
     Restaurante restaurante = buscaOuFalha(restauranteId);
     restaurante.inativar();
+  }
+
+  @Transactional
+  public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+    Restaurante restaurante = buscaOuFalha(restauranteId);
+    FormaPagamento formaPagamento = cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId);
+
+    restaurante.getFormasPagamento().add(formaPagamento);
+  }
+
+  @Transactional
+  public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+    Restaurante restaurante = buscaOuFalha(restauranteId);
+    FormaPagamento formaPagamento = cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId);
+
+    restaurante.getFormasPagamento().remove(formaPagamento);
   }
   
   public Restaurante buscaOuFalha(Long restauranteId) {
