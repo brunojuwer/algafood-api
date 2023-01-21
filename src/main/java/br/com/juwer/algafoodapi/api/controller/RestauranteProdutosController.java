@@ -51,5 +51,4 @@ public class RestauranteProdutosController {
             produtoDTODisassembler.copyToDomainObject(produtoDTOInput, produto);
             return produtoDTOAssembler.toModel(cadastroProdutoService.salvar(produto, restauranteId));
     }
-
 }

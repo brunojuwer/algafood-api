@@ -11,6 +11,7 @@ import br.com.juwer.algafoodapi.domain.repository.RestauranteRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroRestauranteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -89,5 +90,17 @@ public class RestauranteController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void inativar(@PathVariable Long restauranteId) {
     restauranteService.inativar(restauranteId);
+  }
+
+  @PutMapping("/{restauranteId}/abertura")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void abrir(@PathVariable Long restauranteId) {
+      restauranteService.abrir(restauranteId);
+  }
+
+  @PutMapping("/{restauranteId}/fechamento")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void fechar(@PathVariable Long restauranteId) {
+      restauranteService.fechar(restauranteId);
   }
 }
