@@ -4,11 +4,8 @@ import br.com.juwer.algafoodapi.api.assembler.ProdutoDTOAssembler;
 import br.com.juwer.algafoodapi.api.disassembler.ProdutoDTODisassembler;
 import br.com.juwer.algafoodapi.api.model.dto.ProdutoDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.ProdutoDTOInput;
-import br.com.juwer.algafoodapi.domain.exception.ProdutoNaoEncontradoException;
 import br.com.juwer.algafoodapi.domain.model.Produto;
-import br.com.juwer.algafoodapi.domain.repository.ProdutoRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroProdutoService;
-import br.com.juwer.algafoodapi.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,13 +17,7 @@ import java.util.List;
 public class RestauranteProdutosController {
 
     @Autowired
-    private ProdutoRepository produtoRepository;
-
-    @Autowired
     private CadastroProdutoService cadastroProdutoService;
-
-    @Autowired
-    private CadastroRestauranteService cadastroRestauranteService;
 
     @Autowired
     private ProdutoDTOAssembler produtoDTOAssembler;
@@ -42,19 +33,12 @@ public class RestauranteProdutosController {
 
     @GetMapping("/{produtoId}")
     public ProdutoDTO buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
-            cadastroRestauranteService.buscaOuFalha(restauranteId);
-        try {
-            Produto produto = produtoRepository.findProdutoByRestauranteIdAndId(restauranteId, produtoId);
+            Produto produto = cadastroProdutoService.buscaOuFalha(restauranteId, produtoId);
             return produtoDTOAssembler.toModel(produto);
-        } catch (IllegalArgumentException e) {
-            throw new ProdutoNaoEncontradoException(restauranteId, produtoId);
-        }
-
     }
 
     @PostMapping
     public ProdutoDTO salvar(@PathVariable Long restauranteId, @Valid @RequestBody ProdutoDTOInput produtoDTOInput) {
-        cadastroRestauranteService.buscaOuFalha(restauranteId);
         Produto produto = produtoDTODisassembler.toDomainObject(produtoDTOInput);
         return produtoDTOAssembler.toModel(cadastroProdutoService.salvar(produto, restauranteId));
     }
@@ -62,14 +46,10 @@ public class RestauranteProdutosController {
     @PutMapping("/{produtoId}")
     public ProdutoDTO atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId,
                                 @Valid @RequestBody ProdutoDTOInput produtoDTOInput) {
-        cadastroRestauranteService.buscaOuFalha(restauranteId);
-        try {
-            Produto produto = produtoRepository.findProdutoByRestauranteIdAndId(restauranteId, produtoId);
+
+            Produto produto = cadastroProdutoService.buscaOuFalha(restauranteId, produtoId);
             produtoDTODisassembler.copyToDomainObject(produtoDTOInput, produto);
             return produtoDTOAssembler.toModel(cadastroProdutoService.salvar(produto, restauranteId));
-        } catch (IllegalArgumentException e) {
-            throw new ProdutoNaoEncontradoException(restauranteId, produtoId);
-        }
     }
 
 }

@@ -1,5 +1,6 @@
 package br.com.juwer.algafoodapi.domain.service;
 
+import br.com.juwer.algafoodapi.domain.exception.ProdutoNaoEncontradoException;
 import br.com.juwer.algafoodapi.domain.model.Produto;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
 import br.com.juwer.algafoodapi.domain.repository.ProdutoRepository;
@@ -26,9 +27,16 @@ public class CadastroProdutoService {
 
     @Transactional
     public Produto salvar(Produto produto, Long restauranteId) {
+        cadastroRestauranteService.buscaOuFalha(restauranteId);
         produto.setRestaurante(new Restaurante());
         produto.getRestaurante().setId(restauranteId);
         return produtoRepository.save(produto);
+    }
+
+    public Produto buscaOuFalha(Long restauranteId, Long produtoId) {
+        cadastroRestauranteService.buscaOuFalha(restauranteId);
+        return produtoRepository.findProdutoByRestauranteIdAndId(restauranteId, produtoId)
+                .orElseThrow(() -> new ProdutoNaoEncontradoException(restauranteId, produtoId));
     }
 
 }
