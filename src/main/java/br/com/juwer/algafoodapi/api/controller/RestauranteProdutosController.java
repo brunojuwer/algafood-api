@@ -6,7 +6,6 @@ import br.com.juwer.algafoodapi.api.model.dto.ProdutoDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.ProdutoDTOInput;
 import br.com.juwer.algafoodapi.domain.model.Produto;
 import br.com.juwer.algafoodapi.domain.service.CadastroProdutoService;
-import br.com.juwer.algafoodapi.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +18,6 @@ public class RestauranteProdutosController {
 
     @Autowired
     private CadastroProdutoService cadastroProdutoService;
-
-    @Autowired
-    private CadastroRestauranteService cadastroRestauranteService;
 
     @Autowired
     private ProdutoDTOAssembler produtoDTOAssembler;
@@ -37,14 +33,12 @@ public class RestauranteProdutosController {
 
     @GetMapping("/{produtoId}")
     public ProdutoDTO buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
-            cadastroRestauranteService.buscaOuFalha(restauranteId);
             Produto produto = cadastroProdutoService.buscaOuFalha(restauranteId, produtoId);
             return produtoDTOAssembler.toModel(produto);
     }
 
     @PostMapping
     public ProdutoDTO salvar(@PathVariable Long restauranteId, @Valid @RequestBody ProdutoDTOInput produtoDTOInput) {
-        cadastroRestauranteService.buscaOuFalha(restauranteId);
         Produto produto = produtoDTODisassembler.toDomainObject(produtoDTOInput);
         return produtoDTOAssembler.toModel(cadastroProdutoService.salvar(produto, restauranteId));
     }

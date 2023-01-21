@@ -27,6 +27,7 @@ public class CadastroProdutoService {
 
     @Transactional
     public Produto salvar(Produto produto, Long restauranteId) {
+        cadastroRestauranteService.buscaOuFalha(restauranteId);
         produto.setRestaurante(new Restaurante());
         produto.getRestaurante().setId(restauranteId);
         return produtoRepository.save(produto);
