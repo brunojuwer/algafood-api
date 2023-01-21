@@ -1,11 +1,11 @@
 package br.com.juwer.algafoodapi.domain.service;
 
-import br.com.juwer.algafoodapi.domain.exception.ProdutoNaoEncontradoException;
 import br.com.juwer.algafoodapi.domain.model.Produto;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
 import br.com.juwer.algafoodapi.domain.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,5 +24,11 @@ public class CadastroProdutoService {
     }
 
 
+    @Transactional
+    public Produto salvar(Produto produto, Long restauranteId) {
+        produto.setRestaurante(new Restaurante());
+        produto.getRestaurante().setId(restauranteId);
+        return produtoRepository.save(produto);
+    }
 
 }

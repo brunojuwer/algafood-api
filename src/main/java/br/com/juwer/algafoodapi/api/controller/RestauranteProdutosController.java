@@ -3,16 +3,14 @@ package br.com.juwer.algafoodapi.api.controller;
 import br.com.juwer.algafoodapi.api.assembler.ProdutoDTOAssembler;
 import br.com.juwer.algafoodapi.api.disassembler.ProdutoDTODisassembler;
 import br.com.juwer.algafoodapi.api.model.dto.ProdutoDTO;
+import br.com.juwer.algafoodapi.api.model.dto.input.ProdutoDTOInput;
 import br.com.juwer.algafoodapi.domain.exception.ProdutoNaoEncontradoException;
 import br.com.juwer.algafoodapi.domain.model.Produto;
 import br.com.juwer.algafoodapi.domain.repository.ProdutoRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroProdutoService;
 import br.com.juwer.algafoodapi.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -51,5 +49,11 @@ public class RestauranteProdutosController {
             throw new ProdutoNaoEncontradoException(restauranteId, produtoId);
         }
 
+    }
+
+    @PostMapping
+    public ProdutoDTO salvar(@PathVariable Long restauranteId, @RequestBody ProdutoDTOInput produtoDTOInput) {
+        Produto produto = produtoDTODisassembler.toDomainObject(produtoDTOInput);
+        return produtoDTOAssembler.toModel(cadastroProdutoService.salvar(produto, restauranteId));
     }
 }
