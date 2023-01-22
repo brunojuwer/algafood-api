@@ -54,6 +54,7 @@ insert into forma_pagamento (descricao) values ('Dinheiro');
 
 insert into permissao (id, nome, descricao) values (1, 'CONSULTAR_COZINHAS', 'Permite consultar cozinhas');
 insert into permissao (id, nome, descricao) values (2, 'EDITAR_COZINHAS', 'Permite editar cozinhas');
+insert into permissao (id, nome, descricao) values (3, 'EXCLUIR_COZINHAS', 'Permite excluir cozinhas');
 
 insert into restaurante_forma_pagamento (restaurante_id, forma_pagamento_id) values (1, 1), (1, 2), (1, 3), (2, 3), (3, 2), (3, 3), (4, 1), (4, 2), (5, 1), (5, 2), (6, 3);
 
@@ -73,5 +74,7 @@ insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('San
 insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Espetinho de Cupim', 'Acompanha farinha, mandioca e vinagrete', 8, 1, 6);
 
 insert into grupo (nome) values ('Gerente'), ('Vendedor'), ('Cadastrador'), ('Secretária');
+
+insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (1, 3), (2, 1), (3, 1), (3, 2), (4, 3);
 
 insert into usuario (nome, email, senha, data_cadastro) values ('Matt Tuck', 'matt.tuck@algafood.com.br', '123', utc_timestamp), ('Michael Paget', 'michael.paget@algafood.com.br', '123', utc_timestamp), ('Ronnie Radke', 'ronnie.radke@algafood.com.br', '123', utc_timestamp), ('Kei Goto', 'kei.goto@algafood.com.br', '123', utc_timestamp);
