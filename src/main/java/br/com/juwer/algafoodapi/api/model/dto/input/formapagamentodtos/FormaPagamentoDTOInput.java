@@ -1,4 +1,4 @@
-package br.com.juwer.algafoodapi.api.model.dto.input;
+package br.com.juwer.algafoodapi.api.model.dto.input.formapagamentodtos;
 
 import lombok.Getter;
 import lombok.Setter;

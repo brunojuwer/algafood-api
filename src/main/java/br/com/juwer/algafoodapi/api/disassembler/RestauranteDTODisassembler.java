@@ -1,6 +1,6 @@
 package br.com.juwer.algafoodapi.api.disassembler;
 
-import br.com.juwer.algafoodapi.api.model.dto.input.RestauranteDTOInput;
+import br.com.juwer.algafoodapi.api.model.dto.input.restaurantedtos.RestauranteDTOInput;
 import br.com.juwer.algafoodapi.domain.model.Cidade;
 import br.com.juwer.algafoodapi.domain.model.Cozinha;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
