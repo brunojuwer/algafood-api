@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 public class PedidoDTO {
 
-    private long id;
+    private Long id;
 
     private BigDecimal subTotal;
 

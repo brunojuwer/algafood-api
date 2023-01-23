@@ -1,7 +1,9 @@
 package br.com.juwer.algafoodapi.api.controller;
 
 import br.com.juwer.algafoodapi.api.assembler.PedidoDTOAssembler;
+import br.com.juwer.algafoodapi.api.assembler.PedidoResumoDTOAssembler;
 import br.com.juwer.algafoodapi.api.model.dto.PedidoDTO;
+import br.com.juwer.algafoodapi.api.model.dto.PedidoResumoDTO;
 import br.com.juwer.algafoodapi.domain.model.Pedido;
 import br.com.juwer.algafoodapi.domain.repository.PedidoRespository;
 import br.com.juwer.algafoodapi.domain.service.CadastroPedidoService;
@@ -26,11 +28,13 @@ public class PedidoController {
     @Autowired
     private PedidoDTOAssembler pedidoDTOAssembler;
 
-    @GetMapping
-    public List<PedidoDTO> listar() {
-        List<Pedido> pedidos = pedidoRespository.findAll();
+    @Autowired
+    private PedidoResumoDTOAssembler pedidoResumoDTOAssembler;
 
-        return pedidoDTOAssembler.toCollectionModel(pedidos);
+    @GetMapping
+    public List<PedidoResumoDTO> listar() {
+        List<Pedido> pedidos = pedidoRespository.findAll();
+        return pedidoResumoDTOAssembler.toCollectionModel(pedidos);
     }
 
     @GetMapping("/{pedidoId}")

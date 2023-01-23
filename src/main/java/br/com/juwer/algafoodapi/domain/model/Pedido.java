@@ -46,7 +46,7 @@ public class Pedido {
   @Enumerated(EnumType.STRING)
   private StatusPedido status;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
   private FormaPagamento formaPagamento;
 
