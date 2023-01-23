@@ -3,7 +3,7 @@ package br.com.juwer.algafoodapi.api.controller;
 import br.com.juwer.algafoodapi.api.assembler.RestauranteDTOAssembler;
 import br.com.juwer.algafoodapi.api.disassembler.RestauranteDTODisassembler;
 import br.com.juwer.algafoodapi.api.model.dto.RestauranteDTO;
-import br.com.juwer.algafoodapi.api.model.dto.input.RestauranteDTOInput;
+import br.com.juwer.algafoodapi.api.model.dto.input.restaurantedtos.RestauranteDTOInput;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
@@ -11,7 +11,6 @@ import br.com.juwer.algafoodapi.domain.repository.RestauranteRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroRestauranteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

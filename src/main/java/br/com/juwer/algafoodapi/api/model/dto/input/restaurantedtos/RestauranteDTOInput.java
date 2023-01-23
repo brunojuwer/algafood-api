@@ -1,5 +1,7 @@
-package br.com.juwer.algafoodapi.api.model.dto.input;
+package br.com.juwer.algafoodapi.api.model.dto.input.restaurantedtos;
 
+import br.com.juwer.algafoodapi.api.model.dto.input.CozinhaIdDTOInput;
+import br.com.juwer.algafoodapi.api.model.dto.input.EnderecoDTOInput;
 import lombok.Getter;
 import lombok.Setter;
 

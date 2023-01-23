@@ -3,7 +3,7 @@ package br.com.juwer.algafoodapi.api.controller;
 import br.com.juwer.algafoodapi.api.assembler.FormaPagamentoDTOAssembler;
 import br.com.juwer.algafoodapi.api.disassembler.FormaPagamentoDTODisassembler;
 import br.com.juwer.algafoodapi.api.model.dto.FormaPagamentoDTO;
-import br.com.juwer.algafoodapi.api.model.dto.input.FormaPagamentoDTOInput;
+import br.com.juwer.algafoodapi.api.model.dto.input.formapagamentodtos.FormaPagamentoDTOInput;
 import br.com.juwer.algafoodapi.domain.model.FormaPagamento;
 import br.com.juwer.algafoodapi.domain.repository.FormaPagamentoRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroFormaPagamentoService;

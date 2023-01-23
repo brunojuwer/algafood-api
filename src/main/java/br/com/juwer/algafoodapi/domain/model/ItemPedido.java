@@ -21,7 +21,7 @@ public class ItemPedido {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @EqualsAndHashCode.Include
   @Id
-  private long id;
+  private Long id;
 
   @Column(nullable = false)
   private Integer quantidade;
