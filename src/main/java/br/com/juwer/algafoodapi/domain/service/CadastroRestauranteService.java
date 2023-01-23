@@ -2,10 +2,7 @@ package br.com.juwer.algafoodapi.domain.service;
 
 import br.com.juwer.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.juwer.algafoodapi.domain.exception.RestauranteNaoEncontradoException;
-import br.com.juwer.algafoodapi.domain.model.Cidade;
-import br.com.juwer.algafoodapi.domain.model.Cozinha;
-import br.com.juwer.algafoodapi.domain.model.FormaPagamento;
-import br.com.juwer.algafoodapi.domain.model.Restaurante;
+import br.com.juwer.algafoodapi.domain.model.*;
 import br.com.juwer.algafoodapi.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -30,6 +27,9 @@ public class CadastroRestauranteService {
 
   @Autowired
   private CadastroFormaPagamentoService cadastroFormaPagamentoService;
+
+  @Autowired
+  private CadastroUsuarioService cadastroUsuarioService;
 
   @Transactional
   public Restaurante salvar(Restaurante restaurante) {
@@ -86,6 +86,22 @@ public class CadastroRestauranteService {
     FormaPagamento formaPagamento = cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId);
 
     restaurante.getFormasPagamento().remove(formaPagamento);
+  }
+
+  @Transactional
+  public void associarUsuario(Long restauranteId, Long usuarioId) {
+    Restaurante restaurante = buscaOuFalha(restauranteId);
+    Usuario usuario = cadastroUsuarioService.buscaOuFalha(usuarioId);
+
+    restaurante.getUsuarios().add(usuario);
+  }
+
+  @Transactional
+  public void desassociarUsuario(Long restauranteId, Long usuarioId) {
+    Restaurante restaurante = buscaOuFalha(restauranteId);
+    Usuario usuario = cadastroUsuarioService.buscaOuFalha(usuarioId);
+
+    restaurante.getUsuarios().remove(usuario);
   }
   
   public Restaurante buscaOuFalha(Long restauranteId) {
