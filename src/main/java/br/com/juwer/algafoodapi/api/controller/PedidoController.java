@@ -7,6 +7,7 @@ import br.com.juwer.algafoodapi.domain.repository.PedidoRespository;
 import br.com.juwer.algafoodapi.domain.service.CadastroPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,4 +33,9 @@ public class PedidoController {
         return pedidoDTOAssembler.toCollectionModel(pedidos);
     }
 
+    @GetMapping("/{pedidoId}")
+    public PedidoDTO buscar(@PathVariable Long pedidoId) {
+        Pedido pedido = cadastroPedidoService.buscaOuFalha(pedidoId);
+        return pedidoDTOAssembler.toModel(pedido);
+    }
 }
