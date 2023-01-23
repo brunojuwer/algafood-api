@@ -6,12 +6,16 @@ delete from estado;
 delete from forma_pagamento;
 delete from grupo;
 delete from grupo_permissao;
+delete from pedido;
+delete from item_pedido;
 delete from permissao;
 delete from produto;
 delete from restaurante;
 delete from restaurante_forma_pagamento;
 delete from usuario;
 delete from usuario_grupo;
+delete from restaurante_usuario;
+
 
 set foreign_key_checks = 1;
 
@@ -24,6 +28,7 @@ alter table permissao auto_increment = 1;
 alter table produto auto_increment = 1;
 alter table restaurante auto_increment = 1;
 alter table usuario auto_increment = 1;
+alter table restaurante_usuario auto_increment = 1;
 
 insert into cozinha (id, nome) values (1, 'Tailandesa');
 insert into cozinha (id, nome) values (2, 'Indiana');
@@ -80,3 +85,5 @@ insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (1, 
 insert into usuario (nome, email, senha, data_cadastro) values ('Matt Tuck', 'matt.tuck@algafood.com.br', '123', utc_timestamp), ('Michael Paget', 'michael.paget@algafood.com.br', '123', utc_timestamp), ('Ronnie Radke', 'ronnie.radke@algafood.com.br', '123', utc_timestamp), ('Kei Goto', 'kei.goto@algafood.com.br', '123', utc_timestamp);
 
 insert into usuario_grupo (usuario_id, grupo_id) values (1,1), (1,2), (2,2), (3, 4);
+
+insert into restaurante_usuario (restaurante_id, usuario_id) values (1,1), (2,4), (1,2);
