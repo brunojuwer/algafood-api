@@ -78,3 +78,5 @@ insert into grupo (nome) values ('Gerente'), ('Vendedor'), ('Cadastrador'), ('Se
 insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (1, 3), (2, 1), (3, 1), (3, 2), (4, 3);
 
 insert into usuario (nome, email, senha, data_cadastro) values ('Matt Tuck', 'matt.tuck@algafood.com.br', '123', utc_timestamp), ('Michael Paget', 'michael.paget@algafood.com.br', '123', utc_timestamp), ('Ronnie Radke', 'ronnie.radke@algafood.com.br', '123', utc_timestamp), ('Kei Goto', 'kei.goto@algafood.com.br', '123', utc_timestamp);
+
+insert into usuario_grupo (usuario_id, grupo_id) values (1,1), (1,2), (2,2), (3, 4);
