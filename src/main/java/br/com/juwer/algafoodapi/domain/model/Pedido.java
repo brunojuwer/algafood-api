@@ -21,7 +21,7 @@ public class Pedido {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @EqualsAndHashCode.Include
   @Id
-  private long id;
+  private Long id;
   
   @Column(nullable = false)
   private BigDecimal subTotal;
@@ -60,7 +60,4 @@ public class Pedido {
 
   @OneToMany(mappedBy = "pedido")
   private List<ItemPedido> itens = new ArrayList<>();
-
-
-
 }
