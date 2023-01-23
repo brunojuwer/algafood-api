@@ -29,6 +29,8 @@ alter table produto auto_increment = 1;
 alter table restaurante auto_increment = 1;
 alter table usuario auto_increment = 1;
 alter table restaurante_usuario auto_increment = 1;
+alter table pedido auto_increment = 1;
+alter table item_pedido auto_increment =1;
 
 insert into cozinha (id, nome) values (1, 'Tailandesa');
 insert into cozinha (id, nome) values (2, 'Indiana');
@@ -87,3 +89,13 @@ insert into usuario (nome, email, senha, data_cadastro) values ('Matt Tuck', 'ma
 insert into usuario_grupo (usuario_id, grupo_id) values (1,1), (1,2), (2,2), (3, 4);
 
 insert into restaurante_usuario (restaurante_id, usuario_id) values (1,1), (2,4), (1,2);
+
+insert into pedido (subtotal, taxa_frete, valor_total, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, endereco_logradouro, endereco_numero, endereco_bairro, status, data_criacao) values (50, 20, 70, 1, 1, 3, 1, '999999900', 'rua pastel', '432W', 'Interior', 'CRIADO', utc_timestamp);
+
+insert into pedido (subtotal, taxa_frete, valor_total, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, endereco_logradouro, endereco_numero, endereco_bairro, status, data_criacao) values (70, 30, 100, 2, 4, 2, 2, '999999900', 'Rua Yoshida', 'A210', 'Centro', 'CRIADO', utc_timestamp);
+
+insert into item_pedido (quantidade, preco_unitario, preco_total, observacao, pedido_id, produto_id) values (2, 20.18, 30.29, 'Produto extremamente quente', 1, 3);
+
+insert into item_pedido (quantidade, preco_unitario, preco_total, observacao, pedido_id, produto_id) values (1, 21.18, 34.29, 'Cuidado com o vapor quente', 1, 1);
+
+insert into item_pedido (quantidade, preco_unitario, preco_total, observacao, pedido_id, produto_id) values (1, 21.18, 34.29, 'Cuidado com o vapor quente', 2, 1);
