@@ -1,6 +1,5 @@
 package br.com.juwer.algafoodapi.api.model.dto;
 
-import br.com.juwer.algafoodapi.api.model.dto.input.EnderecoDTO;
 import lombok.Getter;
 import lombok.Setter;
 

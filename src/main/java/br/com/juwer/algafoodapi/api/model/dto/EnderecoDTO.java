@@ -1,11 +1,10 @@
-package br.com.juwer.algafoodapi.api.model.dto.input;
+package br.com.juwer.algafoodapi.api.model.dto;
 
-import br.com.juwer.algafoodapi.api.model.dto.CidadeResumoDTO;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 public class EnderecoDTO {
 
     private String cep;
