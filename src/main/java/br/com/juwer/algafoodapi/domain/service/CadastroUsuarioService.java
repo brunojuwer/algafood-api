@@ -3,6 +3,7 @@ package br.com.juwer.algafoodapi.domain.service;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 import br.com.juwer.algafoodapi.domain.exception.UsuarioNaoEncontradoException;
+import br.com.juwer.algafoodapi.domain.model.Grupo;
 import br.com.juwer.algafoodapi.domain.model.Usuario;
 import br.com.juwer.algafoodapi.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class CadastroUsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private CadastroGrupoService cadastroGrupoService;
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
@@ -55,6 +59,20 @@ public class CadastroUsuarioService {
             throw new NegocioException("A senha atual não conincide com a informada");
         }
         usuario.setSenha(novaSenha);
+    }
+
+    @Transactional
+    public void associarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscaOuFalha(usuarioId);
+        Grupo grupo = cadastroGrupoService.buscaOuFalha(grupoId);
+        usuario.getGrupos().add(grupo);
+    }
+
+    @Transactional
+    public void desassociarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscaOuFalha(usuarioId);
+        Grupo grupo = cadastroGrupoService.buscaOuFalha(grupoId);
+        usuario.getGrupos().remove(grupo);
     }
 
     public Usuario buscaOuFalha(Long usuarioId){
