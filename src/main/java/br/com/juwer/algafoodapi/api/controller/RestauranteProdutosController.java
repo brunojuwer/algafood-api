@@ -3,7 +3,7 @@ package br.com.juwer.algafoodapi.api.controller;
 import br.com.juwer.algafoodapi.api.assembler.ProdutoDTOAssembler;
 import br.com.juwer.algafoodapi.api.disassembler.ProdutoDTODisassembler;
 import br.com.juwer.algafoodapi.api.model.dto.ProdutoDTO;
-import br.com.juwer.algafoodapi.api.model.dto.input.ProdutoDTOInput;
+import br.com.juwer.algafoodapi.api.model.dto.input.produtodtos.ProdutoDTOInput;
 import br.com.juwer.algafoodapi.domain.model.Produto;
 import br.com.juwer.algafoodapi.domain.service.CadastroProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;

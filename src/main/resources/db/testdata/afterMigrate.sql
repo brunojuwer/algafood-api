@@ -94,8 +94,8 @@ insert into pedido (sub_total, taxa_frete, valor_total, restaurante_id, usuario_
 
 insert into pedido (sub_total, taxa_frete, valor_total, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, endereco_logradouro, endereco_numero, endereco_bairro, status, data_criacao) values (70, 30, 100, 2, 4, 2, 2, '999999900', 'Rua Yoshida', 'A210', 'Centro', 'CRIADO', utc_timestamp);
 
-insert into item_pedido (quantidade, preco_unitario, preco_total, observacao, pedido_id, produto_id) values (2, 20.18, 30.29, 'Produto extremamente quente', 1, 3);
+insert into item_pedido (quantidade, preco_unitario, preco_total, observacao, pedido_id, produto_id) values (2, 87.20, 174.4, 'Produto extremamente quente', 1, 3);
 
-insert into item_pedido (quantidade, preco_unitario, preco_total, observacao, pedido_id, produto_id) values (1, 21.18, 34.29, 'Cuidado com o vapor quente', 1, 1);
+insert into item_pedido (quantidade, preco_unitario, preco_total, observacao, pedido_id, produto_id) values (1, 21.15, 21.15, 'Cuidado com o vapor quente', 1, 1);
 
-insert into item_pedido (quantidade, preco_unitario, preco_total, observacao, pedido_id, produto_id) values (1, 21.18, 34.29, 'Cuidado com o vapor quente', 2, 1);
+insert into item_pedido (quantidade, preco_unitario, preco_total, observacao, pedido_id, produto_id) values (1, 21.18, 21.18, 'Cuidado com o vapor quente', 2, 1);
