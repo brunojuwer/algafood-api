@@ -14,26 +14,17 @@ import java.util.List;
 public class PedidoDTO {
 
     private Long id;
-
     private BigDecimal subTotal;
-
     private BigDecimal taxaFrete;
-
     private BigDecimal valorTotal;
+    private StatusPedido status;
     private OffsetDateTime dataCriacao;
     private OffsetDateTime dataConfirmacao;
     private OffsetDateTime dataCancelamento;
     private OffsetDateTime dataEntrega;
-
     private EnderecoDTO enderecoEntrega;
-
-    private StatusPedido status;
-
     private FormaPagamentoDTO formaPagamento;
-
     private UsuarioDTO cliente;
-
     private RestauranteResumoDTO restaurante;
-
     private List<ItemPedidoDTO> itens = new ArrayList<>();
 }
