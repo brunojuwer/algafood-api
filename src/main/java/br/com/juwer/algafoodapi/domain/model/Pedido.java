@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.Data;
@@ -69,5 +70,30 @@ public class Pedido {
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
     this.valorTotal = this.subTotal.add(this.taxaFrete);
+  }
+
+  public void confirmar() {
+    this.setStatus(StatusPedido.CONFIRMADO);
+    this.setDataConfirmacao(OffsetDateTime.now());
+  }
+
+  public void cancelar() {
+    this.setStatus(StatusPedido.CANCELADO);
+    this.setDataCancelamento(OffsetDateTime.now());
+  }
+
+  public void entregar() {
+    this.setStatus(StatusPedido.ENTREGE);
+    this.setDataEntrega(OffsetDateTime.now());
+  }
+
+  private void setStatus(StatusPedido novoStatus) {
+    if(this.getStatus().naoPodeAlterarPara(novoStatus)){
+      throw new NegocioException(String.format(
+              "Status do pedido %d não pode ser alterado de %s para %s",
+              this.id, this.getStatus().getDescricao(), novoStatus.getDescricao()
+      ));
+    }
+    this.status = novoStatus;
   }
 }
