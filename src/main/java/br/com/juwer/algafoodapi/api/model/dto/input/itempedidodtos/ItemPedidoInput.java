@@ -11,7 +11,7 @@ import javax.validation.constraints.Positive;
 public class ItemPedidoInput {
 
     @NotNull
-    private Long id;
+    private Long produtoId;
 
     @NotNull
     @Positive

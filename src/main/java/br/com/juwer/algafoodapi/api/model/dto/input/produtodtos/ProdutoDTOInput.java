@@ -1,4 +1,4 @@
-package br.com.juwer.algafoodapi.api.model.dto.input;
+package br.com.juwer.algafoodapi.api.model.dto.input.produtodtos;
 
 import lombok.Getter;
 import lombok.Setter;

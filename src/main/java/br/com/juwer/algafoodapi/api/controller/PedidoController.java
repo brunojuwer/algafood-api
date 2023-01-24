@@ -10,6 +10,7 @@ import br.com.juwer.algafoodapi.domain.model.Pedido;
 import br.com.juwer.algafoodapi.domain.repository.PedidoRespository;
 import br.com.juwer.algafoodapi.domain.service.CadastroPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -47,8 +48,10 @@ public class PedidoController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public PedidoDTO adicionar(@RequestBody @Valid PedidoDTOInput pedidoDTOInput) {
         Pedido pedido = pedidoDTODisassembler.toDomainObject(pedidoDTOInput);
-        return pedidoDTOAssembler.toModel(cadastroPedidoService.salvar(pedido));
+        pedido = cadastroPedidoService.salvar(pedido);
+        return pedidoDTOAssembler.toModel(pedido);
     }
 }

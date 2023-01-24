@@ -1,8 +1,8 @@
 package br.com.juwer.algafoodapi.domain.service;
 
-import br.com.juwer.algafoodapi.domain.exception.FormaPagamentoNaoEncontrada;
 import br.com.juwer.algafoodapi.domain.exception.PedidoNaoEncontradoException;
 import br.com.juwer.algafoodapi.domain.model.Pedido;
+import br.com.juwer.algafoodapi.domain.model.Produto;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
 import br.com.juwer.algafoodapi.domain.model.Usuario;
 import br.com.juwer.algafoodapi.domain.repository.PedidoRespository;
@@ -10,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.math.BigDecimal;
 
 @Service
 public class CadastroPedidoService {
@@ -28,24 +27,46 @@ public class CadastroPedidoService {
     @Autowired
     private CadastroCidadeService cadastroCidadeService;
 
+    @Autowired
+    private CadastroProdutoService cadastroProdutoService;
+
+    @Autowired
+    private CadastroUsuarioService cadastroUsuarioService;
+
 
     @Transactional
     public Pedido salvar(Pedido pedido) {
+
+        pedido.setSubTotal(BigDecimal.ZERO); // evita null pointer ex
+
         Long formaPagamentoId = pedido.getFormaPagamento().getId();
         Long restauranteId = pedido.getRestaurante().getId();
 
-        pedido.setCliente(new Usuario());
-        pedido.getCliente().setId(1L);
+        // TODO pegar usuário autenticado
+        Usuario usuario = cadastroUsuarioService.buscaOuFalha(1L);
+        pedido.setCliente(usuario);
+
 
         Restaurante restaurante = cadastroRestauranteService.buscaOuFalha(restauranteId);
-        cadastroCidadeService.buscaOuFalha(pedido.getEnderecoEntrega().getCidade().getId());
+        pedido.setRestaurante(restaurante);
 
-        boolean restauranteHaveFormaPagamento = restaurante.getFormasPagamento().stream()
-                .anyMatch(item -> Objects.equals(item.getId(), formaPagamentoId));
+        pedido.getEnderecoEntrega().setCidade(cadastroCidadeService.buscaOuFalha(pedido.getEnderecoEntrega().getCidade().getId()));
 
-        if(!restauranteHaveFormaPagamento) {
-            throw new FormaPagamentoNaoEncontrada(restauranteId, formaPagamentoId);
-        }
+        pedido.setFormaPagamento(cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId, restauranteId));
+
+        pedido.getItens().forEach((item) -> {
+
+            Produto produto = cadastroProdutoService.buscaOuFalha(restauranteId, item.getProduto().getId());
+            item.setPrecoUnitario(produto.getPreco());
+            item.setPrecoTotal(produto.getPreco().multiply(BigDecimal.valueOf(item.getQuantidade())));
+            pedido.setSubTotal(pedido.getSubTotal().add(item.getPrecoTotal()));
+
+            item.setProduto(produto);
+            item.setPedido(pedido);
+        });
+
+        pedido.setTaxaFrete(restaurante.getTaxaFrete());
+        pedido.calcularValorTotal();
 
         return pedidoRespository.save(pedido);
     }
