@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Positive;
 
 @Getter
 @Setter
@@ -14,7 +14,7 @@ public class ItemPedidoInput {
     private Long id;
 
     @NotNull
-    @Size(min = 1)
+    @Positive
     private Integer quantidade;
 
     private String observacao;
