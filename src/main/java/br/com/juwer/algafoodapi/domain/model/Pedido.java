@@ -44,7 +44,7 @@ public class Pedido {
   private Endereco enderecoEntrega;
 
   @Enumerated(EnumType.STRING)
-  private StatusPedido status;
+  private StatusPedido status = StatusPedido.CRIADO;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
