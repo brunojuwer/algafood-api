@@ -4,17 +4,21 @@ import br.com.juwer.algafoodapi.api.assembler.RestauranteDTOAssembler;
 import br.com.juwer.algafoodapi.api.disassembler.RestauranteDTODisassembler;
 import br.com.juwer.algafoodapi.api.model.dto.RestauranteDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.restaurantedtos.RestauranteDTOInput;
+import br.com.juwer.algafoodapi.api.model.dto.view.RestauranteView;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
 import br.com.juwer.algafoodapi.domain.repository.RestauranteRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroRestauranteService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -36,9 +40,31 @@ public class RestauranteController {
   @Autowired
   private RestauranteDTODisassembler restauranteDTODisassembler;
 
+//  @GetMapping
+//  public List<RestauranteDTO> listar(){
+//    return restauranteDTOAssembler.toCollectionModel(restauranteRepository.findAll());
+//  }
+//
+//  @JsonView(RestauranteView.Resumo.class)
+//  @GetMapping(params = "projecao=resumo")
+//  public List<RestauranteDTO> listarResumo(){
+//    return this.listar();
+//  }
+
   @GetMapping
-  public List<RestauranteDTO> listar(){
-    return restauranteDTOAssembler.toCollectionModel(restauranteRepository.findAll());
+  public MappingJacksonValue listar(@RequestParam(required = false) String projecao){
+      List<Restaurante> restaurantes = restauranteRepository.findAll();
+      List<RestauranteDTO> restaurantesDTO = restauranteDTOAssembler.toCollectionModel(restaurantes);
+
+      MappingJacksonValue restaurantesWrapper = new MappingJacksonValue(restaurantesDTO);
+
+      if("apenas-nome-e-id".equals(projecao)){
+        restaurantesWrapper.setSerializationView(RestauranteView.ApenasNomeEId.class);
+          return restaurantesWrapper;
+      }
+
+      restaurantesWrapper.setSerializationView(RestauranteView.Resumo.class);
+      return restaurantesWrapper;
   }
 
   @GetMapping("/{restauranteId}")
