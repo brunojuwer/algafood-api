@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -23,6 +24,8 @@ public class Pedido {
   @EqualsAndHashCode.Include
   @Id
   private Long id;
+
+  private String codigo;
   
   @Column(nullable = false)
   private BigDecimal subTotal;
@@ -95,5 +98,10 @@ public class Pedido {
       ));
     }
     this.status = novoStatus;
+  }
+
+  @PrePersist
+  private void setCodigo(){
+    this.codigo = UUID.randomUUID().toString();
   }
 }
