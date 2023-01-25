@@ -72,9 +72,9 @@ public class CadastroPedidoService {
     }
 
 
-    public Pedido buscaOuFalha(Long pedidoId) {
-        return pedidoRespository.findById(pedidoId).orElseThrow(
-                () -> new PedidoNaoEncontradoException(pedidoId)
+    public Pedido buscaOuFalha(String codigo) {
+        return pedidoRespository.findByCodigo(codigo).orElseThrow(
+                () -> new PedidoNaoEncontradoException(codigo)
         );
     }
 }
