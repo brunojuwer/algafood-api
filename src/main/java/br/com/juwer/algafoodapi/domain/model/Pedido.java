@@ -1,19 +1,16 @@
 package br.com.juwer.algafoodapi.domain.model;
 
+import br.com.juwer.algafoodapi.domain.exception.NegocioException;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import javax.persistence.*;
-
-import br.com.juwer.algafoodapi.domain.exception.NegocioException;
-import org.hibernate.annotations.CreationTimestamp;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Data
@@ -86,7 +83,7 @@ public class Pedido {
   }
 
   public void entregar() {
-    this.setStatus(StatusPedido.ENTREGE);
+    this.setStatus(StatusPedido.ENTREGUE);
     this.setDataEntrega(OffsetDateTime.now());
   }
 
