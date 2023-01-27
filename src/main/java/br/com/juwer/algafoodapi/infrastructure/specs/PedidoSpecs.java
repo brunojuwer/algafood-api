@@ -16,7 +16,6 @@ public class PedidoSpecs {
             root.fetch("restaurante").fetch("cozinha");
             root.fetch("cliente");
 
-
             if(filter.getClienteId() != null) {
                 predicates.add(builder.equal(root.get("cliente"), filter.getClienteId()));
             }

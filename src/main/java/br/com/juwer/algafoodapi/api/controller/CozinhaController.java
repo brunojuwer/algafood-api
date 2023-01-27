@@ -8,6 +8,10 @@ import br.com.juwer.algafoodapi.domain.model.Cozinha;
 import br.com.juwer.algafoodapi.domain.repository.CozinhaRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroCozinhaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +35,13 @@ public class CozinhaController {
   private CozinhaDTODisassembler cozinhaDTODisassembler;
 
   @GetMapping()
-  public List<CozinhaDTO> listar(){
-    return cozinhaDTOAssembler.toCollectionModel(cozinhaRepository.findAll());
+  public Page<CozinhaDTO> listar(@PageableDefault(size = 2) Pageable pageable) {
+    Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
+    List<CozinhaDTO> cozinhasDTO = cozinhaDTOAssembler.toCollectionModel(cozinhasPage.getContent());
+
+    // transforma em uma Page de CozinhaDTO
+    Page<CozinhaDTO> cozinhasDTOPage = new PageImpl<>(cozinhasDTO, pageable, cozinhasPage.getTotalElements());
+    return cozinhasDTOPage;
   }
 
   @GetMapping("/{cozinhaId}")
