@@ -39,9 +39,7 @@ public class CozinhaController {
     Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
     List<CozinhaDTO> cozinhasDTO = cozinhaDTOAssembler.toCollectionModel(cozinhasPage.getContent());
 
-    // transforma em uma Page de CozinhaDTO
-    Page<CozinhaDTO> cozinhasDTOPage = new PageImpl<>(cozinhasDTO, pageable, cozinhasPage.getTotalElements());
-    return cozinhasDTOPage;
+    return new PageImpl<>(cozinhasDTO, pageable, cozinhasPage.getTotalElements());
   }
 
   @GetMapping("/{cozinhaId}")
