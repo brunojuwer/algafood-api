@@ -46,7 +46,7 @@ public class PedidoController {
     @GetMapping
     public Page<PedidoResumoDTO> pesquisar(
             PedidoFilter filter,
-            @PageableDefault(size = 2) Pageable pageable
+            @PageableDefault(size = 10) Pageable pageable
     ) {
         Page<Pedido> pedidosPage = pedidoRespository.findAll(PedidoSpecs.usandoFiltro(filter), pageable);
         List<PedidoResumoDTO> pedidoResumoDTOS = pedidoResumoDTOAssembler.toCollectionModel(pedidosPage.getContent());
