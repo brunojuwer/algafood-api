@@ -8,7 +8,7 @@ import br.com.juwer.algafoodapi.api.model.dto.PedidoResumoDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.pedidosdto.PedidoDTOInput;
 import br.com.juwer.algafoodapi.domain.model.Pedido;
 import br.com.juwer.algafoodapi.domain.repository.PedidoRespository;
-import br.com.juwer.algafoodapi.domain.repository.filter.PedidoFilter;
+import br.com.juwer.algafoodapi.domain.filter.PedidoFilter;
 import br.com.juwer.algafoodapi.domain.service.CadastroPedidoService;
 import br.com.juwer.algafoodapi.infrastructure.specs.PedidoSpecs;
 import org.springframework.beans.factory.annotation.Autowired;

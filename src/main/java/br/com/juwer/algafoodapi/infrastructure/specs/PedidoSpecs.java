@@ -1,7 +1,7 @@
 package br.com.juwer.algafoodapi.infrastructure.specs;
 
 import br.com.juwer.algafoodapi.domain.model.Pedido;
-import br.com.juwer.algafoodapi.domain.repository.filter.PedidoFilter;
+import br.com.juwer.algafoodapi.domain.filter.PedidoFilter;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Predicate;
