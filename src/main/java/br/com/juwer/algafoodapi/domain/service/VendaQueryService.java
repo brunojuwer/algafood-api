@@ -2,10 +2,9 @@ package br.com.juwer.algafoodapi.domain.service;
 
 import br.com.juwer.algafoodapi.domain.filter.VendaDiariaFilter;
 import br.com.juwer.algafoodapi.domain.model.dto.VendaDiaria;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 public interface VendaQueryService {
-    List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filter);
+    List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filter, String timeOffSet);
 }

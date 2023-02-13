@@ -1,4 +1,4 @@
-package br.com.juwer.algafoodapi.infrastructure.service;
+package br.com.juwer.algafoodapi.infrastructure.service.query;
 
 import br.com.juwer.algafoodapi.domain.filter.VendaDiariaFilter;
 import br.com.juwer.algafoodapi.domain.model.Pedido;
@@ -21,14 +21,21 @@ public class VendaQueryServiceImpl implements VendaQueryService {
     private EntityManager manager;
 
     @Override
-    public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filter) {
+    public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filter, String timeOffSet) {
         var builder = manager.getCriteriaBuilder();
         var query = builder.createQuery(VendaDiaria.class);
         var root = query.from(Pedido.class);
 
         var predicates = new ArrayList<Predicate>();
 
-        var functionDateDataCriacao = builder.function("date", Date.class, root.get("dataCriacao"));
+        var functionConvertTzDataCriacao = builder.function("convert_tz", Date.class,
+                root.get("dataCriacao"),
+                builder.literal("+00:00"),
+                builder.literal(timeOffSet)
+        );
+
+        var functionDateDataCriacao = builder.function("date", Date.class, functionConvertTzDataCriacao);
+
         var selection = builder.construct(VendaDiaria.class,
                 functionDateDataCriacao,
                 builder.count(root.get("id")),
@@ -49,7 +56,7 @@ public class VendaQueryServiceImpl implements VendaQueryService {
 
         predicates.add(root.get("status").in(StatusPedido.CONFIRMADO, StatusPedido.ENTREGUE));
 
-         query.where(predicates.toArray(new Predicate[0]));
+        query.where(predicates.toArray(new Predicate[0]));
 
         return manager.createQuery(query).getResultList();
     }
