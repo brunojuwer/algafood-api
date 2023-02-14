@@ -21,14 +21,9 @@ public class RestauranteProdutoFotoController {
             @PathVariable Long produtoId,
             @Valid FotoProdutoDTOInput fotoProdutoDTOInput
             ) {
-
         var nomeArquivo = UUID.randomUUID().toString() + "_" + fotoProdutoDTOInput.getArquivo().getOriginalFilename();
 
         var caminhoEArquivoParaSalvar = Path.of("/home/brunojuwer/Documents/upload_test", nomeArquivo);
-
-        System.out.println(fotoProdutoDTOInput.getDescricao());
-        System.out.println(caminhoEArquivoParaSalvar);
-        System.out.println(fotoProdutoDTOInput.getArquivo().getContentType());
 
         try {
             fotoProdutoDTOInput.getArquivo().transferTo(caminhoEArquivoParaSalvar);
