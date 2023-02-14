@@ -1,5 +1,6 @@
 package br.com.juwer.algafoodapi.api.model.dto.input;
 
+import br.com.juwer.algafoodapi.core.validation.FileSize;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
 public class FotoProdutoDTOInput {
 
     @NotNull
+    @FileSize(max = "20KB")
     private MultipartFile arquivo;
 
     @NotBlank
