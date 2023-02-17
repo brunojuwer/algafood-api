@@ -37,6 +37,7 @@ public class RestauranteProdutoFotoController {
             @PathVariable Long produtoId,
             @Valid FotoProdutoDTOInput fotoProdutoDTOInput
             ) throws IOException {
+
         Produto produto = cadastroProdutoService.buscaOuFalha(restauranteId, produtoId);
 
         FotoProduto fotoProduto = new FotoProduto();
