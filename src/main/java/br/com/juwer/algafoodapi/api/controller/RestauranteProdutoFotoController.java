@@ -9,10 +9,7 @@ import br.com.juwer.algafoodapi.domain.service.CadastroProdutoService;
 import br.com.juwer.algafoodapi.domain.service.CatalogoFotoProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -52,5 +49,11 @@ public class RestauranteProdutoFotoController {
         FotoProduto fotoProdutoSalva = catalogoFotoProdutoService.salvar(fotoProduto, file.getInputStream());
 
         return fotoProdutoDTOAssembler.toModel(fotoProdutoSalva);
+    }
+
+    @GetMapping
+    public FotoProdutoDTO buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId){
+        FotoProduto foto = catalogoFotoProdutoService.buscaOuFalha(restauranteId, produtoId);
+        return fotoProdutoDTOAssembler.toModel(foto);
     }
 }
