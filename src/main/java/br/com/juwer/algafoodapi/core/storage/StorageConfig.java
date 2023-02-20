@@ -1,7 +1,8 @@
 package br.com.juwer.algafoodapi.core.storage;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSCredentialsProvider;
+import br.com.juwer.algafoodapi.domain.service.FotoStorageService;
+import br.com.juwer.algafoodapi.infrastructure.storage.LocalFotoStorageService;
+import br.com.juwer.algafoodapi.infrastructure.storage.S3FotoStorageService;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class AmazonS3Config {
+public class StorageConfig {
 
     @Autowired
     private StorageProperties storageProperties;
@@ -30,5 +31,13 @@ public class AmazonS3Config {
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .withRegion(region)
                 .build();
+    }
+
+    @Bean
+    public FotoStorageService fotoStorageService() {
+        if(StorageProperties.TipoStorage.S3.equals(storageProperties.getTipo())){
+            return new S3FotoStorageService();
+        }
+        return new LocalFotoStorageService();
     }
 }
