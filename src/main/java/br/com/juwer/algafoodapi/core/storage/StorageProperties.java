@@ -1,5 +1,6 @@
 package br.com.juwer.algafoodapi.core.storage;
 
+import com.amazonaws.regions.Regions;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -28,7 +29,7 @@ public class StorageProperties {
         private String idKeyAccess;
         private String secret;
         private String bucket;
-        private String region;
+        private Regions region;
         private String directory;
     }
 }
