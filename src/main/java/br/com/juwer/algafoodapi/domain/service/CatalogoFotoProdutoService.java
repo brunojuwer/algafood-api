@@ -50,6 +50,15 @@ public class CatalogoFotoProdutoService {
        return foto;
     }
 
+    @Transactional
+    public void deletar(Long restauranteId, Long produtoId) {
+        FotoProduto foto = this.buscaOuFalha(restauranteId, produtoId);
+        produtoRepository.delete(foto);
+        produtoRepository.flush();
+
+        fotoStorageService.remover(foto.getNomeArquivo());
+    }
+
     public FotoProduto buscaOuFalha(Long restauranteId, Long produtoId) {
         return produtoRepository.findFotoById(restauranteId, produtoId)
                .orElseThrow(() -> new FotoNaoEncontradaException("Não foi encontrada nenhuma foto"));
