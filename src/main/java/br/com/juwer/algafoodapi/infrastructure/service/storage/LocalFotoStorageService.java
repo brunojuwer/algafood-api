@@ -1,4 +1,4 @@
-package br.com.juwer.algafoodapi.infrastructure.storage;
+package br.com.juwer.algafoodapi.infrastructure.service.storage;
 
 import br.com.juwer.algafoodapi.core.storage.StorageProperties;
 import br.com.juwer.algafoodapi.domain.service.FotoStorageService;

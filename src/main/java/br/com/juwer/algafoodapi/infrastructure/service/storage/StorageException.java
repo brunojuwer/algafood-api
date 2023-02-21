@@ -1,4 +1,4 @@
-package br.com.juwer.algafoodapi.infrastructure.storage;
+package br.com.juwer.algafoodapi.infrastructure.service.storage;
 
 public class StorageException extends RuntimeException {
 

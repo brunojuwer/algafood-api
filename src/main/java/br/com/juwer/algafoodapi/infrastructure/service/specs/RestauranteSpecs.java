@@ -1,4 +1,4 @@
-package br.com.juwer.algafoodapi.infrastructure.specs;
+package br.com.juwer.algafoodapi.infrastructure.service.specs;
 
 import java.math.BigDecimal;
 

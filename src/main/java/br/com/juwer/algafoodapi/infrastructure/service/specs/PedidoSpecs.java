@@ -1,4 +1,4 @@
-package br.com.juwer.algafoodapi.infrastructure.specs;
+package br.com.juwer.algafoodapi.infrastructure.service.specs;
 
 import br.com.juwer.algafoodapi.domain.model.Pedido;
 import br.com.juwer.algafoodapi.domain.filter.PedidoFilter;
