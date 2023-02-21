@@ -10,7 +10,7 @@ import br.com.juwer.algafoodapi.domain.model.Pedido;
 import br.com.juwer.algafoodapi.domain.repository.PedidoRespository;
 import br.com.juwer.algafoodapi.domain.filter.PedidoFilter;
 import br.com.juwer.algafoodapi.domain.service.CadastroPedidoService;
-import br.com.juwer.algafoodapi.infrastructure.specs.PedidoSpecs;
+import br.com.juwer.algafoodapi.infrastructure.service.specs.PedidoSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

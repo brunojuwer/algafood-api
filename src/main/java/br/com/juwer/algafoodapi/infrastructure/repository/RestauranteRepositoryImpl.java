@@ -1,7 +1,7 @@
 package br.com.juwer.algafoodapi.infrastructure.repository;
 
-import static br.com.juwer.algafoodapi.infrastructure.specs.RestauranteSpecs.comFreteGratis;
-import static br.com.juwer.algafoodapi.infrastructure.specs.RestauranteSpecs.comNomeSemelhante;
+import static br.com.juwer.algafoodapi.infrastructure.service.specs.RestauranteSpecs.comFreteGratis;
+import static br.com.juwer.algafoodapi.infrastructure.service.specs.RestauranteSpecs.comNomeSemelhante;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

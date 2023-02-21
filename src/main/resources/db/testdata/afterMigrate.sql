@@ -85,7 +85,10 @@ insert into grupo (nome) values ('Gerente'), ('Vendedor'), ('Cadastrador'), ('Se
 
 insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (1, 3), (2, 1), (3, 1), (3, 2), (4, 3);
 
-insert into usuario (nome, email, senha, data_cadastro) values ('Matt Tuck', 'matt.tuck@algafood.com.br', '123', utc_timestamp), ('Michael Paget', 'michael.paget@algafood.com.br', '123', utc_timestamp), ('Ronnie Radke', 'ronnie.radke@algafood.com.br', '123', utc_timestamp), ('Kei Goto', 'kei.goto@algafood.com.br', '123', utc_timestamp);
+insert into usuario (id, nome, email, senha, data_cadastro) values
+(1,'Matt Tuck', 'matt.tuck@algafood.com.br', '123', utc_timestamp), (2, 'Michael Paget', 'michael.paget@algafood.com.br', '123', utc_timestamp),
+(3, 'Ronnie Radke', 'ronnie.radke@algafood.com.br', '123', utc_timestamp), (4, 'Kei Goto', 'kei.goto@algafood.com.br', '123', utc_timestamp),
+(5, 'Débora Alcantra', 'testebrunofood+debora@gmail.com', '123', utc_timestamp), (6, 'Bruno Juwer', 'testebrunofood@gmail.com', '123', utc_timestamp);
 
 insert into usuario_grupo (usuario_id, grupo_id) values (1,1), (1,2), (2,2), (3, 4);
 
@@ -142,3 +145,21 @@ values (5, '8d774bcf-b238-42f3-aef1-5fb388754d63', 1, 3, 2, 1, '38400-200', 'Rua
 
 insert into item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
 values (6, 5, 3, 1, 87.2, 87.2, null);
+
+insert into pedido (id, codigo, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep,
+                    endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
+	                status, data_criacao, data_confirmacao, data_entrega, sub_total, taxa_frete, valor_total)
+values (6, 'ad2eb59c-1acd-4532-a33c-183b0873a819', 3, 5, 2, 1, '38400-200', 'Rua 10', '930', 'Casa 20', 'Martins',
+        'CRIADO', '2019-11-02 21:00:30', '2019-11-02 21:01:21', '2019-11-02 21:20:10', 87.2, 10, 97.2);
+
+insert into item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
+values (7, 6, 3, 1, 87.2, 87.2, null);
+
+insert into pedido (id, codigo, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep,
+                    endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
+	                status, data_criacao, data_confirmacao, data_entrega, sub_total, taxa_frete, valor_total)
+values (7, '34ca5833-6bbc-4a8c-a2db-a8c66e2a9a47', 2, 6, 2, 1, '38400-200', 'Rua 10', '930', 'Casa 20', 'Martins',
+        'CRIADO', '2019-11-02 21:00:30', '2019-11-02 21:01:21', '2019-11-02 21:20:10', 87.2, 10, 97.2);
+
+insert into item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
+values (8, 7, 3, 1, 87.2, 87.2, null);

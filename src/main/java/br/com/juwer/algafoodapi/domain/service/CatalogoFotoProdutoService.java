@@ -3,7 +3,6 @@ package br.com.juwer.algafoodapi.domain.service;
 import br.com.juwer.algafoodapi.domain.exception.FotoNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.model.FotoProduto;
 import br.com.juwer.algafoodapi.domain.repository.ProdutoRepository;
-import br.com.juwer.algafoodapi.infrastructure.storage.StorageException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
