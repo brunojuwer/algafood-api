@@ -1,5 +1,6 @@
 package br.com.juwer.algafoodapi.domain.model;
 
+import br.com.juwer.algafoodapi.domain.event.PedidoCanceladoEvent;
 import br.com.juwer.algafoodapi.domain.event.PedidoConfirmadoEvent;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 import lombok.Data;
@@ -84,6 +85,8 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
   public void cancelar() {
     this.setStatus(StatusPedido.CANCELADO);
     this.setDataCancelamento(OffsetDateTime.now());
+
+    registerEvent(new PedidoCanceladoEvent(this));
   }
 
   public void entregar() {

@@ -20,7 +20,7 @@ public class FluxoPedidoService {
         Pedido pedido = cadastroPedidoService.buscaOuFalha(codigo);
         pedido.confirmar();
 
-        // necessário chamar o save para disparar os eventos do DDD
+        // necessário chamar o save para disparar os eventos de dominio
         pedidoRespository.save(pedido);
     }
 
@@ -28,6 +28,8 @@ public class FluxoPedidoService {
     public void cancelar(String codigo) {
         Pedido pedido = cadastroPedidoService.buscaOuFalha(codigo);
         pedido.cancelar();
+
+        pedidoRespository.save(pedido);
     }
 
     @Transactional
