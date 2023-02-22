@@ -1,7 +1,7 @@
 package br.com.juwer.algafoodapi.api.model.dto.view;
 
 public interface RestauranteView {
-    public interface Resumo {}
+    interface Resumo {}
 
-    public interface ApenasNomeEId{}
+    interface ApenasNomeEId{}
 }
