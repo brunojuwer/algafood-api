@@ -14,11 +14,10 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -40,32 +39,38 @@ public class RestauranteController {
   @Autowired
   private RestauranteDTODisassembler restauranteDTODisassembler;
 
-//  @GetMapping
-//  public List<RestauranteDTO> listar(){
-//    return restauranteDTOAssembler.toCollectionModel(restauranteRepository.findAll());
-//  }
+  @JsonView(RestauranteView.Resumo.class)
+  @GetMapping
+  public ResponseEntity<List<RestauranteDTO>> listar(){
+    List<RestauranteDTO> restauranteDTOS = restauranteDTOAssembler
+      .toCollectionModel(restauranteRepository.findAll());
+
+    return ResponseEntity
+            .ok()
+            .body(restauranteDTOS);
+  }
+
 //
-//  @JsonView(RestauranteView.Resumo.class)
 //  @GetMapping(params = "projecao=resumo")
 //  public List<RestauranteDTO> listarResumo(){
 //    return this.listar();
 //  }
 
-  @GetMapping
-  public MappingJacksonValue listar(@RequestParam(required = false) String projecao){
-      List<Restaurante> restaurantes = restauranteRepository.findAll();
-      List<RestauranteDTO> restaurantesDTO = restauranteDTOAssembler.toCollectionModel(restaurantes);
-
-      MappingJacksonValue restaurantesWrapper = new MappingJacksonValue(restaurantesDTO);
-
-      if("apenas-nome-e-id".equals(projecao)){
-        restaurantesWrapper.setSerializationView(RestauranteView.ApenasNomeEId.class);
-          return restaurantesWrapper;
-      }
-
-      restaurantesWrapper.setSerializationView(RestauranteView.Resumo.class);
-      return restaurantesWrapper;
-  }
+//  @GetMapping
+//  public MappingJacksonValue listar(@RequestParam(required = false) String projecao){
+//      List<Restaurante> restaurantes = restauranteRepository.findAll();
+//      List<RestauranteDTO> restaurantesDTO = restauranteDTOAssembler.toCollectionModel(restaurantes);
+//
+//      MappingJacksonValue restaurantesWrapper = new MappingJacksonValue(restaurantesDTO);
+//
+//      if("apenas-nome-e-id".equals(projecao)){
+//        restaurantesWrapper.setSerializationView(RestauranteView.ApenasNomeEId.class);
+//          return restaurantesWrapper;
+//      }
+//
+//      restaurantesWrapper.setSerializationView(RestauranteView.Resumo.class);
+//      return restaurantesWrapper;
+//  }
 
   @GetMapping("/{restauranteId}")
   public RestauranteDTO buscar(@PathVariable Long restauranteId) {
