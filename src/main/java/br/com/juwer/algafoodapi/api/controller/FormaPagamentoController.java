@@ -7,12 +7,17 @@ import br.com.juwer.algafoodapi.api.model.dto.input.formapagamentodtos.FormaPaga
 import br.com.juwer.algafoodapi.domain.model.FormaPagamento;
 import br.com.juwer.algafoodapi.domain.repository.FormaPagamentoRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroFormaPagamentoService;
+import org.jfree.util.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/formas-pagamento")
@@ -32,9 +37,12 @@ public class FormaPagamentoController {
     private FormaPagamentoDTODisassembler  formaPagamentoDTODisassembler;
 
     @GetMapping
-    public List<FormaPagamentoDTO> listar(){
+    public ResponseEntity<List<FormaPagamentoDTO>> listar(){
         List<FormaPagamento> formaPagamentos = formaPagamentoRepository.findAll();
-        return formaPagamentoDTOAssembler.toCollectionModel(formaPagamentos);
+        List<FormaPagamentoDTO> formaPagamentoDTOS = formaPagamentoDTOAssembler.toCollectionModel(formaPagamentos);
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+                .body(formaPagamentoDTOS);
     }
 
     @GetMapping("/{formaPagamentoId}")
