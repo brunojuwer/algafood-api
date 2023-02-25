@@ -47,7 +47,7 @@ public class FormaPagamentoController {
         OffsetDateTime ultimaAtualizacao = formaPagamentoRepository.getDataUltimaAtualizacao();
 
         if(ultimaAtualizacao != null) {
-            deepETag = String.valueOf(ultimaAtualizacao.toEpochSecond());
+            deepETag = String.valueOf(ultimaAtualizacao.toEpochSecond()); // converte em timestamp
         }
 
         if(request.checkNotModified(deepETag)) {
