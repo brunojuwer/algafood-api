@@ -45,7 +45,7 @@ public class CidadeController {
 
   @GetMapping
   public List<CidadeDTO> listar(){
-    return cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAll());
+    return cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAllCidades());
   }
   
   @GetMapping("/{cidadeId}")
