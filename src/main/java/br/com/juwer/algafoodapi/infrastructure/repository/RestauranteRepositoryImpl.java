@@ -9,11 +9,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 
+import br.com.juwer.algafoodapi.domain.model.Cozinha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -38,7 +36,6 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
     BigDecimal taxaFreteFinal) {
     
       CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-
       CriteriaQuery<Restaurante> criteria = builder.createQuery(Restaurante.class);
       Root<Restaurante> root = criteria.from(Restaurante.class);
       
@@ -69,4 +66,16 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
     return restauranteRepository
       .findAll(comFreteGratis().and(comNomeSemelhante(nome)));  
   }
+
+    @Override
+    public List<Restaurante> findAllResumo() {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Restaurante> criteriaQuery = builder.createQuery(Restaurante.class);
+        Root<Restaurante> root = criteriaQuery.from(Restaurante.class);
+
+        criteriaQuery.multiselect(root.get("id"), root.get("nome"), root.get("taxaFrete"), root.get("cozinha"))
+                .from(Restaurante.class).join("cozinha");
+
+        return entityManager.createQuery(criteriaQuery).getResultList();
+    }
 }

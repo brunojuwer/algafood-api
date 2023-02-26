@@ -18,6 +18,16 @@ import java.util.Set;
 @Entity
 public class Restaurante {
 
+    public Restaurante() {
+    }
+
+    public Restaurante(Long id, String nome, BigDecimal taxaFrete, Cozinha cozinha) {
+        this.id = id;
+        this.nome = nome;
+        this.taxaFrete = taxaFrete;
+        this.cozinha = cozinha;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
@@ -29,7 +39,7 @@ public class Restaurante {
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
 

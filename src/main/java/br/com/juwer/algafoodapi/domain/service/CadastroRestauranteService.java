@@ -3,6 +3,7 @@ package br.com.juwer.algafoodapi.domain.service;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.juwer.algafoodapi.domain.exception.RestauranteNaoEncontradoException;
 import br.com.juwer.algafoodapi.domain.model.*;
+import br.com.juwer.algafoodapi.domain.projections.RestauranteResumo;
 import br.com.juwer.algafoodapi.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -10,6 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -121,6 +123,21 @@ public class CadastroRestauranteService {
              .orElseThrow(() -> 
                new RestauranteNaoEncontradoException(restauranteId));
   }
+
+  public List<Restaurante> buscarResumo() {
+    List<RestauranteResumo> resumo = restauranteRepository.findAllRestauranteResumo();
+    List<Restaurante> restaurantes = new ArrayList<>();
+    resumo.forEach(restaurante -> {
+      Cozinha cozinha = new Cozinha(restaurante.getCozinha_id(), restaurante.getNomeCozinha());
+      Restaurante novoRestaurante =
+                new Restaurante(restaurante.getId(), restaurante.getNome(), restaurante.getTaxaFrete(), cozinha);
+
+        restaurantes.add(novoRestaurante);
+    });
+
+    return restaurantes;
+  }
+
   @Transactional
   public void abrir(Long restauranteId) {
     Restaurante restaurante = buscaOuFalha(restauranteId);

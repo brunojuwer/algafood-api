@@ -11,4 +11,6 @@ public interface RestauranteRepositoryQueries {
     BigDecimal taxaFreteFinal);
 
   List<Restaurante> findComFreteGratis(String nome);
+
+  List<Restaurante> findAllResumo();
 }
