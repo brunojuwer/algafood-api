@@ -43,7 +43,7 @@ public class RestauranteController {
   @GetMapping
   public ResponseEntity<List<RestauranteDTO>> listar(){
     List<RestauranteDTO> restauranteDTOS = restauranteDTOAssembler
-      .toCollectionModel(restauranteRepository.findAll());
+            .toCollectionModel(restauranteRepository.findAll());
 
     return ResponseEntity
             .ok()
