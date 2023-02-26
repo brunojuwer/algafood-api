@@ -12,6 +12,14 @@ import java.util.List;
 @Entity
 public class Cozinha {
 
+    public Cozinha() {
+    }
+
+    public Cozinha(Long id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include

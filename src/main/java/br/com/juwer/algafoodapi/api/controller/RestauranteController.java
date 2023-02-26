@@ -40,10 +40,12 @@ public class RestauranteController {
   private RestauranteDTODisassembler restauranteDTODisassembler;
 
   @JsonView(RestauranteView.Resumo.class)
+
   @GetMapping
   public ResponseEntity<List<RestauranteDTO>> listar(){
     List<RestauranteDTO> restauranteDTOS = restauranteDTOAssembler
-            .toCollectionModel(restauranteRepository.findAll());
+            .toCollectionModel(restauranteService.buscarResumo());
+//            .toCollectionModel(restauranteRepository.findAll());
 
     return ResponseEntity
             .ok()
