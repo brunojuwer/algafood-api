@@ -45,7 +45,6 @@ public class RestauranteController {
   public ResponseEntity<List<RestauranteDTO>> listar(){
     List<RestauranteDTO> restauranteDTOS = restauranteDTOAssembler
             .toCollectionModel(restauranteService.buscarResumo());
-//            .toCollectionModel(restauranteRepository.findAll());
 
     return ResponseEntity
             .ok()

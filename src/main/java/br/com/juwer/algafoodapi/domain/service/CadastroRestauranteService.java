@@ -126,14 +126,12 @@ public class CadastroRestauranteService {
 
   public List<Restaurante> buscarResumo() {
     List<RestauranteResumo> resumo = restauranteRepository.findAllRestauranteResumo();
-    List<Restaurante> restaurantes = new ArrayList<>();
-    resumo.forEach(restaurante -> {
+    List<Restaurante> restaurantes;
+    restaurantes = resumo.stream().map(restaurante -> {
       Cozinha cozinha = new Cozinha(restaurante.getCozinha_id(), restaurante.getNomeCozinha());
-      Restaurante novoRestaurante =
-                new Restaurante(restaurante.getId(), restaurante.getNome(), restaurante.getTaxaFrete(), cozinha);
 
-        restaurantes.add(novoRestaurante);
-    });
+      return new Restaurante(restaurante.getId(), restaurante.getNome(), restaurante.getTaxaFrete(), cozinha);
+    }).toList();
 
     return restaurantes;
   }
