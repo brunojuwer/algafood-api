@@ -8,6 +8,7 @@ import br.com.juwer.algafoodapi.api.assembler.CidadeDTOAssembler;
 import br.com.juwer.algafoodapi.api.disassembler.CidadeDTODisassembler;
 import br.com.juwer.algafoodapi.api.model.dto.CidadeDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.CidadeDTOInput;
+import io.swagger.annotations.Api;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ import br.com.juwer.algafoodapi.domain.model.Cidade;
 import br.com.juwer.algafoodapi.domain.repository.CidadeRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroCidadeService;
 
+@Api(tags = "Cidades")
 @RestController
 @RequestMapping("/cidades")
 public class CidadeController {
