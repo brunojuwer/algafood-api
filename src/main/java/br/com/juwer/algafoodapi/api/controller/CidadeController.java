@@ -8,6 +8,8 @@ import br.com.juwer.algafoodapi.api.assembler.CidadeDTOAssembler;
 import br.com.juwer.algafoodapi.api.disassembler.CidadeDTODisassembler;
 import br.com.juwer.algafoodapi.api.model.dto.CidadeDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.CidadeDTOInput;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,7 @@ import br.com.juwer.algafoodapi.domain.model.Cidade;
 import br.com.juwer.algafoodapi.domain.repository.CidadeRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroCidadeService;
 
+@Api(tags = "Cidades")
 @RestController
 @RequestMapping("/cidades")
 public class CidadeController {
@@ -43,16 +46,19 @@ public class CidadeController {
   @Autowired
   private CidadeDTODisassembler cidadeDTODisassembler;
 
+  @ApiOperation(value = "Listar as cidades")
   @GetMapping
   public List<CidadeDTO> listar(){
     return cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAllCidades());
   }
-  
+
+  @ApiOperation(value = "Buscar uma cidade por ID")
   @GetMapping("/{cidadeId}")
   private CidadeDTO buscar(@PathVariable Long cidadeId) {
     return cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
   }
 
+  @ApiOperation(value = "Cadastrar uma cidade")
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public CidadeDTO adicionar(@RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
@@ -64,6 +70,7 @@ public class CidadeController {
     }
   }
 
+  @ApiOperation(value = "Atualizar uma cidade por ID")
   @PutMapping("/{cidadeId}")
   public CidadeDTO atualizar(@PathVariable Long cidadeId,
                   @RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
@@ -77,6 +84,7 @@ public class CidadeController {
     }                  
   }
 
+  @ApiOperation(value = "Deletar uma cidade por ID")
   @DeleteMapping("/{cidadeId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void remover(@PathVariable Long cidadeId) {
