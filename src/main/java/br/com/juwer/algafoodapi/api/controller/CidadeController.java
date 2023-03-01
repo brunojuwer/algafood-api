@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +33,7 @@ import br.com.juwer.algafoodapi.domain.service.CadastroCidadeService;
 
 @Api(tags = "Cidades")
 @RestController
-@RequestMapping("/cidades")
+@RequestMapping(value = "/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CidadeController {
   
   @Autowired
@@ -54,7 +55,7 @@ public class CidadeController {
   }
 
   @ApiOperation(value = "Buscar uma cidade por ID")
-  @GetMapping("/{cidadeId}")
+  @GetMapping(value = "/{cidadeId}")
   private CidadeDTO buscar(@ApiParam(value = "ID de uma cidade") @PathVariable Long cidadeId) {
     return cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
   }
