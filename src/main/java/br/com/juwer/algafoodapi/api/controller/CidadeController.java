@@ -10,6 +10,7 @@ import br.com.juwer.algafoodapi.api.model.dto.CidadeDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.CidadeDTOInput;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,14 +55,17 @@ public class CidadeController {
 
   @ApiOperation(value = "Buscar uma cidade por ID")
   @GetMapping("/{cidadeId}")
-  private CidadeDTO buscar(@PathVariable Long cidadeId) {
+  private CidadeDTO buscar(@ApiParam(value = "ID de uma cidade") @PathVariable Long cidadeId) {
     return cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
   }
 
   @ApiOperation(value = "Cadastrar uma cidade")
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public CidadeDTO adicionar(@RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
+  public CidadeDTO adicionar(
+          @ApiParam(name = "Corpo", value = "Representação de uma nova cidade")
+          @RequestBody @Valid CidadeDTOInput cidadeDTOInput)
+  {
     try {
       Cidade cidade = cidadeDTODisassembler.toDomainObject(cidadeDTOInput);
       return cidadeDTOAssembler.toModel(cadastroCidadeService.salvar(cidade));
@@ -72,8 +76,12 @@ public class CidadeController {
 
   @ApiOperation(value = "Atualizar uma cidade por ID")
   @PutMapping("/{cidadeId}")
-  public CidadeDTO atualizar(@PathVariable Long cidadeId,
-                  @RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
+  public CidadeDTO atualizar(
+          @ApiParam(value = "ID de uma cidade")
+          @PathVariable Long cidadeId,
+          @ApiParam(name="corpo", value = "Representação de uma cidade com os novos dados")
+          @RequestBody @Valid CidadeDTOInput cidadeDTOInput)
+  {
     Cidade cidadeAtual = cadastroCidadeService.buscaOuFalha(cidadeId);
     cidadeDTODisassembler.copyToDomainObject(cidadeDTOInput, cidadeAtual);
 
@@ -87,7 +95,7 @@ public class CidadeController {
   @ApiOperation(value = "Deletar uma cidade por ID")
   @DeleteMapping("/{cidadeId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void remover(@PathVariable Long cidadeId) {
+  public void remover(@ApiParam(value = "ID de uma cidade")  @PathVariable Long cidadeId) {
     cadastroCidadeService.excluir(cidadeId);
   }
 }
