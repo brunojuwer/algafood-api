@@ -131,12 +131,6 @@ public class SpringFoxConfig {
                         .description("Recurso não possui representação que pode ser aceita pelo consumidor")
                         .build(),
                 new ResponseBuilder()
-                        .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
-                        .description("Requisição inválida (Erro do cliente)")
-                        .representation(MediaType.APPLICATION_JSON)
-                        .apply(getProblemaModelReference())
-                        .build(),
-                new ResponseBuilder()
                         .code(String.valueOf(HttpStatus.NOT_FOUND.value()))
                         .description("Recurso não econtrado")
                         .representation(MediaType.APPLICATION_JSON)

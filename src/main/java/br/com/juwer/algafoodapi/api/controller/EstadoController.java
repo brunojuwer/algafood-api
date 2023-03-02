@@ -4,6 +4,7 @@ import br.com.juwer.algafoodapi.api.assembler.EstadoDTOAssembler;
 import br.com.juwer.algafoodapi.api.disassembler.EstadoDTODIsassembler;
 import br.com.juwer.algafoodapi.api.model.dto.EstadoDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.EstadoDTOInput;
+import br.com.juwer.algafoodapi.api.openapi.controller.EstadoControllerOpenApi;
 import br.com.juwer.algafoodapi.domain.model.Estado;
 import br.com.juwer.algafoodapi.domain.repository.EstadoRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroEstadoService;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/estados")
-public class EstadoController implements br.com.juwer.algafoodapi.api.openapi.controller.EstadoControllerOpenApi {
+public class EstadoController implements EstadoControllerOpenApi {
   
   @Autowired
   private EstadoRepository estadoRepository;
