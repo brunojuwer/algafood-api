@@ -9,14 +9,15 @@ import br.com.juwer.algafoodapi.domain.repository.GrupoRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/grupos")
-public class GrupoController {
+@RequestMapping(value = "/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
+public class GrupoController implements br.com.juwer.algafoodapi.api.controller.openapi.GrupoControllerOpenApi {
 
     @Autowired
     private GrupoRepository grupoRepository;
@@ -30,17 +31,20 @@ public class GrupoController {
     @Autowired
     private GrupoDTODisassembler grupoDTODisassembler;
 
+    @Override
     @GetMapping
     public List<GrupoDTO> listar() {
         List<Grupo> grupos = grupoRepository.findAll();
         return grupoDTOAssembler.toCollectionModel(grupos);
     }
 
+    @Override
     @GetMapping("/{grupoId}")
     public GrupoDTO buscar(@PathVariable Long grupoId) {
         return grupoDTOAssembler.toModel(cadastroGrupoService.buscaOuFalha(grupoId));
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GrupoDTO adicionar(@RequestBody @Valid GrupoDTOInput grupoDTOInput) {
@@ -48,6 +52,7 @@ public class GrupoController {
         return grupoDTOAssembler.toModel(cadastroGrupoService.salvar(grupo));
     }
 
+    @Override
     @PutMapping("/{grupoId}")
     public GrupoDTO atualizar(@PathVariable Long grupoId, @RequestBody @Valid GrupoDTOInput grupoDTOInput) {
         Grupo grupo = cadastroGrupoService.buscaOuFalha(grupoId);
@@ -56,6 +61,7 @@ public class GrupoController {
         return grupoDTOAssembler.toModel(cadastroGrupoService.salvar(grupo));
     }
 
+    @Override
     @DeleteMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Long grupoId) {
