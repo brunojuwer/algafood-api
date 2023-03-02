@@ -57,7 +57,7 @@ public class SpringFoxConfig {
                 .additionalModels(typeResolver.resolve(Problem.class))
                 .apiInfo(this.apiInfo())
                 .tags(new Tag("Cidades", "Gerencia as cidades"),
-                        new Tag("Cozinha", "Gerencia as cozinhas"),
+                        new Tag("Cozinhas", "Gerencia as cozinhas"),
                         new Tag("Grupos", "Gerencia os grupos")
                 );
     }
