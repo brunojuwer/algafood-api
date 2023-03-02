@@ -78,7 +78,7 @@ public class RestauranteProdutoFotoController {
     public ResponseEntity<?> servirFoto(@PathVariable Long restauranteId,
                                                           @PathVariable Long produtoId,
                                                           @RequestHeader(value = "accept") String acceptMediaTypes) throws HttpMediaTypeNotAcceptableException {
-        try{
+        try {
             FotoProduto foto = catalogoFotoProdutoService.buscaOuFalha(restauranteId, produtoId);
 
             MediaType mediaTypeFoto = MediaType.parseMediaType(foto.getContentType());
