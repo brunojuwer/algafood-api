@@ -1,5 +1,6 @@
 package br.com.juwer.algafoodapi.api.controller;
 
+import br.com.juwer.algafoodapi.api.openapi.controller.EstatisticasControllerOpenApi;
 import br.com.juwer.algafoodapi.domain.filter.VendaDiariaFilter;
 import br.com.juwer.algafoodapi.domain.model.dto.VendaDiaria;
 import br.com.juwer.algafoodapi.domain.service.VendaQueryService;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/estatisticas")
-public class EstatisticasController {
+public class EstatisticasController implements EstatisticasControllerOpenApi {
 
     @Autowired
     private VendaQueryService vendaQueryService;
@@ -25,6 +26,7 @@ public class EstatisticasController {
     @Autowired
     private VendaReportService vendaReportService;
 
+    @Override
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<VendaDiaria> consultarVendasDiarias(
             VendaDiariaFilter filter,
@@ -32,6 +34,7 @@ public class EstatisticasController {
         return vendaQueryService.consultarVendasDiarias(filter, timeOffSet);
     }
 
+    @Override
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> consultarVendasDiariasPdf(
             VendaDiariaFilter filter,
