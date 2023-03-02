@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,8 +22,8 @@ import java.util.List;
 
 @Api(tags = "Cozinha")
 @RestController
-@RequestMapping(value = "/cozinhas")
-public class CozinhaController {
+@RequestMapping(path = "/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
+public class CozinhaController implements br.com.juwer.algafoodapi.api.openapi.controller.CozinhaControllerOpenApi {
   
   @Autowired
   private CozinhaRepository cozinhaRepository;
@@ -36,6 +37,7 @@ public class CozinhaController {
   @Autowired
   private CozinhaDTODisassembler cozinhaDTODisassembler;
 
+  @Override
   @GetMapping()
   public Page<CozinhaDTO> listar(@PageableDefault(size = 10) Pageable pageable) {
     Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
@@ -44,11 +46,13 @@ public class CozinhaController {
     return new PageImpl<>(cozinhasDTO, pageable, cozinhasPage.getTotalElements());
   }
 
+  @Override
   @GetMapping("/{cozinhaId}")
   public CozinhaDTO buscar(@PathVariable Long cozinhaId){
     return cozinhaDTOAssembler.toModel(cozinhaService.buscaOuFalha(cozinhaId));
   }
 
+  @Override
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public CozinhaDTO adicionar(@RequestBody @Valid CozinhaDTOInput cozinhaIdDTOInput){
@@ -56,9 +60,10 @@ public class CozinhaController {
       return cozinhaDTOAssembler.toModel(cozinhaService.salvar(cozinha));
   }
 
+  @Override
   @PutMapping("/{cozinhaId}")
   public CozinhaDTO atualizar(@PathVariable Long cozinhaId,
-          @RequestBody @Valid CozinhaDTOInput cozinha) {
+                              @RequestBody @Valid CozinhaDTOInput cozinha) {
     
       Cozinha cozinhaAtual = cozinhaService.buscaOuFalha(cozinhaId);
       cozinhaDTODisassembler.copyToDomainObject(cozinha, cozinhaAtual);
@@ -66,6 +71,7 @@ public class CozinhaController {
       return cozinhaDTOAssembler.toModel(cozinhaService.salvar(cozinhaAtual));
   }
 
+  @Override
   @DeleteMapping("/{cozinhaId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void remover(@PathVariable Long cozinhaId) {

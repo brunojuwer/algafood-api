@@ -1,7 +1,7 @@
 package br.com.juwer.algafoodapi.api.controller;
 
 import br.com.juwer.algafoodapi.api.assembler.CidadeDTOAssembler;
-import br.com.juwer.algafoodapi.api.controller.openapi.CidadeControllerOpenApi;
+import br.com.juwer.algafoodapi.api.openapi.controller.CidadeControllerOpenApi;
 import br.com.juwer.algafoodapi.api.disassembler.CidadeDTODisassembler;
 import br.com.juwer.algafoodapi.api.model.dto.CidadeDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.CidadeDTOInput;

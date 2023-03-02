@@ -1,4 +1,4 @@
-package br.com.juwer.algafoodapi.api.controller.openapi;
+package br.com.juwer.algafoodapi.api.openapi.controller;
 
 import br.com.juwer.algafoodapi.api.model.dto.CidadeDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.CidadeDTOInput;
