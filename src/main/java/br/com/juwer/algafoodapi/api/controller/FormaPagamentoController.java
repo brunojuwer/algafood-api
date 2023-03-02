@@ -4,14 +4,14 @@ import br.com.juwer.algafoodapi.api.assembler.FormaPagamentoDTOAssembler;
 import br.com.juwer.algafoodapi.api.disassembler.FormaPagamentoDTODisassembler;
 import br.com.juwer.algafoodapi.api.model.dto.FormaPagamentoDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.formapagamentodtos.FormaPagamentoDTOInput;
+import br.com.juwer.algafoodapi.api.openapi.controller.FormaPagamentoControllerOpenApi;
 import br.com.juwer.algafoodapi.domain.model.FormaPagamento;
 import br.com.juwer.algafoodapi.domain.repository.FormaPagamentoRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroFormaPagamentoService;
-import org.jfree.util.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -23,9 +23,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/formas-pagamento")
-public class FormaPagamentoController {
-
+@RequestMapping(value = "/formas-pagamento", produces = MediaType.APPLICATION_JSON_VALUE)
+public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 
     @Autowired
     private FormaPagamentoRepository formaPagamentoRepository;
@@ -39,6 +38,7 @@ public class FormaPagamentoController {
     @Autowired
     private FormaPagamentoDTODisassembler  formaPagamentoDTODisassembler;
 
+    @Override
     @GetMapping
     public ResponseEntity<List<FormaPagamentoDTO>> listar(ServletWebRequest request){
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -62,6 +62,7 @@ public class FormaPagamentoController {
                 .body(formaPagamentoDTOS);
     }
 
+    @Override
     @GetMapping("/{formaPagamentoId}")
     public ResponseEntity<FormaPagamentoDTO> buscar(@PathVariable Long formaPagamentoId) {
         FormaPagamento formaPagamento = cadastroFormaPagamentoService
@@ -75,6 +76,7 @@ public class FormaPagamentoController {
                 .body(formaPagamentoDTO);
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public FormaPagamentoDTO adicionar(@RequestBody @Valid FormaPagamentoDTOInput formaPagamentoDTOInput) {
@@ -84,6 +86,7 @@ public class FormaPagamentoController {
         return formaPagamentoDTOAssembler.toModel(cadastroFormaPagamentoService.salvar(formaPagamento));
     }
 
+    @Override
     @PutMapping("/{formaPagamentoID}")
     public FormaPagamentoDTO atualizar(@PathVariable Long formaPagamentoID,
                                        @RequestBody @Valid FormaPagamentoDTOInput formaPagamentoDTOInput) {
@@ -92,6 +95,7 @@ public class FormaPagamentoController {
         return formaPagamentoDTOAssembler.toModel(cadastroFormaPagamentoService.salvar(formaPagamento));
     }
 
+    @Override
     @DeleteMapping("/{formaPagamentoID}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Long formaPagamentoID){

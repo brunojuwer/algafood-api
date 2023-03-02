@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.context.request.ServletWebRequest;
 import springfox.documentation.builders.*;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.ApiInfo;
@@ -46,6 +47,7 @@ public class SpringFoxConfig {
                 .paths(PathSelectors.any())
                 //.paths(PathSelectors.ant("/restaurantes/*")) é possivel selecionar os caminhos
                 .build()
+                .ignoredParameterTypes(ServletWebRequest.class)
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
                 .alternateTypeRules(AlternateTypeRules
                         .newRule(typeResolver.resolve(Page.class, CozinhaDTO.class), CozinhasModelOpenApi.class))
@@ -58,7 +60,8 @@ public class SpringFoxConfig {
                 .apiInfo(this.apiInfo())
                 .tags(new Tag("Cidades", "Gerencia as cidades"),
                         new Tag("Cozinhas", "Gerencia as cozinhas"),
-                        new Tag("Grupos", "Gerencia os grupos")
+                        new Tag("Grupos", "Gerencia os grupos"),
+                        new Tag("Formas Pagamento", "Gerencia as formas de pagamento")
                 );
     }
 
