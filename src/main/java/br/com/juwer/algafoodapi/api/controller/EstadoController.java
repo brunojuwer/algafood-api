@@ -16,8 +16,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/estados", produces = MediaType.APPLICATION_JSON_VALUE)
-public class EstadoController {
+@RequestMapping(value = "/estados")
+public class EstadoController implements br.com.juwer.algafoodapi.api.openapi.controller.EstadoControllerOpenApi {
   
   @Autowired
   private EstadoRepository estadoRepository;
@@ -31,19 +31,22 @@ public class EstadoController {
   @Autowired
   private EstadoDTODIsassembler estadoDTODIsassembler;
 
-  @GetMapping
+  @Override
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public List<EstadoDTO> listar() {
     List<Estado> estados = estadoRepository.findAll();
     return estadoDTOAssembler.toCollectionModel(estados);
   }
 
-  @GetMapping("/{estadoId}")
+  @Override
+  @GetMapping(path = "/{estadoId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public EstadoDTO buscar(@PathVariable Long estadoId) {
     Estado estado = cadastroEstadoService.buscaOuFalha(estadoId);
     return estadoDTOAssembler.toModel(estado);
   }
 
-  @PostMapping
+  @Override
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public EstadoDTO adicionar(@RequestBody @Valid EstadoDTOInput estadoDTOInput) {
     Estado estado = estadoDTODIsassembler.toDomainObject(estadoDTOInput);
@@ -51,16 +54,18 @@ public class EstadoController {
     return estadoDTOAssembler.toModel(estadoSalvo);
   }
 
-  @PutMapping("/{estadoId}")
+  @Override
+  @PutMapping(path = "/{estadoId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public EstadoDTO atualizar(@PathVariable Long estadoId,
-          @RequestBody @Valid EstadoDTOInput estadoDTOInput) {
+                             @RequestBody @Valid EstadoDTOInput estadoDTOInput) {
     Estado estadoAtual = cadastroEstadoService.buscaOuFalha(estadoId);
     estadoDTODIsassembler.copyToDomainObject(estadoDTOInput, estadoAtual);
 
     return estadoDTOAssembler.toModel(cadastroEstadoService.salvar(estadoAtual));
   }
 
-  @DeleteMapping("/{estadoId}")
+  @Override
+  @DeleteMapping(value = "/{estadoId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void excluir(@PathVariable Long estadoId) {
       cadastroEstadoService.excluir(estadoId);

@@ -2,6 +2,7 @@ package br.com.juwer.algafoodapi.api.model.dto;
 
 import br.com.juwer.algafoodapi.api.model.dto.view.RestauranteView;
 import com.fasterxml.jackson.annotation.JsonView;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,12 +12,15 @@ import java.math.BigDecimal;
 @Setter
 public class RestauranteDTO {
 
+    @ApiModelProperty(example = "1")
     @JsonView({RestauranteView.Resumo.class, RestauranteView.ApenasNomeEId.class})
     private Long id;
 
+    @ApiModelProperty(example = "Tuk Tuk Food")
     @JsonView({RestauranteView.Resumo.class, RestauranteView.ApenasNomeEId.class})
     private String nome;
 
+    @ApiModelProperty(example = "20,00", dataType = "java.lang.String")
     @JsonView(RestauranteView.Resumo.class)
     private BigDecimal taxaFrete;
 
