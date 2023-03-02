@@ -3,8 +3,10 @@ package br.com.juwer.algafoodapi.core.openapi;
 
 import br.com.juwer.algafoodapi.api.exceptionhandler.Problem;
 import br.com.juwer.algafoodapi.api.model.dto.CozinhaDTO;
+import br.com.juwer.algafoodapi.api.model.dto.PedidoResumoDTO;
 import br.com.juwer.algafoodapi.api.openapi.model.CozinhasModelOpenApi;
 import br.com.juwer.algafoodapi.api.openapi.model.PageableModelOpenApi;
+import br.com.juwer.algafoodapi.api.openapi.model.PedidosResumoModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
@@ -45,12 +47,15 @@ public class SpringFoxConfig {
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("br.com.juwer.algafoodapi.api"))
                 .paths(PathSelectors.any())
-                //.paths(PathSelectors.ant("/restaurantes/*")) é possivel selecionar os caminhos
                 .build()
                 .ignoredParameterTypes(ServletWebRequest.class)
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
-                .alternateTypeRules(AlternateTypeRules
-                        .newRule(typeResolver.resolve(Page.class, CozinhaDTO.class), CozinhasModelOpenApi.class))
+                .alternateTypeRules(
+                    AlternateTypeRules
+                        .newRule(typeResolver.resolve(Page.class, CozinhaDTO.class), CozinhasModelOpenApi.class),
+                    AlternateTypeRules
+                        .newRule(typeResolver.resolve(Page.class, PedidoResumoDTO.class), PedidosResumoModelOpenApi.class)
+                )
                 .useDefaultResponseMessages(false)
                 .globalResponses(HttpMethod.GET, globalGetResponseMessages())
                 .globalResponses(HttpMethod.POST, globalPostResponseMessages())
@@ -61,7 +66,10 @@ public class SpringFoxConfig {
                 .tags(new Tag("Cidades", "Gerencia as cidades"),
                         new Tag("Cozinhas", "Gerencia as cozinhas"),
                         new Tag("Grupos", "Gerencia os grupos"),
-                        new Tag("Formas Pagamento", "Gerencia as formas de pagamento")
+                        new Tag("Formas Pagamento", "Gerencia as formas de pagamento"),
+                        new Tag("Pedidos", "Gerencia os Pedidos"),
+                        new Tag("Restaurantes", "Gerencia os Restaurantes"),
+                        new Tag("Estados", "Gerencia os Estados")
                 );
     }
 
@@ -121,12 +129,6 @@ public class SpringFoxConfig {
                 new ResponseBuilder()
                         .code(String.valueOf(HttpStatus.METHOD_NOT_ALLOWED.value()))
                         .description("Recurso não possui representação que pode ser aceita pelo consumidor")
-                        .build(),
-                new ResponseBuilder()
-                        .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
-                        .description("Requisição inválida (Erro do cliente)")
-                        .representation(MediaType.APPLICATION_JSON)
-                        .apply(getProblemaModelReference())
                         .build(),
                 new ResponseBuilder()
                         .code(String.valueOf(HttpStatus.NOT_FOUND.value()))

@@ -13,7 +13,7 @@ public interface CidadeControllerOpenApi {
     List<CidadeDTO> listar();
 
     @ApiOperation(value = "Buscar uma cidade por ID")
-    CidadeDTO buscar(@ApiParam(value = "ID de uma cidade") Long cidadeId);
+    CidadeDTO buscar(@ApiParam(value = "ID de uma cidade", required = true) Long cidadeId);
 
     @ApiOperation(value = "Cadastrar uma cidade")
     @ApiResponses({

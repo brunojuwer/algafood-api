@@ -6,6 +6,7 @@ import br.com.juwer.algafoodapi.api.disassembler.PedidoDTODisassembler;
 import br.com.juwer.algafoodapi.api.model.dto.PedidoDTO;
 import br.com.juwer.algafoodapi.api.model.dto.PedidoResumoDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.pedidosdto.PedidoDTOInput;
+import br.com.juwer.algafoodapi.api.openapi.controller.PedidoControllerOpenApi;
 import br.com.juwer.algafoodapi.domain.model.Pedido;
 import br.com.juwer.algafoodapi.domain.repository.PedidoRespository;
 import br.com.juwer.algafoodapi.domain.filter.PedidoFilter;
@@ -17,14 +18,15 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/pedidos")
-public class PedidoController {
+@RequestMapping(value = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
+public class PedidoController implements PedidoControllerOpenApi {
 
     @Autowired
     private PedidoRespository pedidoRespository;
@@ -43,6 +45,7 @@ public class PedidoController {
 
 
 
+    @Override
     @GetMapping
     public Page<PedidoResumoDTO> pesquisar(
             PedidoFilter filter,
@@ -53,12 +56,14 @@ public class PedidoController {
         return new PageImpl<>(pedidoResumoDTOS, pageable, pedidosPage.getTotalElements());
     }
 
+    @Override
     @GetMapping("/{codigo}")
     public PedidoDTO buscar(@PathVariable String codigo) {
         Pedido pedido = cadastroPedidoService.buscaOuFalha(codigo);
         return pedidoDTOAssembler.toModel(pedido);
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PedidoDTO adicionar(@RequestBody @Valid PedidoDTOInput pedidoDTOInput) {
