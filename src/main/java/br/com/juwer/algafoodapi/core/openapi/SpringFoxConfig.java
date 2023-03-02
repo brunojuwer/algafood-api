@@ -11,6 +11,7 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
@@ -27,6 +28,11 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLStreamHandler;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
@@ -48,7 +54,9 @@ public class SpringFoxConfig {
                 .apis(RequestHandlerSelectors.basePackage("br.com.juwer.algafoodapi.api"))
                 .paths(PathSelectors.any())
                 .build()
-                .ignoredParameterTypes(ServletWebRequest.class)
+                .ignoredParameterTypes(ServletWebRequest.class,
+                        URL.class, URI.class, URLStreamHandler.class, Resource.class,
+                        File.class, InputStream.class)
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
                 .alternateTypeRules(
                     AlternateTypeRules
@@ -69,7 +77,9 @@ public class SpringFoxConfig {
                         new Tag("Formas Pagamento", "Gerencia as formas de pagamento"),
                         new Tag("Pedidos", "Gerencia os Pedidos"),
                         new Tag("Restaurantes", "Gerencia os Restaurantes"),
-                        new Tag("Estados", "Gerencia os Estados")
+                        new Tag("Estados", "Gerencia os Estados"),
+                        new Tag("Produtos", "Gerencia os Produtos"),
+                        new Tag("Usuários", "Gerencia os Usuários")
                 );
     }
 
