@@ -10,7 +10,7 @@ import java.util.List;
 public interface CidadeControllerOpenApi {
 
     @ApiOperation(value = "Listar as cidades")
-     List<CidadeDTO> listar();
+    List<CidadeDTO> listar();
 
     @ApiOperation(value = "Buscar uma cidade por ID")
     CidadeDTO buscar(@ApiParam(value = "ID de uma cidade") Long cidadeId);

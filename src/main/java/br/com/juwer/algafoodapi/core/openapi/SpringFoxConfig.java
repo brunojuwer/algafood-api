@@ -48,7 +48,9 @@ public class SpringFoxConfig {
                 .additionalModels(typeResolver.resolve(Problem.class))
                 .apiInfo(this.apiInfo())
                 .tags(new Tag("Cidades", "Gerencia as cidades"),
-                        new Tag("Cozinha", "Gerencia as cozinhas"));
+                        new Tag("Cozinha", "Gerencia as cozinhas"),
+                        new Tag("Grupos", "Gerencia os grupos")
+                );
     }
 
     private List<Response> globalGetResponseMessages(){
@@ -62,18 +64,6 @@ public class SpringFoxConfig {
                 new ResponseBuilder()
                         .code(String.valueOf(HttpStatus.METHOD_NOT_ALLOWED.value()))
                         .description("Recurso não possui representação que pode ser aceita pelo consumidor")
-                        .build(),
-                new ResponseBuilder()
-                        .code(String.valueOf(HttpStatus.NOT_FOUND.value()))
-                        .description("Recurso não econtrado")
-                        .representation(MediaType.APPLICATION_JSON)
-                        .apply(getProblemaModelReference())
-                        .build(),
-                new ResponseBuilder()
-                        .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
-                        .description("Requisição inválida (Erro do cliente)")
-                        .representation(MediaType.APPLICATION_JSON)
-                        .apply(getProblemaModelReference())
                         .build()
         );
     }
@@ -92,12 +82,6 @@ public class SpringFoxConfig {
                 new ResponseBuilder()
                         .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
                         .description("O corpo do payload possui algum erro")
-                        .representation(MediaType.APPLICATION_JSON)
-                        .apply(getProblemaModelReference())
-                        .build(),
-                new ResponseBuilder()
-                        .code(String.valueOf(HttpStatus.NOT_FOUND.value()))
-                        .description("Recurso não econtrado")
                         .representation(MediaType.APPLICATION_JSON)
                         .apply(getProblemaModelReference())
                         .build(),
