@@ -1,7 +1,9 @@
 package br.com.juwer.algafoodapi.api.openapi.controller;
 
+import br.com.juwer.algafoodapi.api.exceptionhandler.Problem;
 import br.com.juwer.algafoodapi.api.model.dto.CozinhaDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.CozinhaDTOInput;
+import io.swagger.annotations.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -10,22 +12,25 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@Api(tags = "Cozinhas")
 public interface CozinhaControllerOpenApi {
-    @GetMapping()
-    Page<CozinhaDTO> listar(@PageableDefault(size = 10) Pageable pageable);
 
-    @GetMapping("/{cozinhaId}")
-    CozinhaDTO buscar(@PathVariable Long cozinhaId);
+    @ApiOperation(value = "Listar todas as cozinhas (Com páginação)")
+    Page<CozinhaDTO> listar(Pageable pageable);
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    CozinhaDTO adicionar(@RequestBody @Valid CozinhaDTOInput cozinhaIdDTOInput);
+    @ApiOperation(value = "Buscar cozinha por ID")
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "Id da cozinha inválido", response = Problem.class),
+            @ApiResponse(code = 404, message = "Recurso não encontrado", response = Problem.class)
+    })
+    CozinhaDTO buscar(@ApiParam(value = "ID de uma cozinha") Long cozinhaId);
 
-    @PutMapping("/{cozinhaId}")
-    CozinhaDTO atualizar(@PathVariable Long cozinhaId,
-                         @RequestBody @Valid CozinhaDTOInput cozinha);
+    @ApiOperation(value = "Cadastrar uma cozinha")
+    CozinhaDTO adicionar(CozinhaDTOInput cozinhaIdDTOInput);
 
-    @DeleteMapping("/{cozinhaId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    void remover(@PathVariable Long cozinhaId);
+    @ApiOperation(value = "Atualizar cozinha por ID")
+    CozinhaDTO atualizar(@ApiParam(value = "ID de uma cozinha") Long cozinhaId, CozinhaDTOInput cozinha);
+
+    @ApiOperation(value = "Excluir cozinha por ID")
+    void remover(@ApiParam(value = "ID de uma cozinha") Long cozinhaId);
 }

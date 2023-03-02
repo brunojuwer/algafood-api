@@ -4,6 +4,7 @@ import br.com.juwer.algafoodapi.api.assembler.CozinhaDTOAssembler;
 import br.com.juwer.algafoodapi.api.disassembler.CozinhaDTODisassembler;
 import br.com.juwer.algafoodapi.api.model.dto.CozinhaDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.CozinhaDTOInput;
+import br.com.juwer.algafoodapi.api.openapi.controller.CozinhaControllerOpenApi;
 import br.com.juwer.algafoodapi.domain.model.Cozinha;
 import br.com.juwer.algafoodapi.domain.repository.CozinhaRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroCozinhaService;
@@ -20,10 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@Api(tags = "Cozinha")
 @RestController
 @RequestMapping(path = "/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CozinhaController implements br.com.juwer.algafoodapi.api.openapi.controller.CozinhaControllerOpenApi {
+public class CozinhaController implements CozinhaControllerOpenApi {
   
   @Autowired
   private CozinhaRepository cozinhaRepository;
@@ -38,7 +38,7 @@ public class CozinhaController implements br.com.juwer.algafoodapi.api.openapi.c
   private CozinhaDTODisassembler cozinhaDTODisassembler;
 
   @Override
-  @GetMapping()
+  @GetMapping
   public Page<CozinhaDTO> listar(@PageableDefault(size = 10) Pageable pageable) {
     Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
     List<CozinhaDTO> cozinhasDTO = cozinhaDTOAssembler.toCollectionModel(cozinhasPage.getContent());
