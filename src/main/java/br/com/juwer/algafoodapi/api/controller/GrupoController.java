@@ -4,6 +4,7 @@ import br.com.juwer.algafoodapi.api.assembler.GrupoDTOAssembler;
 import br.com.juwer.algafoodapi.api.disassembler.GrupoDTODisassembler;
 import br.com.juwer.algafoodapi.api.model.dto.GrupoDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.GrupoDTOInput;
+import br.com.juwer.algafoodapi.api.openapi.controller.GrupoControllerOpenApi;
 import br.com.juwer.algafoodapi.domain.model.Grupo;
 import br.com.juwer.algafoodapi.domain.repository.GrupoRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroGrupoService;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
-public class GrupoController implements br.com.juwer.algafoodapi.api.controller.openapi.GrupoControllerOpenApi {
+public class GrupoController implements GrupoControllerOpenApi {
 
     @Autowired
     private GrupoRepository grupoRepository;

@@ -2,14 +2,20 @@ package br.com.juwer.algafoodapi.core.openapi;
 
 
 import br.com.juwer.algafoodapi.api.exceptionhandler.Problem;
+import br.com.juwer.algafoodapi.api.model.dto.CozinhaDTO;
+import br.com.juwer.algafoodapi.api.openapi.model.CozinhasModelOpenApi;
+import br.com.juwer.algafoodapi.api.openapi.model.PageableModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import springfox.documentation.builders.*;
+import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.Response;
@@ -40,6 +46,9 @@ public class SpringFoxConfig {
                 .paths(PathSelectors.any())
                 //.paths(PathSelectors.ant("/restaurantes/*")) é possivel selecionar os caminhos
                 .build()
+                .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+                .alternateTypeRules(AlternateTypeRules
+                        .newRule(typeResolver.resolve(Page.class, CozinhaDTO.class), CozinhasModelOpenApi.class))
                 .useDefaultResponseMessages(false)
                 .globalResponses(HttpMethod.GET, globalGetResponseMessages())
                 .globalResponses(HttpMethod.POST, globalPostResponseMessages())
