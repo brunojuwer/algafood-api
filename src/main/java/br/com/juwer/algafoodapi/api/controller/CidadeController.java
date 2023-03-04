@@ -1,21 +1,28 @@
 package br.com.juwer.algafoodapi.api.controller;
 
 import br.com.juwer.algafoodapi.api.assembler.CidadeDTOAssembler;
-import br.com.juwer.algafoodapi.api.openapi.controller.CidadeControllerOpenApi;
 import br.com.juwer.algafoodapi.api.disassembler.CidadeDTODisassembler;
 import br.com.juwer.algafoodapi.api.model.dto.CidadeDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.CidadeDTOInput;
+import br.com.juwer.algafoodapi.api.openapi.controller.CidadeControllerOpenApi;
+import br.com.juwer.algafoodapi.api.utils.ResourceUriHelper;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 import br.com.juwer.algafoodapi.domain.model.Cidade;
 import br.com.juwer.algafoodapi.domain.repository.CidadeRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroCidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 
@@ -50,7 +57,11 @@ public class CidadeController implements CidadeControllerOpenApi {
   public CidadeDTO adicionar(@RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
     try {
       Cidade cidade = cidadeDTODisassembler.toDomainObject(cidadeDTOInput);
-      return cidadeDTOAssembler.toModel(cadastroCidadeService.salvar(cidade));
+      CidadeDTO cidadeDTO = cidadeDTOAssembler.toModel(cadastroCidadeService.salvar(cidade));
+
+      ResourceUriHelper.addUriResponseHeader(cidadeDTO.getId());
+
+      return cidadeDTO;
     } catch(EntidadeNaoEncontradaException e) {
       throw new NegocioException(e.getMessage());
     }

@@ -5,6 +5,7 @@ import br.com.juwer.algafoodapi.api.disassembler.EstadoDTODIsassembler;
 import br.com.juwer.algafoodapi.api.model.dto.EstadoDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.EstadoDTOInput;
 import br.com.juwer.algafoodapi.api.openapi.controller.EstadoControllerOpenApi;
+import br.com.juwer.algafoodapi.api.utils.ResourceUriHelper;
 import br.com.juwer.algafoodapi.domain.model.Estado;
 import br.com.juwer.algafoodapi.domain.repository.EstadoRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroEstadoService;
@@ -51,8 +52,11 @@ public class EstadoController implements EstadoControllerOpenApi {
   @ResponseStatus(HttpStatus.CREATED)
   public EstadoDTO adicionar(@RequestBody @Valid EstadoDTOInput estadoDTOInput) {
     Estado estado = estadoDTODIsassembler.toDomainObject(estadoDTOInput);
-    Estado estadoSalvo = cadastroEstadoService.salvar(estado);
-    return estadoDTOAssembler.toModel(estadoSalvo);
+    EstadoDTO estadoDTO = estadoDTOAssembler.toModel(cadastroEstadoService.salvar(estado));
+
+    ResourceUriHelper.addUriResponseHeader(estadoDTO.getId());
+
+    return estadoDTO;
   }
 
   @Override
