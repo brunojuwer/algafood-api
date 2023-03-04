@@ -7,7 +7,6 @@ import br.com.juwer.algafoodapi.api.model.dto.input.usuariodtos.UsuarioDTOInput;
 import br.com.juwer.algafoodapi.api.model.dto.input.usuariodtos.UsuarioDTOInputPost;
 import br.com.juwer.algafoodapi.api.model.dto.input.usuariodtos.UsuarioDTOInputSenha;
 import br.com.juwer.algafoodapi.api.openapi.controller.UsuarioControllerOpenApi;
-import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 import br.com.juwer.algafoodapi.domain.model.Usuario;
 import br.com.juwer.algafoodapi.domain.repository.UsuarioRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroUsuarioService;
