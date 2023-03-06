@@ -4,11 +4,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
 
 @Getter
 @Setter
 @ApiModel(value = "Cidade DTO", description = "Modelo de representação de uma cidade")
-public class CidadeDTO {
+public class CidadeDTO extends RepresentationModel<CidadeDTO> {
 
     @ApiModelProperty(value = "ID da cidade", example = "1")
     private Long id;

@@ -12,6 +12,8 @@ import br.com.juwer.algafoodapi.domain.model.Cidade;
 import br.com.juwer.algafoodapi.domain.repository.CidadeRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroCidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +45,15 @@ public class CidadeController implements CidadeControllerOpenApi {
 
   @GetMapping(value = "/{cidadeId}")
   public CidadeDTO buscar(@PathVariable Long cidadeId) {
-    return cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
+    CidadeDTO cidadeDTO = cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
+
+      cidadeDTO.add(Link.of("http://localhost:8081/cidades/1"));
+//      cidadeDTO.add(Link.of("http://localhost:8081/cidades", "cidades"));
+      cidadeDTO.add(Link.of("http://localhost:8081/cidades", IanaLinkRelations.COLLECTION));
+
+      cidadeDTO.getEstado().add(Link.of("http://localhost:8081/estados/1"));
+
+    return cidadeDTO;
   }
 
   @PostMapping
