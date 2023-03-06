@@ -14,4 +14,7 @@ public interface CidadeRepository extends JpaRepository<Cidade, Long> {
 
     @Query(value = "from Cidade c join fetch c.estado")
     List<Cidade> findAllCidades();
+
+    @Query(value = "from Cidade c join fetch c.estado where c.id = :cidadeId")
+    Optional<Cidade> findById(Long cidadeId);
 }
