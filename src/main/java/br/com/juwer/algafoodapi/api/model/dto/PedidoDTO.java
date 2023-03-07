@@ -1,20 +1,23 @@
 package br.com.juwer.algafoodapi.api.model.dto;
 
-import br.com.juwer.algafoodapi.domain.model.*;
+import br.com.juwer.algafoodapi.domain.model.StatusPedido;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Relation(collectionRelation = "pedidos")
 @Setter
 @Getter
 @ApiModel(description = "Retorno completo dos pedidos")
-public class PedidoDTO {
+public class PedidoDTO extends RepresentationModel<PedidoDTO> {
 
     @ApiModelProperty(example = "c5de95d3-7e0d-4afb-9af7-b6022473e079")
     private String codigo;

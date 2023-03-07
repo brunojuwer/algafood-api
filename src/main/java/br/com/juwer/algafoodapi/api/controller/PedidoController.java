@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -43,17 +45,17 @@ public class PedidoController implements PedidoControllerOpenApi {
     @Autowired
     private PedidoDTODisassembler pedidoDTODisassembler;
 
-
+    @Autowired
+    private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
     @Override
     @GetMapping
-    public Page<PedidoResumoDTO> pesquisar(
+    public PagedModel<PedidoResumoDTO> pesquisar(
             PedidoFilter filter,
             @PageableDefault(size = 10) Pageable pageable
     ) {
         Page<Pedido> pedidosPage = pedidoRespository.findAll(PedidoSpecs.usandoFiltro(filter), pageable);
-        List<PedidoResumoDTO> pedidoResumoDTOS = pedidoResumoDTOAssembler.toCollectionModel(pedidosPage.getContent());
-        return new PageImpl<>(pedidoResumoDTOS, pageable, pedidosPage.getTotalElements());
+        return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoDTOAssembler);
     }
 
     @Override
