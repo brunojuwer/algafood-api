@@ -6,6 +6,7 @@ import br.com.juwer.algafoodapi.api.openapi.controller.RestauranteFormasPagament
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
 import br.com.juwer.algafoodapi.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class RestauranteFormasPagamentoController implements RestauranteFormasPa
 
   @Override
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public List<FormaPagamentoDTO> listar(@PathVariable Long restauranteId) {
+  public CollectionModel<FormaPagamentoDTO> listar(@PathVariable Long restauranteId) {
     Restaurante restaurante = cadastroRestauranteService.buscaOuFalha(restauranteId);
 
     return formaPagamentoDTOAssembler.toCollectionModel(restaurante.getFormasPagamento());
