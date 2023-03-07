@@ -4,19 +4,15 @@ import br.com.juwer.algafoodapi.api.exceptionhandler.Problem;
 import br.com.juwer.algafoodapi.api.model.dto.FormaPagamentoDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.formapagamentodtos.FormaPagamentoDTOInput;
 import io.swagger.annotations.*;
-import org.springframework.http.HttpStatus;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.ServletWebRequest;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @Api(tags = "Formas Pagamento")
 public interface FormaPagamentoControllerOpenApi {
 
     @ApiOperation(value = "Listar todas as formas de pagamento")
-    ResponseEntity<List<FormaPagamentoDTO>> listar(ServletWebRequest request);
+    ResponseEntity<CollectionModel<FormaPagamentoDTO>> listar(ServletWebRequest request);
 
     @ApiOperation(value = "Buscar forma de pagamento por ID")
     @ApiResponses({
