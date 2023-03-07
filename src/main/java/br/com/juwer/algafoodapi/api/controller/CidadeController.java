@@ -39,6 +39,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     @Autowired
     private CidadeDTODisassembler cidadeDTODisassembler;
 
+    @Override
     @GetMapping
     public CollectionModel<CidadeDTO> listar() {
         List<CidadeDTO> cidadesDTO = cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAllCidades());
@@ -64,6 +65,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         return cidadeDTOSColletionModel;
     }
 
+    @Override
     @GetMapping(value = "/{cidadeId}")
     public CidadeDTO buscar(@PathVariable Long cidadeId) {
         CidadeDTO cidadeDTO = cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
@@ -82,6 +84,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         return cidadeDTO;
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeDTO adicionar(@RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
@@ -97,6 +100,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
+    @Override
     @PutMapping("/{cidadeId}")
     public CidadeDTO atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
         Cidade cidadeAtual = cadastroCidadeService.buscaOuFalha(cidadeId);
@@ -109,6 +113,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
+    @Override
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long cidadeId) {
