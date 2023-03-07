@@ -39,49 +39,19 @@ public class CidadeController implements CidadeControllerOpenApi {
     @Autowired
     private CidadeDTODisassembler cidadeDTODisassembler;
 
+    @Override
     @GetMapping
     public CollectionModel<CidadeDTO> listar() {
-        List<CidadeDTO> cidadesDTO = cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAllCidades());
-
-        cidadesDTO.forEach(cidadeDTO -> {
-            cidadeDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
-                            .buscar(cidadeDTO.getId()))
-                    .withSelfRel());
-
-            cidadeDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class).listar())
-                    .withRel("cidades"));
-
-            cidadeDTO.getEstado().add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
-                            .buscar(cidadeDTO.getEstado().getId()))
-                    .withSelfRel());
-        });
-
-        CollectionModel<CidadeDTO> cidadeDTOSColletionModel = CollectionModel.of(cidadesDTO);
-
-        cidadeDTOSColletionModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
-                .listar()).withSelfRel());
-
-        return cidadeDTOSColletionModel;
+        return cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAllCidades());
     }
 
+    @Override
     @GetMapping(value = "/{cidadeId}")
     public CidadeDTO buscar(@PathVariable Long cidadeId) {
-        CidadeDTO cidadeDTO = cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
-
-        cidadeDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
-                        .buscar(cidadeDTO.getId()))
-                .withSelfRel());
-
-        cidadeDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class).listar())
-                .withRel("cidades"));
-
-        cidadeDTO.getEstado().add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
-                        .buscar(cidadeDTO.getEstado().getId()))
-                .withSelfRel());
-
-        return cidadeDTO;
+        return cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeDTO adicionar(@RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
@@ -97,6 +67,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
+    @Override
     @PutMapping("/{cidadeId}")
     public CidadeDTO atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
         Cidade cidadeAtual = cadastroCidadeService.buscaOuFalha(cidadeId);
@@ -109,6 +80,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
+    @Override
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long cidadeId) {

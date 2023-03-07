@@ -6,6 +6,7 @@ import br.com.juwer.algafoodapi.api.model.dto.input.usuariodtos.UsuarioDTOInput;
 import br.com.juwer.algafoodapi.api.model.dto.input.usuariodtos.UsuarioDTOInputPost;
 import br.com.juwer.algafoodapi.api.model.dto.input.usuariodtos.UsuarioDTOInputSenha;
 import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public interface UsuarioControllerOpenApi {
 
     @ApiOperation("Lista os usuários")
-    List<UsuarioDTO> listar();
+    CollectionModel<UsuarioDTO> listar();
 
     @ApiOperation("Busca um usuário por ID")
     @ApiResponses({
