@@ -3,6 +3,7 @@ package br.com.juwer.algafoodapi.api.openapi.controller;
 import br.com.juwer.algafoodapi.api.exceptionhandler.Problem;
 import br.com.juwer.algafoodapi.api.model.dto.UsuarioDTO;
 import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ public interface RestauranteUsuarioControllerOpenApi {
     @ApiResponses({
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    List<UsuarioDTO> listar(@ApiParam(value = "ID do restaurante", example = "1", required = true)
+    CollectionModel<UsuarioDTO> listar(@ApiParam(value = "ID do restaurante", example = "1", required = true)
                             Long restauranteId);
 
     @ApiOperation("Associar usuário a um restaurante")

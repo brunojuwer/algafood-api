@@ -1,11 +1,14 @@
 package br.com.juwer.algafoodapi.api.assembler;
 
 import br.com.juwer.algafoodapi.api.controller.CidadeController;
+import br.com.juwer.algafoodapi.api.controller.EstadoController;
 import br.com.juwer.algafoodapi.api.model.dto.CidadeDTO;
 import br.com.juwer.algafoodapi.domain.model.Cidade;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -23,11 +26,22 @@ public class CidadeDTOAssembler extends RepresentationModelAssemblerSupport<Cida
     }
 
     @Override
-    public CidadeDTO toModel(Cidade domainObject) {
-        return this.modelMapper.map(domainObject, CidadeDTO.class);
+    public CidadeDTO toModel(Cidade cidade) {
+        CidadeDTO cidadeDTO = createModelWithId(cidade.getId(), cidade);
+        modelMapper.map(cidade, cidadeDTO);
+
+        cidadeDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class).listar())
+                .withRel("cidades"));
+
+        cidadeDTO.getEstado().add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
+                        .buscar(cidadeDTO.getEstado().getId()))
+                .withSelfRel());
+
+        return cidadeDTO;
     }
 
-    public List<CidadeDTO> toCollectionModel(Collection<Cidade> listOfDomainObjects) {
-        return listOfDomainObjects.stream().map(this::toModel).collect(Collectors.toList());
+    @Override
+    public CollectionModel<CidadeDTO> toCollectionModel(Iterable<? extends Cidade> entities) {
+        return super.toCollectionModel(entities).add(WebMvcLinkBuilder.linkTo(CidadeController.class).withSelfRel());
     }
 }

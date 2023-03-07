@@ -42,46 +42,13 @@ public class CidadeController implements CidadeControllerOpenApi {
     @Override
     @GetMapping
     public CollectionModel<CidadeDTO> listar() {
-        List<CidadeDTO> cidadesDTO = cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAllCidades());
-
-        cidadesDTO.forEach(cidadeDTO -> {
-            cidadeDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
-                            .buscar(cidadeDTO.getId()))
-                    .withSelfRel());
-
-            cidadeDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class).listar())
-                    .withRel("cidades"));
-
-            cidadeDTO.getEstado().add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
-                            .buscar(cidadeDTO.getEstado().getId()))
-                    .withSelfRel());
-        });
-
-        CollectionModel<CidadeDTO> cidadeDTOSColletionModel = CollectionModel.of(cidadesDTO);
-
-        cidadeDTOSColletionModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
-                .listar()).withSelfRel());
-
-        return cidadeDTOSColletionModel;
+        return cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAllCidades());
     }
 
     @Override
     @GetMapping(value = "/{cidadeId}")
     public CidadeDTO buscar(@PathVariable Long cidadeId) {
-        CidadeDTO cidadeDTO = cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
-
-        cidadeDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
-                        .buscar(cidadeDTO.getId()))
-                .withSelfRel());
-
-        cidadeDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class).listar())
-                .withRel("cidades"));
-
-        cidadeDTO.getEstado().add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
-                        .buscar(cidadeDTO.getEstado().getId()))
-                .withSelfRel());
-
-        return cidadeDTO;
+        return cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
     }
 
     @Override
