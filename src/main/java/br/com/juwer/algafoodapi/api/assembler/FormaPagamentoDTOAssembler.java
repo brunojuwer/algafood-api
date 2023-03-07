@@ -5,6 +5,7 @@ import br.com.juwer.algafoodapi.api.model.dto.FormaPagamentoDTO;
 import br.com.juwer.algafoodapi.domain.model.FormaPagamento;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -27,5 +28,10 @@ public class FormaPagamentoDTOAssembler extends RepresentationModelAssemblerSupp
         formaPagamentoDTO.add(linkTo(FormaPagamentoController.class).withRel("formasPagamento"));
 
         return formaPagamentoDTO;
+    }
+
+    @Override
+    public CollectionModel<FormaPagamentoDTO> toCollectionModel(Iterable<? extends FormaPagamento> entities) {
+        return super.toCollectionModel(entities).add(linkTo(FormaPagamentoController.class).withSelfRel());
     }
 }

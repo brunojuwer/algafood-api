@@ -9,6 +9,7 @@ import io.swagger.annotations.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public interface PedidoControllerOpenApi {
     @ApiResponses({
             @ApiResponse(code = 400, message = "Problema nos filtros", response = Problem.class)
     })
-    Page<PedidoResumoDTO> pesquisar(
+    PagedModel<PedidoResumoDTO> pesquisar(
             PedidoFilter filter,
             Pageable pageable
     );
