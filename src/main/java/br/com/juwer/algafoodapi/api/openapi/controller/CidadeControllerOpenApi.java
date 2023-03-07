@@ -3,6 +3,7 @@ package br.com.juwer.algafoodapi.api.openapi.controller;
 import br.com.juwer.algafoodapi.api.model.dto.CidadeDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.CidadeDTOInput;
 import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public interface CidadeControllerOpenApi {
 
     @ApiOperation(value = "Listar as cidades")
-    List<CidadeDTO> listar();
+    CollectionModel<CidadeDTO> listar();
 
     @ApiOperation(value = "Buscar uma cidade por ID")
     CidadeDTO buscar(@ApiParam(value = "ID de uma cidade", required = true) Long cidadeId);

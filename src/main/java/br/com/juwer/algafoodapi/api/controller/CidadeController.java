@@ -12,8 +12,8 @@ import br.com.juwer.algafoodapi.domain.model.Cidade;
 import br.com.juwer.algafoodapi.domain.repository.CidadeRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroCidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.Link;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -22,70 +22,96 @@ import javax.validation.Valid;
 import java.util.List;
 
 
+
 @RestController
 @RequestMapping(value = "/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CidadeController implements CidadeControllerOpenApi {
-  
-  @Autowired
-  private CidadeRepository cidadeRepository;
 
-  @Autowired 
-  private CadastroCidadeService cadastroCidadeService;
+    @Autowired
+    private CidadeRepository cidadeRepository;
 
-  @Autowired
-  private CidadeDTOAssembler cidadeDTOAssembler;
+    @Autowired
+    private CadastroCidadeService cadastroCidadeService;
 
-  @Autowired
-  private CidadeDTODisassembler cidadeDTODisassembler;
+    @Autowired
+    private CidadeDTOAssembler cidadeDTOAssembler;
 
-  @GetMapping
-  public List<CidadeDTO> listar(){
-    return cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAllCidades());
-  }
+    @Autowired
+    private CidadeDTODisassembler cidadeDTODisassembler;
 
-  @GetMapping(value = "/{cidadeId}")
-  public CidadeDTO buscar(@PathVariable Long cidadeId) {
-    CidadeDTO cidadeDTO = cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
+    @GetMapping
+    public CollectionModel<CidadeDTO> listar() {
+        List<CidadeDTO> cidadesDTO = cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAllCidades());
 
-      cidadeDTO.add(Link.of("http://localhost:8081/cidades/1"));
-//      cidadeDTO.add(Link.of("http://localhost:8081/cidades", "cidades"));
-      cidadeDTO.add(Link.of("http://localhost:8081/cidades", IanaLinkRelations.COLLECTION));
+        cidadesDTO.forEach(cidadeDTO -> {
+            cidadeDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
+                            .buscar(cidadeDTO.getId()))
+                    .withSelfRel());
 
-      cidadeDTO.getEstado().add(Link.of("http://localhost:8081/estados/1"));
+            cidadeDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class).listar())
+                    .withRel("cidades"));
 
-    return cidadeDTO;
-  }
+            cidadeDTO.getEstado().add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
+                            .buscar(cidadeDTO.getEstado().getId()))
+                    .withSelfRel());
+        });
 
-  @PostMapping
-  @ResponseStatus(HttpStatus.CREATED)
-  public CidadeDTO adicionar(@RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
-    try {
-      Cidade cidade = cidadeDTODisassembler.toDomainObject(cidadeDTOInput);
-      CidadeDTO cidadeDTO = cidadeDTOAssembler.toModel(cadastroCidadeService.salvar(cidade));
+        CollectionModel<CidadeDTO> cidadeDTOSColletionModel = CollectionModel.of(cidadesDTO);
 
-      ResourceUriHelper.addUriResponseHeader(cidadeDTO.getId());
+        cidadeDTOSColletionModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
+                .listar()).withSelfRel());
 
-      return cidadeDTO;
-    } catch(EntidadeNaoEncontradaException e) {
-      throw new NegocioException(e.getMessage());
+        return cidadeDTOSColletionModel;
     }
-  }
 
-  @PutMapping("/{cidadeId}")
-  public CidadeDTO atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
-    Cidade cidadeAtual = cadastroCidadeService.buscaOuFalha(cidadeId);
-    cidadeDTODisassembler.copyToDomainObject(cidadeDTOInput, cidadeAtual);
+    @GetMapping(value = "/{cidadeId}")
+    public CidadeDTO buscar(@PathVariable Long cidadeId) {
+        CidadeDTO cidadeDTO = cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
 
-    try {
-      return cidadeDTOAssembler.toModel(cadastroCidadeService.salvar(cidadeAtual));
-    } catch (EntidadeNaoEncontradaException e) {
-      throw new NegocioException(e.getMessage(), e);
-    }                  
-  }
+        cidadeDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
+                        .buscar(cidadeDTO.getId()))
+                .withSelfRel());
 
-  @DeleteMapping("/{cidadeId}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void remover(@PathVariable Long cidadeId) {
-    cadastroCidadeService.excluir(cidadeId);
-  }
+        cidadeDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class).listar())
+                .withRel("cidades"));
+
+        cidadeDTO.getEstado().add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
+                        .buscar(cidadeDTO.getEstado().getId()))
+                .withSelfRel());
+
+        return cidadeDTO;
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public CidadeDTO adicionar(@RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
+        try {
+            Cidade cidade = cidadeDTODisassembler.toDomainObject(cidadeDTOInput);
+            CidadeDTO cidadeDTO = cidadeDTOAssembler.toModel(cadastroCidadeService.salvar(cidade));
+
+            ResourceUriHelper.addUriResponseHeader(cidadeDTO.getId());
+
+            return cidadeDTO;
+        } catch(EntidadeNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{cidadeId}")
+    public CidadeDTO atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
+        Cidade cidadeAtual = cadastroCidadeService.buscaOuFalha(cidadeId);
+        cidadeDTODisassembler.copyToDomainObject(cidadeDTOInput, cidadeAtual);
+
+        try {
+            return cidadeDTOAssembler.toModel(cadastroCidadeService.salvar(cidadeAtual));
+        } catch (EntidadeNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
+    }
+
+    @DeleteMapping("/{cidadeId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable Long cidadeId) {
+        cadastroCidadeService.excluir(cidadeId);
+    }
 }
