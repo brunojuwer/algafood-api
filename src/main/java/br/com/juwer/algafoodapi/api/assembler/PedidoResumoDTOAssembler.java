@@ -4,13 +4,10 @@ import br.com.juwer.algafoodapi.api.controller.PedidoController;
 import br.com.juwer.algafoodapi.api.controller.RestauranteController;
 import br.com.juwer.algafoodapi.api.controller.UsuarioController;
 import br.com.juwer.algafoodapi.api.model.dto.PedidoResumoDTO;
+import br.com.juwer.algafoodapi.api.utils.HateoasAlgaLinks;
 import br.com.juwer.algafoodapi.domain.model.Pedido;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.TemplateVariable;
-import org.springframework.hateoas.TemplateVariables;
-import org.springframework.hateoas.UriTemplate;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +20,9 @@ public class PedidoResumoDTOAssembler extends RepresentationModelAssemblerSuppor
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private HateoasAlgaLinks hateoasAlgaLinks;
+
     public PedidoResumoDTOAssembler() {
         super(PedidoController.class, PedidoResumoDTO.class);
     }
@@ -31,15 +31,12 @@ public class PedidoResumoDTOAssembler extends RepresentationModelAssemblerSuppor
     public PedidoResumoDTO toModel(Pedido pedido) {
         PedidoResumoDTO pedidoResumoDTO = this.modelMapper.map(pedido, PedidoResumoDTO.class);
 
-        pedidoResumoDTO.add(linkTo(methodOn(PedidoController.class).buscar(pedidoResumoDTO.getCodigo())).withSelfRel());
+        pedidoResumoDTO.add(hateoasAlgaLinks.linkToPedidos(pedidoResumoDTO.getCodigo()));
 
+        pedidoResumoDTO.getCliente().add(hateoasAlgaLinks.linkToCliente(pedidoResumoDTO.getCliente().getId()));
 
-
-        pedidoResumoDTO.getCliente().add(linkTo(methodOn(UsuarioController.class)
-                .buscar(pedidoResumoDTO.getCliente().getId())).withSelfRel());
-
-        pedidoResumoDTO.getRestaurante().add(linkTo(methodOn(RestauranteController.class)
-                .buscar(pedidoResumoDTO.getRestaurante().getId())).withSelfRel());
+        pedidoResumoDTO.getRestaurante()
+                .add(hateoasAlgaLinks.linkToRestaurante(pedidoResumoDTO.getRestaurante().getId()));
 
         return pedidoResumoDTO;
     }

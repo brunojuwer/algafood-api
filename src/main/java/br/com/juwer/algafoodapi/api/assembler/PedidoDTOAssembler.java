@@ -1,6 +1,6 @@
 package br.com.juwer.algafoodapi.api.assembler;
 
-import br.com.juwer.algafoodapi.api.controller.*;
+import br.com.juwer.algafoodapi.api.controller.PedidoController;
 import br.com.juwer.algafoodapi.api.model.dto.PedidoDTO;
 import br.com.juwer.algafoodapi.api.utils.HateoasAlgaLinks;
 import br.com.juwer.algafoodapi.domain.model.Pedido;
@@ -8,9 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class PedidoDTOAssembler extends RepresentationModelAssemblerSupport<Pedido, PedidoDTO> {
@@ -29,25 +26,23 @@ public class PedidoDTOAssembler extends RepresentationModelAssemblerSupport<Pedi
     public PedidoDTO toModel(Pedido pedido) {
         PedidoDTO pedidoDTO = modelMapper.map(pedido, PedidoDTO.class);
 
-        pedidoDTO.add(linkTo(methodOn(PedidoController.class).buscar(pedido.getCodigo())).withSelfRel());
+        pedidoDTO.add(hateoasAlgaLinks.linkToPedidos(pedidoDTO.getCodigo()));
 
         pedidoDTO.add(hateoasAlgaLinks.linkToPedidos());
 
-        pedidoDTO.getEnderecoEntrega().getCidade().add(linkTo(methodOn(CidadeController.class)
-                .buscar(pedidoDTO.getEnderecoEntrega().getCidade().getId())).withSelfRel());
+        pedidoDTO.getEnderecoEntrega().getCidade()
+                .add(hateoasAlgaLinks.linkToCidade(pedidoDTO.getEnderecoEntrega().getCidade().getId()));
 
-        pedidoDTO.getFormaPagamento().add(linkTo(methodOn(FormaPagamentoController.class)
-                .buscar(pedidoDTO.getFormaPagamento().getId())).withSelfRel());
+        pedidoDTO.getFormaPagamento()
+                .add(hateoasAlgaLinks.linkToFormaPagamento(pedidoDTO.getFormaPagamento().getId()));
 
-        pedidoDTO.getCliente().add(linkTo(methodOn(UsuarioController.class)
-                .buscar(pedidoDTO.getCliente().getId())).withSelfRel());
+        pedidoDTO.getCliente().add(hateoasAlgaLinks.linkToCliente(pedidoDTO.getCliente().getId()));
 
-        pedidoDTO.getRestaurante().add(linkTo(methodOn(RestauranteController.class)
-                .buscar(pedidoDTO.getRestaurante().getId())).withSelfRel());
+        pedidoDTO.getRestaurante().add(hateoasAlgaLinks.linkToRestaurante(pedidoDTO.getRestaurante().getId()));
 
         pedidoDTO.getItens().forEach(itemPedidoDTO -> {
-            itemPedidoDTO.getProduto().add(linkTo(methodOn(RestauranteProdutosController.class)
-                    .buscar(pedidoDTO.getRestaurante().getId(), itemPedidoDTO.getProduto().getId())).withSelfRel());
+            itemPedidoDTO.getProduto().add(hateoasAlgaLinks
+                    .linkToProduto(pedidoDTO.getRestaurante().getId(), itemPedidoDTO.getProduto().getId()));
         });
 
         return pedidoDTO;

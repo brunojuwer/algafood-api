@@ -3,6 +3,7 @@ package br.com.juwer.algafoodapi.api.assembler;
 import br.com.juwer.algafoodapi.api.controller.UsuarioController;
 import br.com.juwer.algafoodapi.api.controller.UsuarioGruposController;
 import br.com.juwer.algafoodapi.api.model.dto.UsuarioDTO;
+import br.com.juwer.algafoodapi.api.utils.HateoasAlgaLinks;
 import br.com.juwer.algafoodapi.domain.model.Usuario;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,26 +18,28 @@ public class UsuarioDTOAssembler extends RepresentationModelAssemblerSupport<Usu
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private HateoasAlgaLinks hateoasAlgaLinks;
+
     public UsuarioDTOAssembler() {
         super(UsuarioController.class, UsuarioDTO.class);
     }
 
     @Override
     public UsuarioDTO toModel(Usuario usuario) {
-        UsuarioDTO usuarioDTO = createModelWithId(usuario.getId(), usuario);
-        modelMapper.map(usuario, usuarioDTO);
+        UsuarioDTO usuarioDTO = modelMapper.map(usuario, UsuarioDTO.class);
 
-        usuarioDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioController.class)
-                .listar()).withRel("usuarios"));
+        usuarioDTO.add(hateoasAlgaLinks.linkToCliente(usuarioDTO.getId()));
 
-        usuarioDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioGruposController.class)
-                .listar(usuarioDTO.getId())).withRel("usuario-grupos"));
+        usuarioDTO.add(hateoasAlgaLinks.linkToClientes(false));
+
+        usuarioDTO.add(hateoasAlgaLinks.linkToClienteGrupos(usuarioDTO.getId()));
 
         return usuarioDTO;
     }
 
     @Override
     public CollectionModel<UsuarioDTO> toCollectionModel(Iterable<? extends Usuario> entities) {
-        return super.toCollectionModel(entities).add(WebMvcLinkBuilder.linkTo(UsuarioController.class).withSelfRel());
+        return super.toCollectionModel(entities).add(hateoasAlgaLinks.linkToClientes(true));
     }
 }

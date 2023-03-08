@@ -3,6 +3,7 @@ package br.com.juwer.algafoodapi.api.assembler;
 import br.com.juwer.algafoodapi.api.controller.CidadeController;
 import br.com.juwer.algafoodapi.api.controller.EstadoController;
 import br.com.juwer.algafoodapi.api.model.dto.CidadeDTO;
+import br.com.juwer.algafoodapi.api.utils.HateoasAlgaLinks;
 import br.com.juwer.algafoodapi.domain.model.Cidade;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,10 @@ import java.util.stream.Collectors;
 public class CidadeDTOAssembler extends RepresentationModelAssemblerSupport<Cidade, CidadeDTO> {
 
     @Autowired
-    ModelMapper modelMapper;
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private HateoasAlgaLinks hateoasAlgaLinks;
 
     public CidadeDTOAssembler() {
         super(CidadeController.class, CidadeDTO.class);
@@ -30,18 +34,15 @@ public class CidadeDTOAssembler extends RepresentationModelAssemblerSupport<Cida
         CidadeDTO cidadeDTO = createModelWithId(cidade.getId(), cidade);
         modelMapper.map(cidade, cidadeDTO);
 
-        cidadeDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class).listar())
-                .withRel("cidades"));
+        cidadeDTO.add(hateoasAlgaLinks.linkToCidade());
 
-        cidadeDTO.getEstado().add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
-                        .buscar(cidadeDTO.getEstado().getId()))
-                .withSelfRel());
+        cidadeDTO.getEstado().add(hateoasAlgaLinks.linktoEstado(cidadeDTO.getEstado().getId()));
 
         return cidadeDTO;
     }
 
     @Override
     public CollectionModel<CidadeDTO> toCollectionModel(Iterable<? extends Cidade> entities) {
-        return super.toCollectionModel(entities).add(WebMvcLinkBuilder.linkTo(CidadeController.class).withSelfRel());
+        return super.toCollectionModel(entities).add(hateoasAlgaLinks.linktoSelfCidades());
     }
 }
