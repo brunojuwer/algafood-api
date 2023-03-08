@@ -1,6 +1,7 @@
 package br.com.juwer.algafoodapi.api.assembler;
 
 import br.com.juwer.algafoodapi.api.controller.RestauranteController;
+import br.com.juwer.algafoodapi.api.model.dto.EnderecoDTO;
 import br.com.juwer.algafoodapi.api.model.dto.projections.RestauranteDTO;
 import br.com.juwer.algafoodapi.api.utils.HateoasAlgaLinks;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
@@ -28,8 +29,10 @@ public class RestauranteDTOAssembler extends RepresentationModelAssemblerSupport
 
         restauranteDTO.add(hateoasAlgaLinks.linkToRestaurante(restauranteDTO.getId()));
         restauranteDTO.getCozinha().add(hateoasAlgaLinks.linkToCozinha(restauranteDTO.getCozinha().getId()));
-        restauranteDTO.getEndereco().getCidade()
-                .add(hateoasAlgaLinks.linkToCidade(restauranteDTO.getEndereco().getCidade().getId()));
+        if(restauranteDTO.getEndereco() != null) {
+            restauranteDTO.getEndereco().getCidade()
+                    .add(hateoasAlgaLinks.linkToCidade(restauranteDTO.getEndereco().getCidade().getId()));
+        }
         restauranteDTO.add(hateoasAlgaLinks.listToRestauranteResumo("restaurantes"));
         restauranteDTO.add(hateoasAlgaLinks.linkToFormasPagamentoRestaurante(restauranteDTO.getId()));
         restauranteDTO.add(hateoasAlgaLinks.linkToUsuariosRestaurante(restauranteDTO.getId()));
