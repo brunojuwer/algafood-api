@@ -3,6 +3,7 @@ package br.com.juwer.algafoodapi.domain.repository;
 import java.math.BigDecimal;
 import java.util.List;
 
+import br.com.juwer.algafoodapi.api.model.dto.projections.RestauranteBasicoDTO;
 import br.com.juwer.algafoodapi.domain.projections.RestauranteResumo;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;

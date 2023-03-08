@@ -1,5 +1,6 @@
 package br.com.juwer.algafoodapi.api.model.dto;
 
+import br.com.juwer.algafoodapi.api.model.dto.projections.RestauranteResumoDTO;
 import br.com.juwer.algafoodapi.domain.model.StatusPedido;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

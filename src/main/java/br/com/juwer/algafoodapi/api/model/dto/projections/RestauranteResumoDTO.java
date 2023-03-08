@@ -1,4 +1,4 @@
-package br.com.juwer.algafoodapi.api.model.dto;
+package br.com.juwer.algafoodapi.api.model.dto.projections;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,7 +11,7 @@ import org.springframework.hateoas.server.core.Relation;
 @Getter
 @Setter
 @ApiModel(description = "Representação resumida do restaurante")
-public class RestauranteResumoDTO extends RepresentationModel<RestauranteDTO> {
+public class RestauranteResumoDTO extends RepresentationModel<RestauranteResumoDTO> {
 
     @ApiModelProperty(example = "1")
     private Long id;

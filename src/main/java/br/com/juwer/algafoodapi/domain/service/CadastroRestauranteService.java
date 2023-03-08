@@ -1,5 +1,6 @@
 package br.com.juwer.algafoodapi.domain.service;
 
+import br.com.juwer.algafoodapi.api.model.dto.projections.RestauranteBasicoDTO;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.juwer.algafoodapi.domain.exception.RestauranteNaoEncontradoException;
 import br.com.juwer.algafoodapi.domain.model.*;
@@ -11,7 +12,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
