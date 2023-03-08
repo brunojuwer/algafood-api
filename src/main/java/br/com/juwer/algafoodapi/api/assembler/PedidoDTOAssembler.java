@@ -2,13 +2,10 @@ package br.com.juwer.algafoodapi.api.assembler;
 
 import br.com.juwer.algafoodapi.api.controller.*;
 import br.com.juwer.algafoodapi.api.model.dto.PedidoDTO;
+import br.com.juwer.algafoodapi.api.utils.HateoasAlgaLinks;
 import br.com.juwer.algafoodapi.domain.model.Pedido;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.TemplateVariable;
-import org.springframework.hateoas.TemplateVariables;
-import org.springframework.hateoas.UriTemplate;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +18,9 @@ public class PedidoDTOAssembler extends RepresentationModelAssemblerSupport<Pedi
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private HateoasAlgaLinks hateoasAlgaLinks;
+
     public PedidoDTOAssembler() {
         super(PedidoController.class, PedidoDTO.class);
     }
@@ -31,13 +31,7 @@ public class PedidoDTOAssembler extends RepresentationModelAssemblerSupport<Pedi
 
         pedidoDTO.add(linkTo(methodOn(PedidoController.class).buscar(pedido.getCodigo())).withSelfRel());
 
-        TemplateVariables pageVariables = new TemplateVariables(
-                new TemplateVariable("page", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM)
-        );
-        String pedidosUrl = linkTo(PedidoController.class).toUri().toString();
-        pedidoDTO.add(Link.of(UriTemplate.of(pedidosUrl, pageVariables), "pedidos"));
+        pedidoDTO.add(hateoasAlgaLinks.linkToPedidos());
 
         pedidoDTO.getEnderecoEntrega().getCidade().add(linkTo(methodOn(CidadeController.class)
                 .buscar(pedidoDTO.getEnderecoEntrega().getCidade().getId())).withSelfRel());
