@@ -10,8 +10,9 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/formas-pagamento")
@@ -28,7 +29,8 @@ public class RestauranteFormasPagamentoController implements RestauranteFormasPa
   public CollectionModel<FormaPagamentoDTO> listar(@PathVariable Long restauranteId) {
     Restaurante restaurante = cadastroRestauranteService.buscaOuFalha(restauranteId);
 
-    return formaPagamentoDTOAssembler.toCollectionModel(restaurante.getFormasPagamento());
+    return formaPagamentoDTOAssembler.toCollectionModel(restaurante.getFormasPagamento()).removeLinks()
+            .add(linkTo(methodOn(RestauranteFormasPagamentoController.class).listar(restauranteId)).withSelfRel());
   }
 
   @Override

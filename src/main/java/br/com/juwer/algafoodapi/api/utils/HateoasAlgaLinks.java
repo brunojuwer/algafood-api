@@ -92,7 +92,6 @@ public class HateoasAlgaLinks {
         if(isSelfRef) {
             return linkTo(FormaPagamentoController.class).withSelfRel();
         }
-
         return linkTo(FormaPagamentoController.class).withRel("formasPagamento");
     }
 
@@ -122,12 +121,12 @@ public class HateoasAlgaLinks {
         return linkTo(methodOn(RestauranteController.class).listar()).withRel("restaurantes");
     }
 
-    public Link listToRestauranteResumo() {
+    public Link listToRestauranteResumo(String rel) {
         TemplateVariables filterVariable = new TemplateVariables(
                 new TemplateVariable("projecao", TemplateVariable.VariableType.REQUEST_PARAM)
         );
-        String restauranteUrl = linkTo(methodOn(RestauranteController.class).listarApenasNomes()).toUri().toString();
-        return Link.of(UriTemplate.of(restauranteUrl, filterVariable), "restaurantes-nome");
+        String restauranteUrl = linkTo(methodOn(RestauranteController.class)).toUri().toString();
+        return Link.of(UriTemplate.of(restauranteUrl, filterVariable), rel);
     }
 
     public Link linkToFormasPagamentoRestaurante(Long restauranteId) {
@@ -138,6 +137,20 @@ public class HateoasAlgaLinks {
     public Link linkToUsuariosRestaurante(Long restauranteId) {
         return linkTo(methodOn(RestauranteUsuarioController.class)
                 .listar(restauranteId)).withRel("responsaveis");
+    }
+
+    public Link linkToAtivarOuInativarRestaurante(Long restauranteId, boolean isActive) {
+        if(isActive) {
+            return linkTo(methodOn(RestauranteController.class).inativar(restauranteId)).withRel("inativar");
+        }
+        return linkTo(methodOn(RestauranteController.class).ativar(restauranteId)).withRel("ativar");
+    }
+
+    public Link linkToAbrirOuFecharRestaurante(Long restauranteId, boolean isOpen) {
+        if(isOpen) {
+            return linkTo(methodOn(RestauranteController.class).fechar(restauranteId)).withRel("fechar");
+        }
+        return linkTo(methodOn(RestauranteController.class).abrir(restauranteId)).withRel("abrir");
     }
 
     public Link linkToProduto(Long restauranteId, Long produtoId) {

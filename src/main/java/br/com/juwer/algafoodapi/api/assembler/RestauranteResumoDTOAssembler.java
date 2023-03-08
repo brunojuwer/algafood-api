@@ -28,12 +28,12 @@ public class RestauranteResumoDTOAssembler extends RepresentationModelAssemblerS
         RestauranteResumoDTO restauranteResumoDTO = modelMapper.map(restaurante, RestauranteResumoDTO.class);
 
         restauranteResumoDTO.add(hateoasAlgaLinks.linkToRestaurante(restauranteResumoDTO.getId()));
-
         return restauranteResumoDTO;
     }
 
     @Override
     public CollectionModel<RestauranteResumoDTO> toCollectionModel(Iterable<? extends Restaurante> entities) {
-        return super.toCollectionModel(entities).removeLinks().add(hateoasAlgaLinks.listToRestauranteResumo());
+        return super.toCollectionModel(entities)
+                .removeLinks().add(hateoasAlgaLinks.listToRestauranteResumo("restaurantes"));
     }
 }
