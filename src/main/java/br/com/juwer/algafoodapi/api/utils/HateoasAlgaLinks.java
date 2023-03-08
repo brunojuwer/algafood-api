@@ -107,6 +107,19 @@ public class HateoasAlgaLinks {
         return linkTo(methodOn(UsuarioController.class).listar()).withRel("usuarios");
     }
 
+    public Link linkToRestauranteUsuarios(Long restauranteId) {
+        return linkTo(methodOn(RestauranteUsuarioController.class).listar(restauranteId)).withSelfRel();
+    }
+
+    public Link linkToRestauranteUsuariosDesassociar(Long restauranteId, Long usuarioId, String rel) {
+        return linkTo(methodOn(RestauranteUsuarioController.class)
+                .desassociar(restauranteId, usuarioId)).withRel(rel);
+    }
+
+    public Link linkToRestauranteUsuariosAssociar(Long restauranteId, String rel) {
+        return linkTo(methodOn(RestauranteUsuarioController.class)
+                .associar(restauranteId, null)).withRel(rel);
+    }
     public Link linkToClienteGrupos(Long clienteId) {
         return linkTo(methodOn(UsuarioGruposController.class)
                 .listar(clienteId)).withRel("usuario-grupos");
@@ -132,6 +145,20 @@ public class HateoasAlgaLinks {
     public Link linkToFormasPagamentoRestaurante(Long restauranteId) {
         return linkTo(methodOn(RestauranteFormasPagamentoController.class)
                 .listar(restauranteId)).withRel("formas-pagamento");
+    }
+
+    public Link linkToSelfFormasPagamentorestaurante(Long restauranteId){
+        return linkTo(methodOn(RestauranteFormasPagamentoController.class).listar(restauranteId)).withSelfRel();
+    }
+
+    public Link linkToFormasPagamentoRestauranteAssociar(Long restauranteId, String rel) {
+        return linkTo(methodOn(RestauranteFormasPagamentoController.class)
+                .desassociar(restauranteId, null)).withRel(rel);
+    }
+
+    public Link linkToFormasPagamentoRestauranteDesassociar(Long restauranteId, Long formaPagamentoId, String rel) {
+        return linkTo(methodOn(RestauranteFormasPagamentoController.class)
+                .desassociar(restauranteId, formaPagamentoId)).withRel(rel);
     }
 
     public Link linkToUsuariosRestaurante(Long restauranteId) {

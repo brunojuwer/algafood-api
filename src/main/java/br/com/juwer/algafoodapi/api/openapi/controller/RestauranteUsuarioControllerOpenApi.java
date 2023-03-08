@@ -5,6 +5,7 @@ import br.com.juwer.algafoodapi.api.model.dto.UsuarioDTO;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public interface RestauranteUsuarioControllerOpenApi {
             @ApiResponse(code = 404, message = "Restaurante ou usuário não encontrado",
                     response = Problem.class)
     })
-    void associar(
+    ResponseEntity<Void> associar(
         @ApiParam(value = "ID do restaurante", example = "1", required = true)
         Long restauranteId,
         @ApiParam(value = "ID do usuário", example = "1", required = true)
@@ -38,7 +39,7 @@ public interface RestauranteUsuarioControllerOpenApi {
             @ApiResponse(code = 404, message = "Restaurante ou usuário não encontrado",
                     response = Problem.class)
     })
-    void desaassociar(
+    ResponseEntity<Void> desassociar(
         @ApiParam(value = "ID do restaurante", example = "1", required = true)
         Long restauranteId,
         @ApiParam(value = "ID do usuário", example = "1", required = true)
