@@ -4,6 +4,7 @@ import br.com.juwer.algafoodapi.api.openapi.controller.FluxoPedidoControllerOpen
 import br.com.juwer.algafoodapi.domain.service.FluxoPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,21 +17,27 @@ public class FluxoPedidoController implements FluxoPedidoControllerOpenApi {
     @Override
     @PutMapping("/confirmacao")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void confirmacao(@PathVariable String codigo) {
+    public ResponseEntity<Void> confirmacao(@PathVariable String codigo) {
         fluxoPedidoService.confirmar(codigo);
+
+        return ResponseEntity.noContent().build();
     }
 
     @Override
     @PutMapping("/cancelamento")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void cancelar(@PathVariable String codigo) {
+    public ResponseEntity<Void> cancelar(@PathVariable String codigo) {
         fluxoPedidoService.cancelar(codigo);
+
+        return ResponseEntity.noContent().build();
     }
 
     @Override
     @PutMapping("/entrega")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void entregar(@PathVariable String codigo) {
+    public ResponseEntity<Void> entregar(@PathVariable String codigo) {
         fluxoPedidoService.entregar(codigo);
+
+        return ResponseEntity.noContent().build();
     }
 }

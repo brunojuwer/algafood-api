@@ -35,6 +35,18 @@ public class HateoasAlgaLinks {
         return linkTo(methodOn(PedidoController.class).buscar(codigo)).withSelfRel();
     }
 
+    public Link linkToEntregaPedido(String codigo, String rel) {
+        return linkTo(methodOn(FluxoPedidoController.class).entregar(codigo)).withRel(rel);
+    }
+
+    public Link linkToCancelaPedido(String codigo, String rel) {
+        return linkTo(methodOn(FluxoPedidoController.class).cancelar(codigo)).withRel(rel);
+    }
+
+    public Link linkToConfirmaPedido(String codigo, String rel) {
+        return linkTo(methodOn(FluxoPedidoController.class).confirmacao(codigo)).withRel(rel);
+    }
+
     public Link linkToCidade() {
         return linkTo(methodOn(CidadeController.class).listar())
                 .withRel("cidades");
