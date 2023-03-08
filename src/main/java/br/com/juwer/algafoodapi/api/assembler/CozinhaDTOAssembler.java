@@ -2,6 +2,7 @@ package br.com.juwer.algafoodapi.api.assembler;
 
 import br.com.juwer.algafoodapi.api.controller.CozinhaController;
 import br.com.juwer.algafoodapi.api.model.dto.CozinhaDTO;
+import br.com.juwer.algafoodapi.api.utils.HateoasAlgaLinks;
 import br.com.juwer.algafoodapi.domain.model.Cozinha;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class CozinhaDTOAssembler extends RepresentationModelAssemblerSupport<Coz
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private HateoasAlgaLinks hateoasAlgaLinks;
+
     public CozinhaDTOAssembler() {
         super(CozinhaController.class, CozinhaDTO.class);
     }
@@ -25,7 +29,7 @@ public class CozinhaDTOAssembler extends RepresentationModelAssemblerSupport<Coz
         CozinhaDTO cozinhaDTO = createModelWithId(cozinha.getId(), cozinha);
         modelMapper.map(cozinha, cozinhaDTO);
 
-        cozinhaDTO.add(linkTo(CozinhaController.class).withRel("cozinhas"));
+        cozinhaDTO.add(hateoasAlgaLinks.linkToCozinha());
 
         return cozinhaDTO;
     }
