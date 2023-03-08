@@ -7,6 +7,10 @@ import br.com.juwer.algafoodapi.api.model.dto.PedidoResumoDTO;
 import br.com.juwer.algafoodapi.domain.model.Pedido;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.TemplateVariable;
+import org.springframework.hateoas.TemplateVariables;
+import org.springframework.hateoas.UriTemplate;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -25,8 +29,11 @@ public class PedidoResumoDTOAssembler extends RepresentationModelAssemblerSuppor
 
     @Override
     public PedidoResumoDTO toModel(Pedido pedido) {
-        PedidoResumoDTO pedidoResumoDTO = createModelWithId(pedido.getId(), pedido);
-        modelMapper.map(pedido, pedidoResumoDTO);
+        PedidoResumoDTO pedidoResumoDTO = this.modelMapper.map(pedido, PedidoResumoDTO.class);
+
+        pedidoResumoDTO.add(linkTo(methodOn(PedidoController.class).buscar(pedidoResumoDTO.getCodigo())).withSelfRel());
+
+
 
         pedidoResumoDTO.getCliente().add(linkTo(methodOn(UsuarioController.class)
                 .buscar(pedidoResumoDTO.getCliente().getId())).withSelfRel());
@@ -34,9 +41,6 @@ public class PedidoResumoDTOAssembler extends RepresentationModelAssemblerSuppor
         pedidoResumoDTO.getRestaurante().add(linkTo(methodOn(RestauranteController.class)
                 .buscar(pedidoResumoDTO.getRestaurante().getId())).withSelfRel());
 
-        pedidoResumoDTO.add(linkTo(PedidoController.class).withRel("pedidos"));
-
         return pedidoResumoDTO;
     }
-
 }
