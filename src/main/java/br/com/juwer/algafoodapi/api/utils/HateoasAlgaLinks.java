@@ -66,6 +66,10 @@ public class HateoasAlgaLinks {
         return Link.of(UriTemplate.of(cozinhasUrl, pageVariables) , "cozinhas");
     }
 
+    public Link linkToCozinha(Long cozinhaId) {
+        return linkTo(methodOn(CozinhaController.class).buscar(cozinhaId)).withSelfRel();
+    }
+
     public Link linkToSelfEstados() {
         return linkTo((EstadoController.class)).withSelfRel();
     }
@@ -112,6 +116,28 @@ public class HateoasAlgaLinks {
     public Link linkToRestaurante(Long restauranteId) {
         return linkTo(methodOn(RestauranteController.class)
                 .buscar(restauranteId)).withSelfRel();
+    }
+
+    public Link linkToRestaurante() {
+        return linkTo(methodOn(RestauranteController.class).listar()).withRel("restaurantes");
+    }
+
+    public Link listToRestauranteResumo() {
+        TemplateVariables filterVariable = new TemplateVariables(
+                new TemplateVariable("projecao", TemplateVariable.VariableType.REQUEST_PARAM)
+        );
+        String restauranteUrl = linkTo(methodOn(RestauranteController.class).listarApenasNomes()).toUri().toString();
+        return Link.of(UriTemplate.of(restauranteUrl, filterVariable), "restaurantes-nome");
+    }
+
+    public Link linkToFormasPagamentoRestaurante(Long restauranteId) {
+        return linkTo(methodOn(RestauranteFormasPagamentoController.class)
+                .listar(restauranteId)).withRel("formas-pagamento");
+    }
+
+    public Link linkToUsuariosRestaurante(Long restauranteId) {
+        return linkTo(methodOn(RestauranteUsuarioController.class)
+                .listar(restauranteId)).withRel("responsaveis");
     }
 
     public Link linkToProduto(Long restauranteId, Long produtoId) {

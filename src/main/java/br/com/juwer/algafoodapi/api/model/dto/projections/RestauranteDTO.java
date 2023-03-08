@@ -1,7 +1,7 @@
-package br.com.juwer.algafoodapi.api.model.dto;
+package br.com.juwer.algafoodapi.api.model.dto.projections;
 
-import br.com.juwer.algafoodapi.api.model.dto.view.RestauranteView;
-import com.fasterxml.jackson.annotation.JsonView;
+import br.com.juwer.algafoodapi.api.model.dto.CozinhaDTO;
+import br.com.juwer.algafoodapi.api.model.dto.EnderecoDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,18 +16,14 @@ import java.math.BigDecimal;
 public class RestauranteDTO extends RepresentationModel<RestauranteDTO> {
 
     @ApiModelProperty(example = "1")
-    @JsonView({RestauranteView.Resumo.class, RestauranteView.ApenasNomeEId.class})
     private Long id;
 
     @ApiModelProperty(example = "Tuk Tuk Food")
-    @JsonView({RestauranteView.Resumo.class, RestauranteView.ApenasNomeEId.class})
     private String nome;
 
     @ApiModelProperty(example = "20,00", dataType = "java.lang.String")
-    @JsonView(RestauranteView.Resumo.class)
     private BigDecimal taxaFrete;
 
-    @JsonView(RestauranteView.Resumo.class)
     private CozinhaDTO cozinha;
 
     private Boolean ativo;

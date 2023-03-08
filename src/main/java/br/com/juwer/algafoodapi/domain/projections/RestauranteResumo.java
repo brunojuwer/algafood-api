@@ -1,6 +1,5 @@
 package br.com.juwer.algafoodapi.domain.projections;
 
-import br.com.juwer.algafoodapi.domain.model.Cozinha;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
