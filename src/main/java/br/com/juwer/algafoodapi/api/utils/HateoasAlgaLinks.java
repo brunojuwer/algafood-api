@@ -184,9 +184,19 @@ public class HateoasAlgaLinks {
         return linkTo(methodOn(RestauranteProdutosController.class)
                 .buscar(restauranteId, produtoId)).withSelfRel();
     }
+
+    public Link linkToProduto(Long restauranteId, Long produtoId, String rel) {
+        return linkTo(methodOn(RestauranteProdutosController.class)
+                .buscar(restauranteId, produtoId)).withRel(rel);
+    }
+
     public Link linkToProduto(Long restauranteId, String rel) {
         return linkTo(methodOn(RestauranteProdutosController.class)
                 .listar(restauranteId, null)).withRel(rel);
+    }
+
+    public Link linkToFoto(Long restauranteId, Long produtoId, String rel) {
+        return linkTo(methodOn(RestauranteProdutoFotoController.class).buscar(restauranteId, produtoId)).withRel(rel);
     }
 
 }
