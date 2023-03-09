@@ -232,4 +232,20 @@ public class HateoasAlgaLinks {
         return linkTo(methodOn(GrupoPermissaoController.class).associar(grupoId, permissaoId)).withRel(rel);
     }
 
+    public Link linkToEstatisticas(String rel) {
+        return linkTo(methodOn(EstatisticasController.class).vendaDiariaLink()).withRel(rel);
+    }
+
+    public Link linkToVendasDiarias() {
+        TemplateVariables filterVariables = new TemplateVariables(
+                new TemplateVariable("apartirData", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("ateData", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("restauranteId", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("timeOffSet", TemplateVariable.VariableType.REQUEST_PARAM)
+        );
+        String vendasDiariasUrl = linkTo(EstatisticasController.class)
+                .slash("vendas-diarias").toUri().toString();
+
+        return Link.of(UriTemplate.of(vendasDiariasUrl, filterVariables), "vendas-diarias");
+    }
 }

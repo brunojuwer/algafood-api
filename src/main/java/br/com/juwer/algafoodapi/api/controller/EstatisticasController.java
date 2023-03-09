@@ -1,11 +1,13 @@
 package br.com.juwer.algafoodapi.api.controller;
 
 import br.com.juwer.algafoodapi.api.openapi.controller.EstatisticasControllerOpenApi;
+import br.com.juwer.algafoodapi.api.utils.HateoasAlgaLinks;
 import br.com.juwer.algafoodapi.domain.filter.VendaDiariaFilter;
 import br.com.juwer.algafoodapi.domain.model.dto.VendaDiaria;
 import br.com.juwer.algafoodapi.domain.service.VendaQueryService;
 import br.com.juwer.algafoodapi.domain.service.VendaReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,17 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 
     @Autowired
     private VendaReportService vendaReportService;
+
+    @Autowired
+    private HateoasAlgaLinks hateoasAlgaLinks;
+
+    @GetMapping
+    public VendaDiariaLink vendaDiariaLink() {
+        var vendasDiarias = new VendaDiariaLink();
+        vendasDiarias.add(hateoasAlgaLinks.linkToVendasDiarias());
+
+        return vendasDiarias;
+    }
 
     @Override
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,4 +62,6 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
                 .headers(headers)
                 .body(bytesPdf);
     }
+
+    public static class VendaDiariaLink extends RepresentationModel<VendaDiariaLink> {}
 }
