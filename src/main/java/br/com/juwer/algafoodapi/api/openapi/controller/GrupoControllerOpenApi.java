@@ -4,6 +4,7 @@ import br.com.juwer.algafoodapi.api.exceptionhandler.Problem;
 import br.com.juwer.algafoodapi.api.model.dto.GrupoDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.GrupoDTOInput;
 import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public interface GrupoControllerOpenApi {
 
     @ApiOperation(value = "Lista os grupos")
-    List<GrupoDTO> listar();
+    CollectionModel<GrupoDTO> listar();
 
     @ApiOperation(value = "Busca grupo por ID")
     @ApiResponses({

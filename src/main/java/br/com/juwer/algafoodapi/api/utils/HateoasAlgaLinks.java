@@ -199,4 +199,28 @@ public class HateoasAlgaLinks {
         return linkTo(methodOn(RestauranteProdutoFotoController.class).buscar(restauranteId, produtoId)).withRel(rel);
     }
 
+    public Link linkToGrupos(String rel) {
+        return linkTo(methodOn(GrupoController.class).listar()).withRel(rel);
+    }
+
+    public Link linkToGrupo(Long grupoId) {
+        return linkTo(methodOn(GrupoController.class).buscar(grupoId)).withSelfRel();
+    }
+
+    public Link linkToPermissoes(Long grupoId, String rel) {
+        return linkTo(methodOn(GrupoPermissaoController.class).listar(grupoId)).withRel(rel);
+    }
+
+    public Link linkToPermissoes() {
+        return linkTo(PermissaoController.class).withSelfRel();
+    }
+
+    public Link linkToGrupoPermissoesAssociar(Long grupoId, String rel){
+        return linkTo(methodOn(GrupoPermissaoController.class).associar(grupoId, null)).withRel(rel);
+    }
+
+    public Link linkToGrupoPermissoesDesassociar(Long grupoId, Long permissaoId, String rel){
+        return linkTo(methodOn(GrupoPermissaoController.class).associar(grupoId, permissaoId)).withRel(rel);
+    }
+
 }
