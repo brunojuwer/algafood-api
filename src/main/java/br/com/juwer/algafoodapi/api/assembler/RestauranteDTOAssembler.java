@@ -36,7 +36,7 @@ public class RestauranteDTOAssembler extends RepresentationModelAssemblerSupport
         restauranteDTO.add(hateoasAlgaLinks.listToRestauranteResumo("restaurantes"));
         restauranteDTO.add(hateoasAlgaLinks.linkToFormasPagamentoRestaurante(restauranteDTO.getId()));
         restauranteDTO.add(hateoasAlgaLinks.linkToUsuariosRestaurante(restauranteDTO.getId()));
-
+        restauranteDTO.add(hateoasAlgaLinks.linkToProduto(restauranteDTO.getId(), "produtos"));
 
         restauranteDTO.add(hateoasAlgaLinks
                 .linkToAbrirOuFecharRestaurante(restaurante.getId(), restauranteDTO.getAberto()));
