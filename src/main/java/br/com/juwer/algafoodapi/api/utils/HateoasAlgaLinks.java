@@ -210,4 +210,17 @@ public class HateoasAlgaLinks {
     public Link linkToPermissoes(Long grupoId, String rel) {
         return linkTo(methodOn(GrupoPermissaoController.class).listar(grupoId)).withRel(rel);
     }
+
+    public Link linkToPermissoes() {
+        return linkTo(PermissaoController.class).withSelfRel();
+    }
+
+    public Link linkToGrupoPermissoesAssociar(Long grupoId, String rel){
+        return linkTo(methodOn(GrupoPermissaoController.class).associar(grupoId, null)).withRel(rel);
+    }
+
+    public Link linkToGrupoPermissoesDesassociar(Long grupoId, Long permissaoId, String rel){
+        return linkTo(methodOn(GrupoPermissaoController.class).associar(grupoId, permissaoId)).withRel(rel);
+    }
+
 }
