@@ -28,8 +28,8 @@ public class GrupoDTOAssembler extends RepresentationModelAssemblerSupport<Grupo
     public GrupoDTO toModel(Grupo grupo) {
         GrupoDTO grupoDTO = modelMapper.map(grupo, GrupoDTO.class);
 
-        grupoDTO.add(hateoasAlgaLinks.linkToGrupos("grupos"));
         grupoDTO.add(hateoasAlgaLinks.linkToGrupo(grupoDTO.getId()));
+        grupoDTO.add(hateoasAlgaLinks.linkToGrupos("grupos"));
         grupoDTO.add(hateoasAlgaLinks.linkToPermissoes(grupoDTO.getId(), "permissoes"));
 
         return grupoDTO;

@@ -125,6 +125,15 @@ public class HateoasAlgaLinks {
                 .listar(clienteId)).withRel("usuario-grupos");
     }
 
+    public Link linkToUsuarioGruposDesassociar(Long usuarioId, Long grupoId, String rel) {
+        return linkTo(methodOn(UsuarioGruposController.class).desassociar(usuarioId, grupoId)).withRel(rel);
+    }
+
+    public Link linkToUsuarioGruposAssociar(Long usuarioId, String rel) {
+        return linkTo(methodOn(UsuarioGruposController.class).associar(usuarioId, null)).withRel(rel);
+    }
+
+
     public Link linkToRestaurante(Long restauranteId) {
         return linkTo(methodOn(RestauranteController.class)
                 .buscar(restauranteId)).withSelfRel();
