@@ -5,12 +5,15 @@ import br.com.juwer.algafoodapi.api.disassembler.ProdutoDTODisassembler;
 import br.com.juwer.algafoodapi.api.model.dto.ProdutoDTO;
 import br.com.juwer.algafoodapi.api.model.dto.input.produtodtos.ProdutoDTOInput;
 import br.com.juwer.algafoodapi.api.openapi.controller.RestauranteProdutosControllerOpenApi;
+import br.com.juwer.algafoodapi.api.utils.HateoasAlgaLinks;
 import br.com.juwer.algafoodapi.domain.model.Produto;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
 import br.com.juwer.algafoodapi.domain.repository.ProdutoRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroProdutoService;
 import br.com.juwer.algafoodapi.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,20 +39,25 @@ public class RestauranteProdutosController implements RestauranteProdutosControl
     @Autowired
     private CadastroRestauranteService cadastroRestauranteService;
 
+    @Autowired
+    private HateoasAlgaLinks hateoasAlgaLinks;
 
     @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ProdutoDTO> listar(@PathVariable Long restauranteId, @RequestParam(required = false) boolean incluirInativos){
+    public CollectionModel<ProdutoDTO> listar(@PathVariable Long restauranteId,
+                                              @RequestParam(required = false, defaultValue = "false") Boolean incluirInativos){
         Restaurante restaurante = cadastroRestauranteService.buscaOuFalha(restauranteId);
         List<Produto> produtos = null;
 
         if(incluirInativos) {
             produtos = cadastroProdutoService.listar(restauranteId);
-            return produtoDTOAssembler.toCollectionModel(produtos);
+            return produtoDTOAssembler.toCollectionModel(produtos)
+                    .add(hateoasAlgaLinks.linkToProduto(restauranteId, IanaLinkRelations.SELF.value()));
         }
 
         produtos = produtoRepository.findAtivosByRestauranteId(restaurante);
-        return produtoDTOAssembler.toCollectionModel(produtos);
+        return produtoDTOAssembler.toCollectionModel(produtos)
+                .add(hateoasAlgaLinks.linkToProduto(restauranteId, IanaLinkRelations.SELF.value()));
     }
 
     @Override
