@@ -9,6 +9,7 @@ import br.com.juwer.algafoodapi.domain.model.Grupo;
 import br.com.juwer.algafoodapi.domain.repository.GrupoRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 
     @Override
     @GetMapping
-    public List<GrupoDTO> listar() {
+    public CollectionModel<GrupoDTO> listar() {
         List<Grupo> grupos = grupoRepository.findAll();
         return grupoDTOAssembler.toCollectionModel(grupos);
     }
