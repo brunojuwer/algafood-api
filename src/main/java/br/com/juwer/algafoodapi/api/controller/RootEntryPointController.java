@@ -27,8 +27,7 @@ public class RootEntryPointController {
             rootEntryPointModel.add(hateoasAlgaLinks.linkToClientes(false));
             rootEntryPointModel.add(hateoasAlgaLinks.linkToGrupos("grupos"));
             rootEntryPointModel.add(hateoasAlgaLinks.linkToPermissoes().withRel("permissoes"));
-
-
+            rootEntryPointModel.add(hateoasAlgaLinks.linkToEstatisticas("estatisticas"));
         return rootEntryPointModel;
     }
 
