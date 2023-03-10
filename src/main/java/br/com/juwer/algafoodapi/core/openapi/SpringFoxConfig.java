@@ -3,6 +3,7 @@ package br.com.juwer.algafoodapi.core.openapi;
 
 import br.com.juwer.algafoodapi.api.exceptionhandler.Problem;
 import br.com.juwer.algafoodapi.api.model.dto.*;
+import br.com.juwer.algafoodapi.api.model.dto.projections.RestauranteBasicoDTO;
 import br.com.juwer.algafoodapi.api.openapi.model.*;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -83,6 +84,18 @@ public class SpringFoxConfig {
                     AlternateTypeRules
                         .newRule(typeResolver.resolve(CollectionModel.class, PermissaoDTO.class), PermissoesModelOpenApi.class)
                 )
+                .alternateTypeRules(
+                    AlternateTypeRules
+                        .newRule(typeResolver.resolve(CollectionModel.class, ProdutoDTO.class), ProdutosModelOpenApi.class)
+                )
+                .alternateTypeRules(
+                    AlternateTypeRules
+                        .newRule(typeResolver.resolve(CollectionModel.class, RestauranteBasicoDTO.class), RestaurantesModelOpenApi.class)
+                )
+                .alternateTypeRules(
+                    AlternateTypeRules
+                        .newRule(typeResolver.resolve(CollectionModel.class, UsuarioDTO.class), UsuariosModelOpenApi.class)
+                )
                 .useDefaultResponseMessages(false)
                 .globalResponses(HttpMethod.GET, globalGetResponseMessages())
                 .globalResponses(HttpMethod.POST, globalPostResponseMessages())
@@ -100,7 +113,8 @@ public class SpringFoxConfig {
                         new Tag("Produtos", "Gerencia os Produtos"),
                         new Tag("Usuários", "Gerencia os Usuários"),
                         new Tag("Estatísticas", "Gerencia as estatísticas"),
-                        new Tag("Permissões", "Consulta as permissões")
+                        new Tag("Permissões", "Consulta as permissões"),
+                        new Tag("RootEntryPoint", "Endpoints de entrada")
                 );
     }
 
