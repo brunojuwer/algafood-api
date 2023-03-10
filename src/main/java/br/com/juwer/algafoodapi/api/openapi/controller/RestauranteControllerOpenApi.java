@@ -8,6 +8,7 @@ import br.com.juwer.algafoodapi.api.model.dto.projections.RestauranteResumoDTO;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public interface RestauranteControllerOpenApi {
     })
     CollectionModel<RestauranteBasicoDTO> listar();
 
+    @ApiIgnore
     @ApiOperation(value = "Listar Restaurantes", hidden = true)
     CollectionModel<RestauranteResumoDTO> listarApenasNomes();
 
