@@ -75,6 +75,14 @@ public class SpringFoxConfig {
                     AlternateTypeRules
                         .newRule(typeResolver.resolve(CollectionModel.class, FormaPagamentoDTO.class), FormasPagamentoModelOpenApi.class)
                 )
+                .alternateTypeRules(
+                    AlternateTypeRules
+                        .newRule(typeResolver.resolve(CollectionModel.class, GrupoDTO.class), GruposModelOpenApi.class)
+                )
+                .alternateTypeRules(
+                    AlternateTypeRules
+                        .newRule(typeResolver.resolve(CollectionModel.class, PermissaoDTO.class), PermissoesModelOpenApi.class)
+                )
                 .useDefaultResponseMessages(false)
                 .globalResponses(HttpMethod.GET, globalGetResponseMessages())
                 .globalResponses(HttpMethod.POST, globalPostResponseMessages())
