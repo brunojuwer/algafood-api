@@ -2,18 +2,17 @@ package br.com.juwer.algafoodapi.core.openapi;
 
 
 import br.com.juwer.algafoodapi.api.exceptionhandler.Problem;
-import br.com.juwer.algafoodapi.api.model.dto.CozinhaDTO;
-import br.com.juwer.algafoodapi.api.model.dto.PedidoResumoDTO;
-import br.com.juwer.algafoodapi.api.openapi.model.CozinhasModelOpenApi;
-import br.com.juwer.algafoodapi.api.openapi.model.PageableModelOpenApi;
-import br.com.juwer.algafoodapi.api.openapi.model.PedidosResumoModelOpenApi;
+import br.com.juwer.algafoodapi.api.model.dto.*;
+import br.com.juwer.algafoodapi.api.openapi.model.*;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Links;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -58,11 +57,23 @@ public class SpringFoxConfig {
                         URL.class, URI.class, URLStreamHandler.class, Resource.class,
                         File.class, InputStream.class)
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+                .directModelSubstitute(Links.class, LinksModelOpenApi.class)
                 .alternateTypeRules(
                     AlternateTypeRules
-                        .newRule(typeResolver.resolve(Page.class, CozinhaDTO.class), CozinhasModelOpenApi.class),
+                        .newRule(typeResolver.resolve(PagedModel.class, CozinhaDTO.class), CozinhasModelOpenApi.class),
+
                     AlternateTypeRules
-                        .newRule(typeResolver.resolve(Page.class, PedidoResumoDTO.class), PedidosResumoModelOpenApi.class)
+                        .newRule(typeResolver.resolve(CollectionModel.class, CidadeDTO.class), CidadesModelOpenApi.class)
+                )
+                .alternateTypeRules(
+                    AlternateTypeRules
+                        .newRule(typeResolver.resolve(CollectionModel.class, EstadoDTO.class), EstadosModelOpenApi.class),
+                    AlternateTypeRules
+                        .newRule(typeResolver.resolve(PagedModel.class, PedidoResumoDTO.class), PedidosModelOpenApi.class)
+                )
+                .alternateTypeRules(
+                    AlternateTypeRules
+                        .newRule(typeResolver.resolve(CollectionModel.class, FormaPagamentoDTO.class), FormasPagamentoModelOpenApi.class)
                 )
                 .useDefaultResponseMessages(false)
                 .globalResponses(HttpMethod.GET, globalGetResponseMessages())
