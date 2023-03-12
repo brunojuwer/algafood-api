@@ -1,11 +1,10 @@
-package br.com.juwer.algafoodapi.api.v1.controller;
+package br.com.juwer.algafoodapi.api.v2.controller;
 
 import br.com.juwer.algafoodapi.api.utils.ResourceUriHelper;
-import br.com.juwer.algafoodapi.api.v1.assembler.CidadeDTOAssembler;
-import br.com.juwer.algafoodapi.api.v1.disassembler.CidadeDTODisassembler;
-import br.com.juwer.algafoodapi.api.v1.model.dto.CidadeDTO;
-import br.com.juwer.algafoodapi.api.v1.model.dto.input.CidadeDTOInput;
-import br.com.juwer.algafoodapi.api.v1.openapi.controller.CidadeControllerOpenApi;
+import br.com.juwer.algafoodapi.api.v2.assembler.CidadeDTOAssemblerV2;
+import br.com.juwer.algafoodapi.api.v2.disassembler.CidadeDTODisassemblerV2;
+import br.com.juwer.algafoodapi.api.v2.model.dto.CidadeDTOV2;
+import br.com.juwer.algafoodapi.api.v2.model.dtoinput.CidadeDTOInputV2;
 import br.com.juwer.algafoodapi.core.web.AlgaMediaTypes;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
@@ -21,8 +20,8 @@ import javax.validation.Valid;
 
 
 @RestController
-@RequestMapping(value = "/cidades", produces = AlgaMediaTypes.V1_APPLICATION_JSON_VALUE)
-public class CidadeController implements CidadeControllerOpenApi {
+@RequestMapping(value = "/cidades", produces = AlgaMediaTypes.V2_APPLICATION_JSON_VALUE)
+public class CidadeControllerV2  {
 
     @Autowired
     private CidadeRepository cidadeRepository;
@@ -31,32 +30,29 @@ public class CidadeController implements CidadeControllerOpenApi {
     private CadastroCidadeService cadastroCidadeService;
 
     @Autowired
-    private CidadeDTOAssembler cidadeDTOAssembler;
+    private CidadeDTOAssemblerV2 cidadeDTOAssembler;
 
     @Autowired
-    private CidadeDTODisassembler cidadeDTODisassembler;
+    private CidadeDTODisassemblerV2 cidadeDTODisassembler;
 
-    @Override
     @GetMapping
-    public CollectionModel<CidadeDTO> listar() {
+    public CollectionModel<CidadeDTOV2> listar() {
         return cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAllCidades());
     }
 
-    @Override
     @GetMapping(value = "/{cidadeId}")
-    public CidadeDTO buscar(@PathVariable Long cidadeId) {
+    public CidadeDTOV2 buscar(@PathVariable Long cidadeId) {
         return cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
     }
 
-    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CidadeDTO adicionar(@RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
+    public CidadeDTOV2 adicionar(@RequestBody @Valid CidadeDTOInputV2 cidadeDTOInput) {
         try {
             Cidade cidade = cidadeDTODisassembler.toDomainObject(cidadeDTOInput);
-            CidadeDTO cidadeDTO = cidadeDTOAssembler.toModel(cadastroCidadeService.salvar(cidade));
+            CidadeDTOV2 cidadeDTO = cidadeDTOAssembler.toModel(cadastroCidadeService.salvar(cidade));
 
-            ResourceUriHelper.addUriResponseHeader(cidadeDTO.getId());
+            ResourceUriHelper.addUriResponseHeader(cidadeDTO.getIdCidade());
 
             return cidadeDTO;
         } catch(EntidadeNaoEncontradaException e) {
@@ -64,9 +60,8 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
-    @Override
     @PutMapping("/{cidadeId}")
-    public CidadeDTO atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
+    public CidadeDTOV2 atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeDTOInputV2 cidadeDTOInput) {
         Cidade cidadeAtual = cadastroCidadeService.buscaOuFalha(cidadeId);
         cidadeDTODisassembler.copyToDomainObject(cidadeDTOInput, cidadeAtual);
 
@@ -77,10 +72,9 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
-    @Override
-    @DeleteMapping("/{cidadeId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@PathVariable Long cidadeId) {
-        cadastroCidadeService.excluir(cidadeId);
-    }
+//    @DeleteMapping("/{cidadeId}")
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    public void remover(@PathVariable Long cidadeId) {
+//        cadastroCidadeService.excluir(cidadeId);
+//    }
 }
