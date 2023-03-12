@@ -1,7 +1,7 @@
 package br.com.juwer.algafoodapi.core.modelmapper;
 
-import br.com.juwer.algafoodapi.api.model.dto.EnderecoDTO;
-import br.com.juwer.algafoodapi.api.model.dto.input.itempedidodtos.ItemPedidoInput;
+import br.com.juwer.algafoodapi.api.v1.model.dto.EnderecoDTO;
+import br.com.juwer.algafoodapi.api.v1.model.dto.input.itempedidodtos.ItemPedidoInput;
 import br.com.juwer.algafoodapi.domain.model.Endereco;
 import br.com.juwer.algafoodapi.domain.model.ItemPedido;
 import org.modelmapper.ModelMapper;

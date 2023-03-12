@@ -2,9 +2,9 @@ package br.com.juwer.algafoodapi.core.openapi;
 
 
 import br.com.juwer.algafoodapi.api.exceptionhandler.Problem;
-import br.com.juwer.algafoodapi.api.model.dto.*;
-import br.com.juwer.algafoodapi.api.model.dto.projections.RestauranteBasicoDTO;
-import br.com.juwer.algafoodapi.api.openapi.model.*;
+import br.com.juwer.algafoodapi.api.v1.model.dto.*;
+import br.com.juwer.algafoodapi.api.v1.model.dto.projections.RestauranteBasicoDTO;
+import br.com.juwer.algafoodapi.api.v1.openapi.model.*;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
