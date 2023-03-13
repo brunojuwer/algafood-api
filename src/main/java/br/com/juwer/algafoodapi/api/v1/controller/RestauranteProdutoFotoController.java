@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
+@RequestMapping("/v1/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
 public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 
     @Autowired

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/usuarios/{usuarioId}/grupos")
+@RequestMapping("/v1/usuarios/{usuarioId}/grupos")
 public class UsuarioGruposController implements UsuarioGruposControllerOpenApi {
 
     @Autowired
