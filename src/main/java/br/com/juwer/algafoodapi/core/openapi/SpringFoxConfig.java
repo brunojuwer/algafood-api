@@ -51,7 +51,7 @@ public class SpringFoxConfig {
         return objectMapper -> objectMapper.registerModule(new JavaTimeModule());
     } // necessário criar esse bean para não dar erro de conversão de Data
 
-    @Bean
+//    @Bean
     public Docket apiDocket() {
         return new Docket(DocumentationType.OAS_30)
                 .groupName("V1")
@@ -251,7 +251,7 @@ public class SpringFoxConfig {
 
     private ApiInfo apiInfoV1() {
         return new ApiInfoBuilder()
-                .title("Algafood API")
+                .title("Algafood API - (Depreciada)")
                 .description("API aberta para cliente e restaurantes")
                 .version("V1")
                 .contact(new Contact("Bruno", "http://www.juwer.com.br", "bruno@juwer.com.br"))
