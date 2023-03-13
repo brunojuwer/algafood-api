@@ -51,7 +51,7 @@ public class SpringFoxConfig {
         return objectMapper -> objectMapper.registerModule(new JavaTimeModule());
     } // necessário criar esse bean para não dar erro de conversão de Data
 
-    @Bean
+//    @Bean
     public Docket apiDocket() {
         return new Docket(DocumentationType.OAS_30)
                 .groupName("V1")
