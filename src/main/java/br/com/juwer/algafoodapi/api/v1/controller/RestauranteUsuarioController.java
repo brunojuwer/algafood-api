@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/restaurantes/{restauranteId}/usuarios")
+@RequestMapping("/v1/restaurantes/{restauranteId}/usuarios")
 public class RestauranteUsuarioController implements RestauranteUsuarioControllerOpenApi {
 
     @Autowired

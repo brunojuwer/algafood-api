@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/estados")
+@RequestMapping(value = "/v1/estados")
 public class EstadoController implements EstadoControllerOpenApi {
   
   @Autowired

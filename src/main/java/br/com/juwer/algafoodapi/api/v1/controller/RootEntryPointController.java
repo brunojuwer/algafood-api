@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Api(tags = "RootEntryPoint")
 @RestController
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1",produces = MediaType.APPLICATION_JSON_VALUE)
 public class RootEntryPointController {
 
     @Autowired
