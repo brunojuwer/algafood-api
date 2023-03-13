@@ -5,6 +5,10 @@ import br.com.juwer.algafoodapi.api.exceptionhandler.Problem;
 import br.com.juwer.algafoodapi.api.v1.model.dto.*;
 import br.com.juwer.algafoodapi.api.v1.model.dto.projections.RestauranteBasicoDTO;
 import br.com.juwer.algafoodapi.api.v1.openapi.model.*;
+import br.com.juwer.algafoodapi.api.v2.model.dto.CidadeDTOV2;
+import br.com.juwer.algafoodapi.api.v2.model.dto.CozinhaDTOV2;
+import br.com.juwer.algafoodapi.api.v2.openapi.model.CidadesModelOpenApiV2;
+import br.com.juwer.algafoodapi.api.v2.openapi.model.CozinhasModelOpenApiV2;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
@@ -50,9 +54,10 @@ public class SpringFoxConfig {
     @Bean
     public Docket apiDocket() {
         return new Docket(DocumentationType.OAS_30)
+                .groupName("V1")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("br.com.juwer.algafoodapi.api"))
-                .paths(PathSelectors.any())
+                .paths(PathSelectors.ant("/v1/**"))
                 .build()
                 .ignoredParameterTypes(ServletWebRequest.class,
                         URL.class, URI.class, URLStreamHandler.class, Resource.class,
@@ -102,7 +107,7 @@ public class SpringFoxConfig {
                 .globalResponses(HttpMethod.PUT, globalPutResponseMessages())
                 .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
                 .additionalModels(typeResolver.resolve(Problem.class))
-                .apiInfo(this.apiInfo())
+                .apiInfo(this.apiInfoV1())
                 .tags(new Tag("Cidades", "Gerencia as cidades"),
                         new Tag("Cozinhas", "Gerencia as cozinhas"),
                         new Tag("Grupos", "Gerencia os grupos"),
@@ -117,7 +122,40 @@ public class SpringFoxConfig {
                         new Tag("RootEntryPoint", "Endpoints de entrada")
                 );
     }
+    @Bean
+    public Docket apiDocketV2() {
+        var typeResolver = new TypeResolver();
 
+        return new Docket(DocumentationType.OAS_30)
+                .groupName("V2")
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("br.com.juwer.algafoodapi.api"))
+                .paths(PathSelectors.ant("/v2/**"))
+                .build()
+                .useDefaultResponseMessages(false)
+                .globalResponses(HttpMethod.GET, globalGetResponseMessages())
+                .globalResponses(HttpMethod.POST, globalPostResponseMessages())
+                .globalResponses(HttpMethod.PUT, globalPutResponseMessages())
+                .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
+                .additionalModels(typeResolver.resolve(Problem.class))
+                .ignoredParameterTypes(ServletWebRequest.class,
+                        URL.class, URI.class, URLStreamHandler.class, Resource.class,
+                        File.class, InputStream.class)
+                .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+                .directModelSubstitute(Links.class, LinksModelOpenApi.class)
+                .alternateTypeRules(
+                        AlternateTypeRules
+                                .newRule(typeResolver.resolve(PagedModel.class, CozinhaDTOV2.class), CozinhasModelOpenApiV2.class),
+
+                        AlternateTypeRules
+                                .newRule(typeResolver.resolve(CollectionModel.class, CidadeDTOV2.class), CidadesModelOpenApiV2.class)
+                )
+                .apiInfo(this.apiInfoV2())
+                .tags(new Tag("Cidades", "Gerencia as cidades"),
+                        new Tag("Cozinhas", "Gerencia as cozinhas"),
+                        new Tag("RootEntryPoint", "Endpoints de entrada")
+                );
+    }
     private List<Response> globalGetResponseMessages(){
         return Arrays.asList(
                 new ResponseBuilder()
@@ -211,11 +249,20 @@ public class SpringFoxConfig {
         );
     }
 
-    private ApiInfo apiInfo() {
+    private ApiInfo apiInfoV1() {
         return new ApiInfoBuilder()
                 .title("Algafood API")
                 .description("API aberta para cliente e restaurantes")
-                .version("1")
+                .version("V1")
+                .contact(new Contact("Bruno", "http://www.juwer.com.br", "bruno@juwer.com.br"))
+                .build();
+    }
+
+    private ApiInfo apiInfoV2() {
+        return new ApiInfoBuilder()
+                .title("Algafood API")
+                .description("API aberta para cliente e restaurantes")
+                .version("V2")
                 .contact(new Contact("Bruno", "http://www.juwer.com.br", "bruno@juwer.com.br"))
                 .build();
     }
