@@ -8,6 +8,9 @@ import br.com.juwer.algafoodapi.api.v1.openapi.controller.CozinhaControllerOpenA
 import br.com.juwer.algafoodapi.domain.model.Cozinha;
 import br.com.juwer.algafoodapi.domain.repository.CozinhaRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroCozinhaService;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
