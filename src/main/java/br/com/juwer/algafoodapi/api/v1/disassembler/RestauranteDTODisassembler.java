@@ -3,6 +3,7 @@ package br.com.juwer.algafoodapi.api.v1.disassembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.restaurantedtos.RestauranteDTOInput;
 import br.com.juwer.algafoodapi.domain.model.Cidade;
 import br.com.juwer.algafoodapi.domain.model.Cozinha;
+import br.com.juwer.algafoodapi.domain.model.Endereco;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,8 @@ public class RestauranteDTODisassembler extends GenericDisassembler<RestauranteD
         // identifier of an instance of br.com.juwer.algafoodapi.domain.model.Cozinha was altered from 1 to 2
         restaurante.setCozinha(new Cozinha());
 
-        if(restaurante.getEndereco().getCidade().getId() != null) {
+        if(restaurante.getEndereco() == null) {
+            restaurante.setEndereco(new Endereco());
             restaurante.getEndereco().setCidade(new Cidade());
         }
 
