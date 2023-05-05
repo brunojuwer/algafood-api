@@ -27,7 +27,6 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-
         // OBS: chave tem que ter mais de 256 bits
         var secretKey = new SecretKeySpec(
                 "n26247586h4576h28475h60824576hdfxg807hdfg87".getBytes(),
