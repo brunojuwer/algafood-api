@@ -9,6 +9,7 @@ import br.com.juwer.algafoodapi.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,9 @@ public class CadastroUsuarioService {
     @Autowired
     private CadastroGrupoService cadastroGrupoService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Transactional
     public Usuario salvar(Usuario usuario) {
         usuarioRepository.detach(usuario);
@@ -35,7 +39,7 @@ public class CadastroUsuarioService {
                     "Já existe um cadastro de usuário com e-mail: %s", usuario.getEmail()
             ));
         }
-
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         return usuarioRepository.save(usuario);
     }
 
@@ -55,10 +59,11 @@ public class CadastroUsuarioService {
     public void alterarSenha(String senhaAtual, String novaSenha, Long usuarioId) {
         Usuario usuario = this.buscaOuFalha(usuarioId);
 
-        if(!usuario.senhaCoincide(senhaAtual)) {
+        if(!passwordEncoder.matches(senhaAtual, usuario.getSenha())) {
             throw new NegocioException("A senha atual não conincide com a informada");
         }
-        usuario.setSenha(novaSenha);
+
+        usuario.setSenha(passwordEncoder.encode(novaSenha));
     }
 
     @Transactional
