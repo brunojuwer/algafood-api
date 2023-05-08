@@ -5,6 +5,7 @@ import br.com.juwer.algafoodapi.api.v1.disassembler.CozinhaDTODisassembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.CozinhaDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.CozinhaDTOInput;
 import br.com.juwer.algafoodapi.api.v1.openapi.controller.CozinhaControllerOpenApi;
+import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.model.Cozinha;
 import br.com.juwer.algafoodapi.domain.repository.CozinhaRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroCozinhaService;
@@ -44,7 +45,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
     @Override
-    @PreAuthorize("isAuthenticated()")
+    @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping
     public PagedModel<CozinhaDTO> listar(@PageableDefault(size = 10) Pageable pageable) {
         Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
@@ -52,14 +53,14 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     }
 
     @Override
-    @PreAuthorize("isAuthenticated()")
+    @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping("/{cozinhaId}")
     public CozinhaDTO buscar(@PathVariable Long cozinhaId){
         return cozinhaDTOAssembler.toModel(cozinhaService.buscaOuFalha(cozinhaId));
     }
 
     @Override
-    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+    @CheckSecurity.Cozinhas.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CozinhaDTO adicionar(@RequestBody @Valid CozinhaDTOInput cozinhaIdDTOInput){
@@ -68,7 +69,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     }
 
     @Override
-    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+    @CheckSecurity.Cozinhas.PodeEditar
     @PutMapping("/{cozinhaId}")
     public CozinhaDTO atualizar(@PathVariable Long cozinhaId,
                                 @RequestBody @Valid CozinhaDTOInput cozinha) {
@@ -80,7 +81,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     }
 
     @Override
-    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+    @CheckSecurity.Cozinhas.PodeEditar
     @DeleteMapping("/{cozinhaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long cozinhaId) {
