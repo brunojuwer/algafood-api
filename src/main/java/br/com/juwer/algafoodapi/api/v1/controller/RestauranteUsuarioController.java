@@ -4,6 +4,7 @@ import br.com.juwer.algafoodapi.api.v1.assembler.UsuarioDTOAssembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.UsuarioDTO;
 import br.com.juwer.algafoodapi.api.v1.openapi.controller.RestauranteUsuarioControllerOpenApi;
 import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
+import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
 import br.com.juwer.algafoodapi.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
     private HateoasAlgaLinks hateoasAlgaLinks;
 
     @Override
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UsuarioDTO> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = cadastroRestauranteService.buscaOuFalha(restauranteId);
@@ -43,6 +45,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/{usuarioId}")
     public ResponseEntity<Void> associar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
         cadastroRestauranteService.associarUsuario(restauranteId, usuarioId);
@@ -50,6 +53,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @DeleteMapping("/{usuarioId}")
     public ResponseEntity<Void> desassociar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
         cadastroRestauranteService.desassociarUsuario(restauranteId, usuarioId);

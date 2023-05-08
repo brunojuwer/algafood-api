@@ -6,6 +6,7 @@ import br.com.juwer.algafoodapi.api.v1.model.dto.ProdutoDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.produtodtos.ProdutoDTOInput;
 import br.com.juwer.algafoodapi.api.v1.openapi.controller.RestauranteProdutosControllerOpenApi;
 import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
+import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.model.Produto;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
 import br.com.juwer.algafoodapi.domain.repository.ProdutoRepository;
@@ -43,6 +44,7 @@ public class RestauranteProdutosController implements RestauranteProdutosControl
     private HateoasAlgaLinks hateoasAlgaLinks;
 
     @Override
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<ProdutoDTO> listar(@PathVariable Long restauranteId,
                                               @RequestParam(required = false, defaultValue = "false") Boolean incluirInativos){
@@ -61,6 +63,7 @@ public class RestauranteProdutosController implements RestauranteProdutosControl
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(path = "/{produtoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProdutoDTO buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
             Produto produto = cadastroProdutoService.buscaOuFalha(restauranteId, produtoId);
@@ -68,6 +71,7 @@ public class RestauranteProdutosController implements RestauranteProdutosControl
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ProdutoDTO salvar(@PathVariable Long restauranteId, @Valid @RequestBody ProdutoDTOInput produtoDTOInput) {
         Produto produto = produtoDTODisassembler.toDomainObject(produtoDTOInput);
@@ -75,6 +79,7 @@ public class RestauranteProdutosController implements RestauranteProdutosControl
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping(path = "/{produtoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProdutoDTO atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId,
                                 @Valid @RequestBody ProdutoDTOInput produtoDTOInput) {

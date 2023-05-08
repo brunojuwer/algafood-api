@@ -4,6 +4,7 @@ import br.com.juwer.algafoodapi.api.v1.assembler.FotoProdutoDTOAssembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.FotoProdutoDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.FotoProdutoDTOInput;
 import br.com.juwer.algafoodapi.api.v1.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
+import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.model.FotoProduto;
 import br.com.juwer.algafoodapi.domain.model.Produto;
@@ -41,6 +42,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     private FotoStorageService fotoStorageService;
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProdutoDTO atualizarFoto(
             @PathVariable Long restauranteId,
@@ -65,6 +67,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Long restauranteId, @PathVariable Long produtoId){
@@ -72,6 +75,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public FotoProdutoDTO buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId){
         FotoProduto foto = catalogoFotoProdutoService.buscaOuFalha(restauranteId, produtoId);

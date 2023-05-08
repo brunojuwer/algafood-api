@@ -4,6 +4,7 @@ import br.com.juwer.algafoodapi.api.v1.assembler.FormaPagamentoDTOAssembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.FormaPagamentoDTO;
 import br.com.juwer.algafoodapi.api.v1.openapi.controller.RestauranteFormasPagamentoControllerOpenApi;
 import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
+import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
 import br.com.juwer.algafoodapi.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class RestauranteFormasPagamentoController implements RestauranteFormasPa
     private HateoasAlgaLinks hateoasAlgaLinks;
 
     @Override
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<FormaPagamentoDTO> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = cadastroRestauranteService.buscaOuFalha(restauranteId);
@@ -46,6 +48,7 @@ public class RestauranteFormasPagamentoController implements RestauranteFormasPa
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/{formaPagamentoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> associar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
@@ -54,6 +57,7 @@ public class RestauranteFormasPagamentoController implements RestauranteFormasPa
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @DeleteMapping("/{formaPagamentoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> desassociar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {

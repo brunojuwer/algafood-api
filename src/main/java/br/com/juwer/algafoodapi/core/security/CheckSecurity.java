@@ -20,4 +20,17 @@ public @interface CheckSecurity {
         @Target(ElementType.METHOD)
         @interface PodeConsultar{}
     }
+
+    @interface Restaurantes {
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_RESTAURANTES')")
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        @interface PodeEditar{}
+
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        @interface PodeConsultar{}
+
+    }
 }
