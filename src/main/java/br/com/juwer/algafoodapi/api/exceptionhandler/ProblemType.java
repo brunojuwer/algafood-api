@@ -11,7 +11,8 @@ public enum ProblemType {
   ENTIDADE_EM_USO("/entidade-em-uso", "Entidade em uso"),
   ERRO_NEGOCIO("/erro-negocio", "Violação de regra de negócio"),
   ERRO_DE_SISTEMA("/erro-de-sistema", "Erro de sistema"),
-  PARAMETRO_INVALIDO("/parametro-invalido", "Parâmetro inválido");
+  PARAMETRO_INVALIDO("/parametro-invalido", "Parâmetro inválido"),
+  ACESSO_NEGADO("/acesso-negado", "Acesso negado");
 
   private String url;
   private String title;
