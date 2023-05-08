@@ -7,6 +7,7 @@ import br.com.juwer.algafoodapi.api.v1.model.dto.PedidoDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.PedidoResumoDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.pedidosdto.PedidoDTOInput;
 import br.com.juwer.algafoodapi.api.v1.openapi.controller.PedidoControllerOpenApi;
+import br.com.juwer.algafoodapi.core.security.SecurityUtils;
 import br.com.juwer.algafoodapi.domain.filter.PedidoFilter;
 import br.com.juwer.algafoodapi.domain.model.Pedido;
 import br.com.juwer.algafoodapi.domain.repository.PedidoRespository;
@@ -46,6 +47,9 @@ public class PedidoController implements PedidoControllerOpenApi {
     @Autowired
     private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
+    @Autowired
+    private SecurityUtils securityUtils;
+
     @Override
     @GetMapping
     public PagedModel<PedidoResumoDTO> pesquisar(
@@ -68,7 +72,7 @@ public class PedidoController implements PedidoControllerOpenApi {
     @ResponseStatus(HttpStatus.CREATED)
     public PedidoDTO adicionar(@RequestBody @Valid PedidoDTOInput pedidoDTOInput) {
         Pedido pedido = pedidoDTODisassembler.toDomainObject(pedidoDTOInput);
-        pedido = cadastroPedidoService.salvar(pedido);
+        pedido = cadastroPedidoService.salvar(pedido, securityUtils.getUsuarioId());
         return pedidoDTOAssembler.toModel(pedido);
     }
 }

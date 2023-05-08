@@ -35,22 +35,22 @@ public class CadastroPedidoService {
 
 
     @Transactional
-    public Pedido salvar(Pedido pedido) {
+    public Pedido salvar(Pedido pedido, Long usuario_id) {
 
         pedido.setSubTotal(BigDecimal.ZERO); // evita null pointer ex
 
         Long formaPagamentoId = pedido.getFormaPagamento().getId();
         Long restauranteId = pedido.getRestaurante().getId();
 
-        // TODO pegar usuário autenticado
-        Usuario usuario = cadastroUsuarioService.buscaOuFalha(1L);
+        Usuario usuario = cadastroUsuarioService.buscaOuFalha(usuario_id);
         pedido.setCliente(usuario);
 
 
         Restaurante restaurante = cadastroRestauranteService.buscaOuFalha(restauranteId);
         pedido.setRestaurante(restaurante);
 
-        pedido.getEnderecoEntrega().setCidade(cadastroCidadeService.buscaOuFalha(pedido.getEnderecoEntrega().getCidade().getId()));
+        pedido.getEnderecoEntrega().setCidade(cadastroCidadeService
+                .buscaOuFalha(pedido.getEnderecoEntrega().getCidade().getId()));
 
         pedido.setFormaPagamento(cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId, restauranteId));
 
