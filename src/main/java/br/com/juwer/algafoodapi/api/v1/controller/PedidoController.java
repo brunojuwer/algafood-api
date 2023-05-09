@@ -7,6 +7,7 @@ import br.com.juwer.algafoodapi.api.v1.model.dto.PedidoDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.PedidoResumoDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.pedidosdto.PedidoDTOInput;
 import br.com.juwer.algafoodapi.api.v1.openapi.controller.PedidoControllerOpenApi;
+import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.core.security.SecurityUtils;
 import br.com.juwer.algafoodapi.domain.filter.PedidoFilter;
 import br.com.juwer.algafoodapi.domain.model.Pedido;
@@ -61,6 +62,7 @@ public class PedidoController implements PedidoControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Pedidos.PodeBuscar
     @GetMapping("/{codigo}")
     public PedidoDTO buscar(@PathVariable String codigo) {
         Pedido pedido = cadastroPedidoService.buscaOuFalha(codigo);
