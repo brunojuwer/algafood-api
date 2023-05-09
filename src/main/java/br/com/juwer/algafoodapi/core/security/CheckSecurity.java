@@ -50,5 +50,12 @@ public @interface CheckSecurity {
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         @interface PodeBuscar{}
+
+        @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('CONSULTAR_PEDIDOS') or " +
+                "@securityUtils.possuiPedidos(#filter) or " +
+                "@securityUtils.gerenciaRestaurantePedido(#filter)")
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        @interface PodePesquisar{}
     }
 }

@@ -1,5 +1,7 @@
 package br.com.juwer.algafoodapi.core.security;
 
+import br.com.juwer.algafoodapi.domain.filter.PedidoFilter;
+import br.com.juwer.algafoodapi.domain.repository.PedidoRespository;
 import br.com.juwer.algafoodapi.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,6 +15,9 @@ public class SecurityUtils {
     @Autowired
     private RestauranteRepository restauranteRepository;
 
+    @Autowired
+    private PedidoRespository pedidoRespository;
+
     public Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
     }
@@ -25,5 +30,19 @@ public class SecurityUtils {
 
     public boolean gerenciaRestaurante(Long restauranteId) {
         return restauranteRepository.existsResponsavel(restauranteId, getUsuarioId());
+    }
+
+    public boolean possuiPedidos(PedidoFilter filter) {
+        if(filter.getClienteId() == null || !filter.getClienteId().equals(getUsuarioId())) {
+            return false;
+        }
+        return pedidoRespository.existsPedido(getUsuarioId());
+    }
+
+    public boolean gerenciaRestaurantePedido(PedidoFilter filter) {
+        if(filter.getRestauranteId() == null) {
+            return false;
+        }
+        return this.gerenciaRestaurante(filter.getRestauranteId());
     }
 }
