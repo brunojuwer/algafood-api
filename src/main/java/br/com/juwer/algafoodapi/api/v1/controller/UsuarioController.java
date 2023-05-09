@@ -7,6 +7,7 @@ import br.com.juwer.algafoodapi.api.v1.model.dto.input.usuariodtos.UsuarioDTOInp
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.usuariodtos.UsuarioDTOInputPost;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.usuariodtos.UsuarioDTOInputSenha;
 import br.com.juwer.algafoodapi.api.v1.openapi.controller.UsuarioControllerOpenApi;
+import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.model.Usuario;
 import br.com.juwer.algafoodapi.domain.repository.UsuarioRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroUsuarioService;
@@ -36,6 +37,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     private UsuarioDTODisassembler usuarioDTODisassembler;
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UsuarioDTO> listar() {
         List<Usuario> usuarios = usuarioRepository.findAll();
@@ -43,6 +45,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping(path = "/{usuarioId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UsuarioDTO buscar(@PathVariable Long usuarioId) {
         Usuario usuario = cadastroUsuarioService.buscaOuFalha(usuarioId);
@@ -60,6 +63,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeAlterarUsuario
     @PutMapping(path = "/{usuarioId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UsuarioDTO atualizar(@PathVariable Long usuarioId,
                                 @RequestBody @Valid UsuarioDTOInput usuarioDTOInput) {
@@ -69,6 +73,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeAlterarPropriaSenha
     @PutMapping("/{usuarioId}/senha")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void senha(@PathVariable Long usuarioId, @RequestBody UsuarioDTOInputSenha usuarioDTOInputSenha) {
@@ -78,10 +83,10 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @DeleteMapping("/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Long usuarioId) {
         cadastroUsuarioService.excluir(usuarioId);
     }
-
 }

@@ -6,6 +6,7 @@ import br.com.juwer.algafoodapi.api.v1.disassembler.CidadeDTODisassembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.CidadeDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.CidadeDTOInput;
 import br.com.juwer.algafoodapi.api.v1.openapi.controller.CidadeControllerOpenApi;
+import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.core.web.AlgaMediaTypes;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
@@ -39,18 +40,21 @@ public class CidadeController implements CidadeControllerOpenApi {
 
     @Deprecated
     @Override
+    @CheckSecurity.Cidades.PodeConsultar
     @GetMapping
     public CollectionModel<CidadeDTO> listar() {
         return cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAllCidades());
     }
 
     @Override
+    @CheckSecurity.Cidades.PodeConsultar
     @GetMapping(value = "/{cidadeId}")
     public CidadeDTO buscar(@PathVariable Long cidadeId) {
         return cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
     }
 
     @Override
+    @CheckSecurity.Cidades.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeDTO adicionar(@RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
@@ -67,6 +71,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Cidades.PodeEditar
     @PutMapping("/{cidadeId}")
     public CidadeDTO atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
         Cidade cidadeAtual = cadastroCidadeService.buscaOuFalha(cidadeId);
@@ -80,6 +85,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Cidades.PodeEditar
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long cidadeId) {

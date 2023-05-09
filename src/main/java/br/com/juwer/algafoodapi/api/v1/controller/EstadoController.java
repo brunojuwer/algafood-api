@@ -6,6 +6,7 @@ import br.com.juwer.algafoodapi.api.v1.model.dto.EstadoDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.EstadoDTOInput;
 import br.com.juwer.algafoodapi.api.v1.openapi.controller.EstadoControllerOpenApi;
 import br.com.juwer.algafoodapi.api.utils.ResourceUriHelper;
+import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.model.Estado;
 import br.com.juwer.algafoodapi.domain.repository.EstadoRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroEstadoService;
@@ -35,6 +36,7 @@ public class EstadoController implements EstadoControllerOpenApi {
   private EstadoDTODIsassembler estadoDTODIsassembler;
 
   @Override
+  @CheckSecurity.Estados.PodeConsultar
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public CollectionModel<EstadoDTO> listar() {
     List<Estado> estados = estadoRepository.findAll();
@@ -42,6 +44,7 @@ public class EstadoController implements EstadoControllerOpenApi {
   }
 
   @Override
+  @CheckSecurity.Estados.PodeConsultar
   @GetMapping(path = "/{estadoId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public EstadoDTO buscar(@PathVariable Long estadoId) {
     Estado estado = cadastroEstadoService.buscaOuFalha(estadoId);
@@ -49,6 +52,7 @@ public class EstadoController implements EstadoControllerOpenApi {
   }
 
   @Override
+  @CheckSecurity.Estados.PodeEditar
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public EstadoDTO adicionar(@RequestBody @Valid EstadoDTOInput estadoDTOInput) {
@@ -61,6 +65,7 @@ public class EstadoController implements EstadoControllerOpenApi {
   }
 
   @Override
+  @CheckSecurity.Estados.PodeEditar
   @PutMapping(path = "/{estadoId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public EstadoDTO atualizar(@PathVariable Long estadoId,
                              @RequestBody @Valid EstadoDTOInput estadoDTOInput) {
@@ -71,6 +76,7 @@ public class EstadoController implements EstadoControllerOpenApi {
   }
 
   @Override
+  @CheckSecurity.Estados.PodeEditar
   @DeleteMapping(value = "/{estadoId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void excluir(@PathVariable Long estadoId) {

@@ -6,6 +6,7 @@ import br.com.juwer.algafoodapi.api.v2.disassembler.CidadeDTODisassemblerV2;
 import br.com.juwer.algafoodapi.api.v2.model.dto.CidadeDTOV2;
 import br.com.juwer.algafoodapi.api.v2.model.dtoinput.CidadeDTOInputV2;
 import br.com.juwer.algafoodapi.api.v2.openapi.controller.CidadeControllerV2OpenApi;
+import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 import br.com.juwer.algafoodapi.domain.model.Cidade;
@@ -37,18 +38,21 @@ public class CidadeControllerV2 implements CidadeControllerV2OpenApi {
     private CidadeDTODisassemblerV2 cidadeDTODisassembler;
 
     @Override
+    @CheckSecurity.Cidades.PodeConsultar
     @GetMapping
     public CollectionModel<CidadeDTOV2> listar() {
         return cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAllCidades());
     }
 
     @Override
+    @CheckSecurity.Cidades.PodeConsultar
     @GetMapping(value = "/{cidadeId}")
     public CidadeDTOV2 buscar(@PathVariable Long cidadeId) {
         return cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
     }
 
     @Override
+    @CheckSecurity.Cidades.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeDTOV2 adicionar(@RequestBody @Valid CidadeDTOInputV2 cidadeDTOInput) {
@@ -65,6 +69,7 @@ public class CidadeControllerV2 implements CidadeControllerV2OpenApi {
     }
 
     @Override
+    @CheckSecurity.Cidades.PodeEditar
     @PutMapping("/{cidadeId}")
     public CidadeDTOV2 atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeDTOInputV2 cidadeDTOInput) {
         Cidade cidadeAtual = cadastroCidadeService.buscaOuFalha(cidadeId);
@@ -77,9 +82,10 @@ public class CidadeControllerV2 implements CidadeControllerV2OpenApi {
         }
     }
 
-//    @DeleteMapping("/{cidadeId}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void remover(@PathVariable Long cidadeId) {
-//        cadastroCidadeService.excluir(cidadeId);
-//    }
+    @DeleteMapping("/{cidadeId}")
+    @CheckSecurity.Cidades.PodeEditar
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable Long cidadeId) {
+        cadastroCidadeService.excluir(cidadeId);
+    }
 }

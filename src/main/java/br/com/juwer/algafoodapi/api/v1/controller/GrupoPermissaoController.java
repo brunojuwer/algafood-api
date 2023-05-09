@@ -4,6 +4,7 @@ import br.com.juwer.algafoodapi.api.v1.assembler.PermissoesDTOAssembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.PermissaoDTO;
 import br.com.juwer.algafoodapi.api.v1.openapi.controller.GrupoPermissaoControllerOpenApi;
 import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
+import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.model.Grupo;
 import br.com.juwer.algafoodapi.domain.repository.PermissaoRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroGrupoService;
@@ -31,6 +32,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
     private HateoasAlgaLinks hateoasAlgaLinks;
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<PermissaoDTO> listar(@PathVariable Long grupoId) {
         Grupo grupo = cadastroGrupoService.buscaOuFalha(grupoId);
@@ -50,6 +52,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PutMapping("/{permissaoId}")
     public ResponseEntity<Void> associar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
         cadastroGrupoService.associarPermissao(grupoId, permissaoId);
@@ -57,6 +60,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @DeleteMapping("/{permissaoId}")
     public ResponseEntity<Void> desassociar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
         cadastroGrupoService.desaAssociarPermissao(grupoId, permissaoId);

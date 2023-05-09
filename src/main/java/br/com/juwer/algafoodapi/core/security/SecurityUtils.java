@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -54,5 +55,9 @@ public class SecurityUtils {
         Optional<Pedido> pedido = pedidoRespository.findByCodigo(codigo);
         return pedido.filter(value -> this.gerenciaRestaurante(value
                 .getRestaurante().getId())).isPresent();
+    }
+
+    public boolean gerenciaASiProprio(Long usuarioId) {
+        return Objects.equals(usuarioId, getUsuarioId());
     }
 }
