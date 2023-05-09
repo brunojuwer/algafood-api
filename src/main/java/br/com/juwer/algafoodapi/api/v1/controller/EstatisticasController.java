@@ -2,6 +2,7 @@ package br.com.juwer.algafoodapi.api.v1.controller;
 
 import br.com.juwer.algafoodapi.api.v1.openapi.controller.EstatisticasControllerOpenApi;
 import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
+import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.filter.VendaDiariaFilter;
 import br.com.juwer.algafoodapi.domain.model.dto.VendaDiaria;
 import br.com.juwer.algafoodapi.domain.service.VendaQueryService;
@@ -32,6 +33,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
     private HateoasAlgaLinks hateoasAlgaLinks;
 
     @GetMapping
+    @CheckSecurity.Estatisticas.PodeConsultar
     public VendaDiariaLink vendaDiariaLink() {
         var vendasDiarias = new VendaDiariaLink();
         vendasDiarias.add(hateoasAlgaLinks.linkToVendasDiarias());
@@ -40,6 +42,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Estatisticas.PodeConsultar
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<VendaDiaria> consultarVendasDiarias(
             VendaDiariaFilter filter,
@@ -48,6 +51,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Estatisticas.PodeConsultar
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> consultarVendasDiariasPdf(
             VendaDiariaFilter filter,
