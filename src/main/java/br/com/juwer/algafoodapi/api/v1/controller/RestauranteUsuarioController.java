@@ -32,7 +32,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
     public CollectionModel<UsuarioDTO> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = cadastroRestauranteService.buscaOuFalha(restauranteId);
 
-        CollectionModel<UsuarioDTO> usuariosDTO = usuarioDTOAssembler.toCollectionModel(restaurante.getUsuarios())
+        CollectionModel<UsuarioDTO> usuariosDTO = usuarioDTOAssembler.toCollectionModel(restaurante.getResponsaveis())
                 .removeLinks()
                 .add(hateoasAlgaLinks.linkToRestauranteUsuarios(restauranteId))
                 .add(hateoasAlgaLinks.linkToRestauranteUsuariosAssociar(restauranteId, "associar"));
@@ -45,7 +45,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
     }
 
     @Override
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @PutMapping("/{usuarioId}")
     public ResponseEntity<Void> associar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
         cadastroRestauranteService.associarUsuario(restauranteId, usuarioId);
@@ -53,7 +53,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
     }
 
     @Override
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @DeleteMapping("/{usuarioId}")
     public ResponseEntity<Void> desassociar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
         cadastroRestauranteService.desassociarUsuario(restauranteId, usuarioId);

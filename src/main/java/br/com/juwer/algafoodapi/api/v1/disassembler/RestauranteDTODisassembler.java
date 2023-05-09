@@ -20,6 +20,8 @@ public class RestauranteDTODisassembler extends GenericDisassembler<RestauranteD
         if(restaurante.getEndereco() == null) {
             restaurante.setEndereco(new Endereco());
             restaurante.getEndereco().setCidade(new Cidade());
+        } else {
+            restaurante.getEndereco().setCidade(new Cidade());
         }
 
         modelMapper.map(restauranteDTOInput, restaurante);

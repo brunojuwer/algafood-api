@@ -73,7 +73,7 @@ public class Restaurante {
     @JoinTable(name = "restaurante_usuario",
     joinColumns = @JoinColumn(name = "restaurante_id"),
     inverseJoinColumns = @JoinColumn(name = "usuario_id"))
-    private Set<Usuario> usuarios = new HashSet<>();
+    private Set<Usuario> responsaveis = new HashSet<>();
 
     public void ativar() {
         setAtivo(true);

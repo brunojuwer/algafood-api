@@ -106,7 +106,7 @@ public class CadastroRestauranteService {
     Restaurante restaurante = buscaOuFalha(restauranteId);
     Usuario usuario = cadastroUsuarioService.buscaOuFalha(usuarioId);
 
-    restaurante.getUsuarios().add(usuario);
+    restaurante.getResponsaveis().add(usuario);
   }
 
   @Transactional
@@ -114,7 +114,7 @@ public class CadastroRestauranteService {
     Restaurante restaurante = buscaOuFalha(restauranteId);
     Usuario usuario = cadastroUsuarioService.buscaOuFalha(usuarioId);
 
-    restaurante.getUsuarios().remove(usuario);
+    restaurante.getResponsaveis().remove(usuario);
   }
   
   public Restaurante buscaOuFalha(Long restauranteId) {

@@ -24,4 +24,6 @@ public interface RestauranteRepository extends CustomJpaRepository<Restaurante, 
   List<Restaurante> findByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal);
   
   List<Restaurante> consultarPorNome(String nome, @Param("id") Long cozinhaId);
+
+  boolean existsResponsavel(Long restauranteId, Long usuarioId);
 }
