@@ -3,6 +3,7 @@ package br.com.juwer.algafoodapi.api.v1.assembler;
 import br.com.juwer.algafoodapi.api.v1.controller.PedidoController;
 import br.com.juwer.algafoodapi.api.v1.model.dto.PedidoDTO;
 import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
+import br.com.juwer.algafoodapi.core.security.SecurityUtils;
 import br.com.juwer.algafoodapi.domain.model.Pedido;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class PedidoDTOAssembler extends RepresentationModelAssemblerSupport<Pedi
     @Autowired
     private HateoasAlgaLinks hateoasAlgaLinks;
 
+    @Autowired
+    private SecurityUtils securityUtils;
+
     public PedidoDTOAssembler() {
         super(PedidoController.class, PedidoDTO.class);
     }
@@ -28,14 +32,16 @@ public class PedidoDTOAssembler extends RepresentationModelAssemblerSupport<Pedi
 
         pedidoDTO.add(hateoasAlgaLinks.linkToPedidos(pedidoDTO.getCodigo()));
 
-        if(pedido.podeConfirmar()) {
-            pedidoDTO.add(hateoasAlgaLinks.linkToConfirmaPedido(pedidoDTO.getCodigo(), "confirmar"));
-        }
-        if (pedido.podeEntregar()) {
-            pedidoDTO.add(hateoasAlgaLinks.linkToEntregaPedido(pedidoDTO.getCodigo(), "entregar"));
-        }
-        if(pedido.podeCancelar()) {
-            pedidoDTO.add(hateoasAlgaLinks.linkToCancelaPedido(pedidoDTO.getCodigo(), "cancelar"));
+        if(securityUtils.gerenciaPedido(pedido.getCodigo())){
+            if(pedido.podeConfirmar()) {
+                pedidoDTO.add(hateoasAlgaLinks.linkToConfirmaPedido(pedidoDTO.getCodigo(), "confirmar"));
+            }
+            if (pedido.podeEntregar()) {
+                pedidoDTO.add(hateoasAlgaLinks.linkToEntregaPedido(pedidoDTO.getCodigo(), "entregar"));
+            }
+            if(pedido.podeCancelar()) {
+                pedidoDTO.add(hateoasAlgaLinks.linkToCancelaPedido(pedidoDTO.getCodigo(), "cancelar"));
+            }
         }
 
         pedidoDTO.add(hateoasAlgaLinks.linkToPedidos());

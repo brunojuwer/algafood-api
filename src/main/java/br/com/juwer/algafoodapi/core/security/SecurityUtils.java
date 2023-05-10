@@ -53,11 +53,19 @@ public class SecurityUtils {
 
     public boolean gerenciaPedido(String codigo) {
         Optional<Pedido> pedido = pedidoRespository.findByCodigo(codigo);
-        return pedido.filter(value -> this.gerenciaRestaurante(value
-                .getRestaurante().getId())).isPresent();
+        return hasAuthority("SCOPE_WRITE") &&
+                ( hasAuthority("GERENCIAR_PEDIDOS") ||
+                    pedido.filter(value -> this.gerenciaRestaurante(value
+                    .getRestaurante().getId())).isPresent());
     }
 
     public boolean gerenciaASiProprio(Long usuarioId) {
         return Objects.equals(usuarioId, getUsuarioId());
     }
+
+    private boolean hasAuthority(String permissao) {
+        return getAuthentication().getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals(permissao));
+    }
+
 }

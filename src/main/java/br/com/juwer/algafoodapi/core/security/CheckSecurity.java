@@ -61,8 +61,7 @@ public @interface CheckSecurity {
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and isAuthenticated()")
         @interface PodeCriar{}
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('GERENCIAR_PEDIDOS') or " +
-                "@securityUtils.gerenciaPedido(#codigo)")
+        @PreAuthorize("@securityUtils.gerenciaPedido(#codigo)")
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         @interface PodeGerenciarStatus{}
