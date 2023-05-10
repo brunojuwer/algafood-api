@@ -24,11 +24,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.context.request.ServletWebRequest;
 import springfox.documentation.builders.*;
 import springfox.documentation.schema.AlternateTypeRules;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.service.Response;
-import springfox.documentation.service.Tag;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.plugins.Docket;
 
@@ -38,6 +36,7 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLStreamHandler;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -51,7 +50,7 @@ public class SpringFoxConfig {
         return objectMapper -> objectMapper.registerModule(new JavaTimeModule());
     } // necessário criar esse bean para não dar erro de conversão de Data
 
-//    @Bean
+    @Bean
     public Docket apiDocket() {
         return new Docket(DocumentationType.OAS_30)
                 .groupName("V1")
@@ -120,7 +119,10 @@ public class SpringFoxConfig {
                         new Tag("Estatísticas", "Gerencia as estatísticas"),
                         new Tag("Permissões", "Consulta as permissões"),
                         new Tag("RootEntryPoint", "Endpoints de entrada")
-                );
+                )
+                .securityContexts(Collections.singletonList(securityContext()))
+                .securitySchemes(List.of(authenticationScheme()))
+                .securityContexts(List.of(securityContext()));
     }
     @Bean
     public Docket apiDocketV2() {
@@ -170,6 +172,23 @@ public class SpringFoxConfig {
                         .build()
         );
     }
+
+    private SecurityContext securityContext() {
+        return SecurityContext.builder()
+                .securityReferences(securityReference()).build();
+    }
+
+    private List<SecurityReference> securityReference() {
+        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return List.of(new SecurityReference("Authorization", authorizationScopes));
+    }
+
+    private HttpAuthenticationScheme authenticationScheme() {
+        return HttpAuthenticationScheme.JWT_BEARER_BUILDER.name("Authorization").build();
+    }
+
     private List<Response> globalPostResponseMessages(){
         return Arrays.asList(
                 new ResponseBuilder()
