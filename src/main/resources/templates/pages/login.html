@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Login</title>
+    <style>
+     * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: 'Roboto',sans-serif;
+        }
+
+        body {
+          height: 100vh;
+          background: #191a21;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .container {
+          background: #282a36;
+          width: 100%;
+          height: 700px;
+          max-width: 700px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          padding: 1rem;
+          border-radius: 8px;
+        }
+
+        .container span {
+          margin-top: 1rem;
+          margin-bottom: 1rem;
+          color: #FFF;
+          font-size: 2.5rem;
+          font-weight: 500;
+          width: 90%;
+          text-align: center;
+        }
+
+        .container form {
+          background: #282a36;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+        }
+
+        .container .input-field {
+          position: relative;
+          width: 90%;
+        }
+
+        .container input {
+          margin-top: 1.3rem;
+          width: 100%;
+          height: 4rem;
+          background: #191a21;
+          border-radius: 8px;
+          color: #fff;
+          border: 0;
+          padding: 1rem;
+          font-size: medium;
+        }
+
+        .container input:focus {
+          outline: transparent;
+          box-shadow: 0 0 0 2px #1ed760;
+        }
+
+        .input-field label {
+          color: rgba(255, 255, 255, 0.6);
+          position: absolute;
+          bottom: 1.3rem;
+          left: 1rem;
+          transition: bottom 0.5s;
+          pointer-events: none;
+        }
+
+        .input-field input:focus + label, input:not(:placeholder-shown) + label {
+          bottom: 4.3rem;
+        }
+
+        .container button {
+          width: 90%;
+          margin-top: 2rem;
+          height: 4rem;
+          border-radius: 8px;
+          background: #1ed760;
+          color: #fff;
+          font-size: 1.5rem;
+          border: 0;
+          cursor: pointer;
+          font-weight: 500;
+
+          transition: background-color 0.2s;
+        }
+
+        .container button:hover {
+          background: #17a147;
+        }
+
+        .login-fail-msg {
+            margin-top: 1.25rem;
+            color: #FF0000;
+            font-size: 1.25rem;
+        }
+
+        .container .recovery-field {
+          margin: 2.5rem 0;
+          width: 90%;
+          text-align: center;
+
+        }
+
+        .container .recovery-field a {
+          color: rgba(255, 255, 255, 0.6);
+          text-decoration: none;
+
+          transition: color 0.2s;
+        }
+
+        .container .recovery-field a:hover {
+          color: rgba(255, 255, 255, 0.8);
+        }
+
+
+        .container .create-account-field {
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          width: 90%;
+          text-align: center;
+          padding-top: 3rem;
+        }
+
+        .container .create-account-field p {
+          color: rgba(255, 255, 255, 0.6);
+        }
+
+
+        .container .create-account-field a {
+          color: #1ed760;
+          text-decoration: none;
+          margin-left: 0.3rem;
+          font-size: 1.1rem;
+          transition: color 0.2s;
+        }
+
+        .container .create-account-field a:hover {
+          color: #17a147;
+        }
+
+
+        .social-media {
+          margin-top: 1rem;
+          padding-top: 1rem;
+          width: 90%;
+          text-align: center;
+          color: rgba(255, 255, 255, 0.6);
+          display: flex;
+          justify-content: center;
+        }
+
+        .fa {
+          padding: 1rem;
+          font-size: 2rem;
+          width: 4rem;
+          text-align: center;
+          text-decoration: none;
+          color: rgba(255, 255, 255, 0.6);
+
+          transition: color 0.5s;
+        }
+
+        .fa:hover {
+          color: #1ed760;
+        }
+
+
+        @media(max-width: 1080px) {
+          html {
+            font-size: 93.75%;
+          }
+        }
+
+        @media (max-width: 768px) {
+          html {
+            font-size: 87.5%;
+          }
+
+
+        .container   {
+            margin: 0 1rem;
+            max-width: 600px;
+            padding: 0.5rem;
+            height: 600px;
+          }
+
+          .container span {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .fa {
+            font-size: 1.5rem;
+          }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <span>Acessar Algafood</span>
+    <form method="post" th:action="@{/login}">
+
+        <div class="input-field">
+            <input type="email" name="username" required placeholder=" "> <label for="">E-mail</label>
+        </div>
+        <div class="input-field">
+            <input type="password" name="password" required placeholder=" "> <label for="">Senha</label>
+        </div>
+
+        <button type="submit">Entrar</button>
+    </form>
+
+    <p class="login-fail-msg" th:if="${#bools.isTrue(param.error)}">Falha no login</p>
+
+
+    <div class="recovery-field">
+        <a href="#">Esqueceu sua senha?</a>
+    </div>
+    <div class="create-account-field">
+        <p>Não tem uma conta?<a href="#">Cadastre-se</a></p>
+    </div>
+</div>
+</body>
+</html>
