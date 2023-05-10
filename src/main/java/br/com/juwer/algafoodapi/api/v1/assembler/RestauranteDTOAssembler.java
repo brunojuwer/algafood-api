@@ -3,6 +3,7 @@ package br.com.juwer.algafoodapi.api.v1.assembler;
 import br.com.juwer.algafoodapi.api.v1.controller.RestauranteController;
 import br.com.juwer.algafoodapi.api.v1.model.dto.projections.RestauranteDTO;
 import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
+import br.com.juwer.algafoodapi.core.security.SecurityUtils;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class RestauranteDTOAssembler extends RepresentationModelAssemblerSupport
 
     @Autowired
     private HateoasAlgaLinks hateoasAlgaLinks;
+
+    @Autowired
+    private SecurityUtils securityUtils;
 
     public RestauranteDTOAssembler() {
         super(RestauranteController.class, RestauranteDTO.class);
@@ -37,10 +41,12 @@ public class RestauranteDTOAssembler extends RepresentationModelAssemblerSupport
         restauranteDTO.add(hateoasAlgaLinks.linkToUsuariosRestaurante(restauranteDTO.getId()));
         restauranteDTO.add(hateoasAlgaLinks.linkToProduto(restauranteDTO.getId(), "produtos"));
 
-        restauranteDTO.add(hateoasAlgaLinks
-                .linkToAbrirOuFecharRestaurante(restaurante.getId(), restauranteDTO.getAberto()));
-        restauranteDTO.add(hateoasAlgaLinks
-                .linkToAtivarOuInativarRestaurante(restaurante.getId(), restauranteDTO.getAtivo()));
+        if(securityUtils.temPermissaoOuGerenciaRestaurante(restaurante.getId(), "EDITAR_RESTAURANTES")) {
+            restauranteDTO.add(hateoasAlgaLinks
+                    .linkToAbrirOuFecharRestaurante(restaurante.getId(), restauranteDTO.getAberto()));
+            restauranteDTO.add(hateoasAlgaLinks
+                    .linkToAtivarOuInativarRestaurante(restaurante.getId(), restauranteDTO.getAtivo()));
+        }
 
         return restauranteDTO;
     }

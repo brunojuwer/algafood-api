@@ -37,6 +37,11 @@ public class SecurityUtils {
         return restauranteRepository.existsResponsavel(restauranteId, getUsuarioId());
     }
 
+    public boolean temPermissaoOuGerenciaRestaurante(Long restauranteId, String permissao) {
+        return restauranteRepository.existsResponsavel(restauranteId, getUsuarioId())
+                || hasAuthority(permissao);
+    }
+
     public boolean possuiPedidos(PedidoFilter filter) {
         if(filter.getClienteId() == null || !filter.getClienteId().equals(getUsuarioId())) {
             return false;
@@ -63,7 +68,7 @@ public class SecurityUtils {
         return Objects.equals(usuarioId, getUsuarioId());
     }
 
-    private boolean hasAuthority(String permissao) {
+    public boolean hasAuthority(String permissao) {
         return getAuthentication().getAuthorities().stream()
                 .anyMatch(authority -> authority.getAuthority().equals(permissao));
     }

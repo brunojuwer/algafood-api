@@ -5,6 +5,7 @@ import br.com.juwer.algafoodapi.api.v1.model.dto.FormaPagamentoDTO;
 import br.com.juwer.algafoodapi.api.v1.openapi.controller.RestauranteFormasPagamentoControllerOpenApi;
 import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
+import br.com.juwer.algafoodapi.core.security.SecurityUtils;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
 import br.com.juwer.algafoodapi.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,23 +29,29 @@ public class RestauranteFormasPagamentoController implements RestauranteFormasPa
     @Autowired
     private HateoasAlgaLinks hateoasAlgaLinks;
 
+    @Autowired
+    private SecurityUtils securityUtils;
+
     @Override
     @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<FormaPagamentoDTO> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = cadastroRestauranteService.buscaOuFalha(restauranteId);
 
-        CollectionModel<FormaPagamentoDTO> formasPagamentoDTO =
-                formaPagamentoDTOAssembler.toCollectionModel(restaurante.getFormasPagamento()).removeLinks()
+        CollectionModel<FormaPagamentoDTO> formasPagamentoDTO;
+        if(securityUtils.temPermissaoOuGerenciaRestaurante(restauranteId, "EDITAR_RESTAURANTES")) {
+            formasPagamentoDTO = formaPagamentoDTOAssembler
+                    .toCollectionModel(restaurante.getFormasPagamento()).removeLinks()
                         .add(hateoasAlgaLinks.linkToSelfFormasPagamentorestaurante(restauranteId))
                         .add(hateoasAlgaLinks.linkToFormasPagamentoRestauranteAssociar(restauranteId, "associar"));
 
-        formasPagamentoDTO.getContent().forEach(formaPagamento -> {
-            formaPagamento.add(hateoasAlgaLinks.linkToFormasPagamentoRestauranteDesassociar(
-                    restauranteId, formaPagamento.getId(), "desassociar"));
-        });
-
-        return formasPagamentoDTO;
+            formasPagamentoDTO.getContent().forEach(formaPagamento -> {
+                formaPagamento.add(hateoasAlgaLinks.linkToFormasPagamentoRestauranteDesassociar(
+                        restauranteId, formaPagamento.getId(), "desassociar"));
+            });
+            return formasPagamentoDTO;
+        }
+        return formaPagamentoDTOAssembler.toCollectionModel(restaurante.getFormasPagamento());
     }
 
     @Override

@@ -5,6 +5,7 @@ import br.com.juwer.algafoodapi.api.v1.model.dto.UsuarioDTO;
 import br.com.juwer.algafoodapi.api.v1.openapi.controller.RestauranteUsuarioControllerOpenApi;
 import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
+import br.com.juwer.algafoodapi.core.security.SecurityUtils;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
 import br.com.juwer.algafoodapi.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,22 +27,29 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
     @Autowired
     private HateoasAlgaLinks hateoasAlgaLinks;
 
+    @Autowired
+    private SecurityUtils securityUtils;
+
     @Override
     @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UsuarioDTO> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = cadastroRestauranteService.buscaOuFalha(restauranteId);
+        CollectionModel<UsuarioDTO> usuariosDTO;
 
-        CollectionModel<UsuarioDTO> usuariosDTO = usuarioDTOAssembler.toCollectionModel(restaurante.getResponsaveis())
-                .removeLinks()
-                .add(hateoasAlgaLinks.linkToRestauranteUsuarios(restauranteId))
-                .add(hateoasAlgaLinks.linkToRestauranteUsuariosAssociar(restauranteId, "associar"));
+        if (securityUtils.hasAuthority("EDITAR_USUARIOS_GRUPOS_PERMISSOES")) {
+            usuariosDTO = usuarioDTOAssembler.toCollectionModel(restaurante.getResponsaveis())
+                    .removeLinks()
+                    .add(hateoasAlgaLinks.linkToRestauranteUsuarios(restauranteId))
+                    .add(hateoasAlgaLinks.linkToRestauranteUsuariosAssociar(restauranteId, "associar"));
 
-        usuariosDTO.getContent().forEach(usuario -> {
-            usuario.add(hateoasAlgaLinks.linkToRestauranteUsuariosDesassociar(restauranteId, usuario.getId(), "desassociar"));
-        });
-
-        return usuariosDTO;
+            usuariosDTO.getContent().forEach(usuario -> {
+                usuario.add(hateoasAlgaLinks.linkToRestauranteUsuariosDesassociar(restauranteId, usuario.getId(), "desassociar"));
+            });
+            return usuariosDTO;
+        } else {
+            return usuarioDTOAssembler.toCollectionModel(restaurante.getResponsaveis());
+        }
     }
 
     @Override
