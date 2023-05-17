@@ -19,9 +19,17 @@ services:
     command: ["/wait-for-it.sh", "algafood-mysql:3306", "-t", "30", "--", "java", "-jar", "api.jar"]
     environment:
       DBHOST: algafood-mysql
-    ports:
-      - "8081:8081"
     networks:
       - algafood-network
     depends_on:
       - algafood-mysql
+
+  algafood-nginx:
+    build: ./nginx
+    image: algafood-nginx
+    ports:
+      - "80:80"
+    networks:
+      - algafood-network
+    depends_on:
+      - algafood-api
