@@ -1,0 +1,26 @@
+version: "2.15.1"
+
+networks:
+  algafood-network:
+    driver: bridge
+
+services:
+  algafood-mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: "docker"
+    ports:
+      - "3306:3306"
+    networks:
+      - algafood-network
+
+  algafood-api:
+    image: algafood-api
+    environment:
+      DBHOST: algafood-mysql
+    ports:
+      - "8081:8081"
+    networks:
+      - algafood-network
+    depends_on:
+      - algafood-mysql
