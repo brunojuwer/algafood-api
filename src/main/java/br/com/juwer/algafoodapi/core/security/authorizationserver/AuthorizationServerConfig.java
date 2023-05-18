@@ -7,7 +7,6 @@ import com.nimbusds.jose.jwk.RSAKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -18,6 +17,7 @@ import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
+import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -61,6 +61,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints
             .authenticationManager(authenticationManager)
             .userDetailsService(jpaUserDetailService)
+            .authorizationCodeServices(new JdbcAuthorizationCodeServices(this.dataSource))
             .reuseRefreshTokens(false)
             .accessTokenConverter(jwtAccessTokenConverter())
             .tokenEnhancer(enhancerChain)
