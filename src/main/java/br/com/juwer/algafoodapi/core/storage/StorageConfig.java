@@ -20,6 +20,10 @@ public class StorageConfig {
 
     @Bean
     public AmazonS3 amazonS3() {
+        if(!storageProperties.getTipo().equals(StorageProperties.TipoStorage.S3)) {
+            return null;
+        }
+
         String accessIdKey = storageProperties.getS3().getIdKeyAccess();
         String secret = storageProperties.getS3().getSecret();
         Regions region = storageProperties.getS3().getRegion();
