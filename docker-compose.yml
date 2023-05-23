@@ -10,7 +10,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "docker"
     ports:
-      - "3306:3306"
+      - "33065:3306"
     networks:
       - algafood-network
 
@@ -27,6 +27,7 @@ services:
       DBHOST: algafood-mysql
       SPRING_SESSION_STORE_TYPE: redis
       SPRING_REDIS_HOST: algafood-redis
+      SPRING_PROFILES_ACTIVE: development
     networks:
       - algafood-network
     deploy:
