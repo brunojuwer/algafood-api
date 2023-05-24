@@ -5,6 +5,7 @@ import br.com.juwer.algafoodapi.api.v1.assembler.EstadoDTOAssembler;
 import br.com.juwer.algafoodapi.api.v1.disassembler.EstadoDTODIsassembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.EstadoDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.EstadoDTOInput;
+import br.com.juwer.algafoodapi.api.v1.springdoc.controller.EstadoControllerSpringDoc;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.model.Estado;
 import br.com.juwer.algafoodapi.domain.repository.EstadoRepository;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/v1/estados")
-public class EstadoController {
+public class EstadoController implements EstadoControllerSpringDoc {
   
   @Autowired
   private EstadoRepository estadoRepository;
@@ -34,6 +35,7 @@ public class EstadoController {
   @Autowired
   private EstadoDTODIsassembler estadoDTODIsassembler;
 
+  @Override
   @CheckSecurity.Estados.PodeConsultar
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public CollectionModel<EstadoDTO> listar() {
@@ -41,6 +43,7 @@ public class EstadoController {
     return estadoDTOAssembler.toCollectionModel(estados);
   }
 
+  @Override
   @CheckSecurity.Estados.PodeConsultar
   @GetMapping(path = "/{estadoId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public EstadoDTO buscar(@PathVariable Long estadoId) {
@@ -48,6 +51,7 @@ public class EstadoController {
     return estadoDTOAssembler.toModel(estado);
   }
 
+  @Override
   @CheckSecurity.Estados.PodeEditar
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
@@ -60,6 +64,7 @@ public class EstadoController {
     return estadoDTO;
   }
 
+  @Override
   @CheckSecurity.Estados.PodeEditar
   @PutMapping(path = "/{estadoId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public EstadoDTO atualizar(@PathVariable Long estadoId,
@@ -70,6 +75,7 @@ public class EstadoController {
     return estadoDTOAssembler.toModel(cadastroEstadoService.salvar(estadoAtual));
   }
 
+  @Override
   @CheckSecurity.Estados.PodeEditar
   @DeleteMapping(value = "/{estadoId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)

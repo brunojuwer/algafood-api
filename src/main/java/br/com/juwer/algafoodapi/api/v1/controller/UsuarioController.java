@@ -6,6 +6,7 @@ import br.com.juwer.algafoodapi.api.v1.model.dto.UsuarioDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.usuariodtos.UsuarioDTOInput;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.usuariodtos.UsuarioDTOInputPost;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.usuariodtos.UsuarioDTOInputSenha;
+import br.com.juwer.algafoodapi.api.v1.springdoc.controller.UsuarioControllerSpringDoc;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.model.Usuario;
 import br.com.juwer.algafoodapi.domain.repository.UsuarioRepository;
@@ -21,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/usuarios")
-public class UsuarioController {
+public class UsuarioController implements UsuarioControllerSpringDoc {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -35,6 +36,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioDTODisassembler usuarioDTODisassembler;
 
+    @Override
     @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UsuarioDTO> listar() {
@@ -42,6 +44,7 @@ public class UsuarioController {
         return usuarioDTOAssembler.toCollectionModel(usuarios);
     }
 
+    @Override
     @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping(path = "/{usuarioId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UsuarioDTO buscar(@PathVariable Long usuarioId) {
@@ -49,6 +52,7 @@ public class UsuarioController {
         return usuarioDTOAssembler.toModel(usuario);
     }
 
+    @Override
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioDTO adicionar(@RequestBody @Valid UsuarioDTOInputPost usuarioDTOInputPost) {
@@ -58,6 +62,7 @@ public class UsuarioController {
         return usuarioDTOAssembler.toModel(usuarioSalvo);
     }
 
+    @Override
     @CheckSecurity.UsuariosGruposPermissoes.PodeAlterarUsuario
     @PutMapping(path = "/{usuarioId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UsuarioDTO atualizar(@PathVariable Long usuarioId,
@@ -67,6 +72,7 @@ public class UsuarioController {
         return usuarioDTOAssembler.toModel(cadastroUsuarioService.salvar(usuarioAtual));
     }
 
+    @Override
     @CheckSecurity.UsuariosGruposPermissoes.PodeAlterarPropriaSenha
     @PutMapping("/{usuarioId}/senha")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -76,6 +82,7 @@ public class UsuarioController {
         cadastroUsuarioService.alterarSenha(senhaAtual, novaSenha, usuarioId);
     }
 
+    @Override
     @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @DeleteMapping("/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

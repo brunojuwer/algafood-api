@@ -4,6 +4,7 @@ import br.com.juwer.algafoodapi.api.v1.assembler.GrupoDTOAssembler;
 import br.com.juwer.algafoodapi.api.v1.disassembler.GrupoDTODisassembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.GrupoDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.GrupoDTOInput;
+import br.com.juwer.algafoodapi.api.v1.springdoc.controller.GrupoControllerSpringDoc;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.model.Grupo;
 import br.com.juwer.algafoodapi.domain.repository.GrupoRepository;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/v1/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
-public class GrupoController {
+public class GrupoController implements GrupoControllerSpringDoc {
 
     @Autowired
     private GrupoRepository grupoRepository;
@@ -33,6 +34,7 @@ public class GrupoController {
     @Autowired
     private GrupoDTODisassembler grupoDTODisassembler;
 
+    @Override
     @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping
     public CollectionModel<GrupoDTO> listar() {
@@ -40,12 +42,14 @@ public class GrupoController {
         return grupoDTOAssembler.toCollectionModel(grupos);
     }
 
+    @Override
     @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping("/{grupoId}")
     public GrupoDTO buscar(@PathVariable Long grupoId) {
         return grupoDTOAssembler.toModel(cadastroGrupoService.buscaOuFalha(grupoId));
     }
 
+    @Override
     @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -54,6 +58,7 @@ public class GrupoController {
         return grupoDTOAssembler.toModel(cadastroGrupoService.salvar(grupo));
     }
 
+    @Override
     @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PutMapping("/{grupoId}")
     public GrupoDTO atualizar(@PathVariable Long grupoId, @RequestBody @Valid GrupoDTOInput grupoDTOInput) {
@@ -63,6 +68,7 @@ public class GrupoController {
         return grupoDTOAssembler.toModel(cadastroGrupoService.salvar(grupo));
     }
 
+    @Override
     @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @DeleteMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

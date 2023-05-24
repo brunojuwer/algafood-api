@@ -5,6 +5,7 @@ import br.com.juwer.algafoodapi.api.v2.assembler.CidadeDTOAssemblerV2;
 import br.com.juwer.algafoodapi.api.v2.disassembler.CidadeDTODisassemblerV2;
 import br.com.juwer.algafoodapi.api.v2.model.dto.CidadeDTOV2;
 import br.com.juwer.algafoodapi.api.v2.model.dtoinput.CidadeDTOInputV2;
+import br.com.juwer.algafoodapi.api.v2.springdoc.controller.CidadeControllerV2SpringDoc;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
@@ -22,7 +23,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/v2/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CidadeControllerV2 {
+public class CidadeControllerV2 implements CidadeControllerV2SpringDoc {
 
     @Autowired
     private CidadeRepository cidadeRepository;
@@ -36,18 +37,21 @@ public class CidadeControllerV2 {
     @Autowired
     private CidadeDTODisassemblerV2 cidadeDTODisassembler;
 
+    @Override
     @CheckSecurity.Cidades.PodeConsultar
     @GetMapping
     public CollectionModel<CidadeDTOV2> listar() {
         return cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAllCidades());
     }
 
+    @Override
     @CheckSecurity.Cidades.PodeConsultar
     @GetMapping(value = "/{cidadeId}")
     public CidadeDTOV2 buscar(@PathVariable Long cidadeId) {
         return cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
     }
 
+    @Override
     @CheckSecurity.Cidades.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -64,6 +68,7 @@ public class CidadeControllerV2 {
         }
     }
 
+    @Override
     @CheckSecurity.Cidades.PodeEditar
     @PutMapping("/{cidadeId}")
     public CidadeDTOV2 atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeDTOInputV2 cidadeDTOInput) {
@@ -77,6 +82,7 @@ public class CidadeControllerV2 {
         }
     }
 
+    @Override
     @DeleteMapping("/{cidadeId}")
     @CheckSecurity.Cidades.PodeEditar
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -3,6 +3,7 @@ package br.com.juwer.algafoodapi.api.v1.controller;
 import br.com.juwer.algafoodapi.api.v1.assembler.FotoProdutoDTOAssembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.FotoProdutoDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.FotoProdutoDTOInput;
+import br.com.juwer.algafoodapi.api.v1.springdoc.controller.RestauranteProdutoFotoControllerSpringDoc;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.model.FotoProduto;
@@ -26,7 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
-public class RestauranteProdutoFotoController {
+public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerSpringDoc {
 
     @Autowired
     private CadastroProdutoService cadastroProdutoService;
@@ -40,6 +41,7 @@ public class RestauranteProdutoFotoController {
     @Autowired
     private FotoStorageService fotoStorageService;
 
+    @Override
     @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProdutoDTO atualizarFoto(
@@ -64,6 +66,7 @@ public class RestauranteProdutoFotoController {
         return fotoProdutoDTOAssembler.toModel(fotoProdutoSalva);
     }
 
+    @Override
     @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -71,6 +74,7 @@ public class RestauranteProdutoFotoController {
         catalogoFotoProdutoService.deletar(restauranteId, produtoId);
     }
 
+    @Override
     @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public FotoProdutoDTO buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId){
@@ -78,6 +82,7 @@ public class RestauranteProdutoFotoController {
         return fotoProdutoDTOAssembler.toModel(foto);
     }
 
+    @Override
     @GetMapping
     public ResponseEntity<?> servirFoto(@PathVariable Long restauranteId,
                                         @PathVariable Long produtoId,
@@ -108,8 +113,9 @@ public class RestauranteProdutoFotoController {
         boolean compativel = requestedMediaTypes.stream()
                 .anyMatch(mediaType -> mediaType.isCompatibleWith(mediaTypeFoto));
 
-        if(!compativel) {
+        if (!compativel) {
             throw new HttpMediaTypeNotAcceptableException(requestedMediaTypes);
         }
     }
+
 }

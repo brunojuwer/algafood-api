@@ -11,6 +11,7 @@ import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 import br.com.juwer.algafoodapi.domain.model.Cidade;
 import br.com.juwer.algafoodapi.domain.repository.CidadeRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroCidadeService;
+import br.com.juwer.algafoodapi.api.v1.springdoc.controller.CidadeControllerSpringDoc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/v1/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CidadeController {
+public class CidadeController implements CidadeControllerSpringDoc {
 
     @Autowired
     private CidadeRepository cidadeRepository;
@@ -36,6 +37,7 @@ public class CidadeController {
     @Autowired
     private CidadeDTODisassembler cidadeDTODisassembler;
 
+    @Override
     @Deprecated
     @CheckSecurity.Cidades.PodeConsultar
     @GetMapping
@@ -43,12 +45,14 @@ public class CidadeController {
         return cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAllCidades());
     }
 
+    @Override
     @CheckSecurity.Cidades.PodeConsultar
     @GetMapping(value = "/{cidadeId}")
     public CidadeDTO buscar(@PathVariable Long cidadeId) {
         return cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
     }
 
+    @Override
     @CheckSecurity.Cidades.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -65,6 +69,7 @@ public class CidadeController {
         }
     }
 
+    @Override
     @CheckSecurity.Cidades.PodeEditar
     @PutMapping("/{cidadeId}")
     public CidadeDTO atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
@@ -78,6 +83,7 @@ public class CidadeController {
         }
     }
 
+    @Override
     @CheckSecurity.Cidades.PodeEditar
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

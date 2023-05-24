@@ -5,6 +5,7 @@ import br.com.juwer.algafoodapi.api.v1.assembler.ProdutoDTOAssembler;
 import br.com.juwer.algafoodapi.api.v1.disassembler.ProdutoDTODisassembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.ProdutoDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.produtodtos.ProdutoDTOInput;
+import br.com.juwer.algafoodapi.api.v1.springdoc.controller.RestauranteProdutosControllerSpringDoc;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.model.Produto;
 import br.com.juwer.algafoodapi.domain.model.Restaurante;
@@ -22,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/restaurantes/{restauranteId}/produtos")
-public class RestauranteProdutosController {
+public class RestauranteProdutosController implements RestauranteProdutosControllerSpringDoc {
 
     @Autowired
     private CadastroProdutoService cadastroProdutoService;
@@ -42,6 +43,7 @@ public class RestauranteProdutosController {
     @Autowired
     private HateoasAlgaLinks hateoasAlgaLinks;
 
+    @Override
     @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<ProdutoDTO> listar(@PathVariable Long restauranteId,
@@ -60,6 +62,7 @@ public class RestauranteProdutosController {
                 .add(hateoasAlgaLinks.linkToProduto(restauranteId, IanaLinkRelations.SELF.value()));
     }
 
+    @Override
     @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(path = "/{produtoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProdutoDTO buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
@@ -67,6 +70,7 @@ public class RestauranteProdutosController {
             return produtoDTOAssembler.toModel(produto);
     }
 
+    @Override
     @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ProdutoDTO salvar(@PathVariable Long restauranteId, @Valid @RequestBody ProdutoDTOInput produtoDTOInput) {
@@ -74,6 +78,7 @@ public class RestauranteProdutosController {
         return produtoDTOAssembler.toModel(cadastroProdutoService.salvar(produto, restauranteId));
     }
 
+    @Override
     @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @PutMapping(path = "/{produtoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProdutoDTO atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId,

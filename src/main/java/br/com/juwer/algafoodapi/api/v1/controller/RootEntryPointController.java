@@ -1,6 +1,7 @@
 package br.com.juwer.algafoodapi.api.v1.controller;
 
 import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.MediaType;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/v1",produces = MediaType.APPLICATION_JSON_VALUE)
+@SecurityRequirement(name = "security_auth")
 public class RootEntryPointController {
 
     @Autowired

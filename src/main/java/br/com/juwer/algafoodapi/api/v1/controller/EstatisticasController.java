@@ -1,6 +1,7 @@
 package br.com.juwer.algafoodapi.api.v1.controller;
 
 import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
+import br.com.juwer.algafoodapi.api.v1.springdoc.controller.EstatisticasControllerSpringDoc;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.filter.VendaDiariaFilter;
 import br.com.juwer.algafoodapi.domain.model.dto.VendaDiaria;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/v1/estatisticas")
-public class EstatisticasController {
+public class EstatisticasController implements EstatisticasControllerSpringDoc {
 
     @Autowired
     private VendaQueryService vendaQueryService;
@@ -31,6 +32,7 @@ public class EstatisticasController {
     @Autowired
     private HateoasAlgaLinks hateoasAlgaLinks;
 
+    @Override
     @GetMapping
     @CheckSecurity.Estatisticas.PodeConsultar
     public VendaDiariaLink vendaDiariaLink() {
@@ -40,6 +42,7 @@ public class EstatisticasController {
         return vendasDiarias;
     }
 
+    @Override
     @CheckSecurity.Estatisticas.PodeConsultar
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<VendaDiaria> consultarVendasDiarias(
@@ -48,6 +51,7 @@ public class EstatisticasController {
         return vendaQueryService.consultarVendasDiarias(filter, timeOffSet);
     }
 
+    @Override
     @CheckSecurity.Estatisticas.PodeConsultar
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> consultarVendasDiariasPdf(

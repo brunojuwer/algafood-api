@@ -1,5 +1,6 @@
 package br.com.juwer.algafoodapi.api.v1.controller;
 
+import br.com.juwer.algafoodapi.api.v1.springdoc.controller.FluxoPedidoControllerSpringDoc;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.service.FluxoPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/v1/pedidos/{codigo}", produces = MediaType.APPLICATION_JSON_VALUE)
-public class FluxoPedidoController {
+public class FluxoPedidoController implements FluxoPedidoControllerSpringDoc {
 
     @Autowired
     private FluxoPedidoService fluxoPedidoService;
 
+    @Override
     @CheckSecurity.Pedidos.PodeGerenciarStatus
     @PutMapping("/confirmacao")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -24,6 +26,7 @@ public class FluxoPedidoController {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @CheckSecurity.Pedidos.PodeGerenciarStatus
     @PutMapping("/cancelamento")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -33,6 +36,7 @@ public class FluxoPedidoController {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @CheckSecurity.Pedidos.PodeGerenciarStatus
     @PutMapping("/entrega")
     @ResponseStatus(HttpStatus.NO_CONTENT)
