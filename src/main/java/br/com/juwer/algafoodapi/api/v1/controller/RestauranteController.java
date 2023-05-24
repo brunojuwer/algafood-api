@@ -4,11 +4,10 @@ import br.com.juwer.algafoodapi.api.v1.assembler.RestauranteBasicoDTOAssembler;
 import br.com.juwer.algafoodapi.api.v1.assembler.RestauranteDTOAssembler;
 import br.com.juwer.algafoodapi.api.v1.assembler.RestauranteResumoDTOAssembler;
 import br.com.juwer.algafoodapi.api.v1.disassembler.RestauranteDTODisassembler;
-import br.com.juwer.algafoodapi.api.v1.model.dto.projections.RestauranteDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.restaurantedtos.RestauranteDTOInput;
 import br.com.juwer.algafoodapi.api.v1.model.dto.projections.RestauranteBasicoDTO;
+import br.com.juwer.algafoodapi.api.v1.model.dto.projections.RestauranteDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.projections.RestauranteResumoDTO;
-import br.com.juwer.algafoodapi.api.v1.openapi.controller.RestauranteControllerOpenApi;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
@@ -28,7 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/v1/restaurantes")
-public class RestauranteController implements RestauranteControllerOpenApi {
+public class RestauranteController {
 
     @Autowired
     private RestauranteRepository restauranteRepository;
@@ -51,7 +50,6 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     @Autowired
     private RestauranteBasicoDTOAssembler restauranteBasicoDTOAssembler;
 
-    @Override
     @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<RestauranteBasicoDTO> listar(){
@@ -59,14 +57,12 @@ public class RestauranteController implements RestauranteControllerOpenApi {
                 .toCollectionModel(restauranteService.buscarResumo());
     }
 
-    @Override
     @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(params = "projecao=apenas-nome", produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<RestauranteResumoDTO> listarApenasNomes(){
         return restauranteResumoDTOAssembler.toCollectionModel(restauranteService.buscarResumo());
     }
 
-    @Override
     @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(path = "/{restauranteId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestauranteDTO buscar(@PathVariable Long restauranteId) {
@@ -74,7 +70,6 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         return restauranteDTOAssembler.toModel(restaurante);
     }
 
-    @Override
     @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
@@ -88,7 +83,6 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         }
     }
 
-    @Override
     @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @PutMapping(path = "/{restauranteId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestauranteDTO atualizar(@PathVariable Long restauranteId,
@@ -104,7 +98,6 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         }
     }
 
-    @Override
     @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @DeleteMapping("/{restauranteId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -112,7 +105,6 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         restauranteService.excluir(restauranteId);
     }
 
-    @Override
     @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @PutMapping("/{restauranteId}/ativo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -121,7 +113,6 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
-    @Override
     @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @DeleteMapping("/{restauranteId}/ativo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -130,7 +121,6 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
-    @Override
     @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @PutMapping("/ativacoes")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -142,7 +132,6 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         }
     }
 
-    @Override
     @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @DeleteMapping("/ativacoes")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -154,7 +143,6 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         }
     }
 
-    @Override
     @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @PutMapping("/{restauranteId}/abertura")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -163,7 +151,6 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
-    @Override
     @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @PutMapping("/{restauranteId}/fechamento")
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -5,9 +5,7 @@ import br.com.juwer.algafoodapi.api.v1.assembler.CidadeDTOAssembler;
 import br.com.juwer.algafoodapi.api.v1.disassembler.CidadeDTODisassembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.CidadeDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.CidadeDTOInput;
-import br.com.juwer.algafoodapi.api.v1.openapi.controller.CidadeControllerOpenApi;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
-import br.com.juwer.algafoodapi.core.web.AlgaMediaTypes;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
 import br.com.juwer.algafoodapi.domain.model.Cidade;
@@ -24,7 +22,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/v1/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CidadeController implements CidadeControllerOpenApi {
+public class CidadeController {
 
     @Autowired
     private CidadeRepository cidadeRepository;
@@ -39,21 +37,18 @@ public class CidadeController implements CidadeControllerOpenApi {
     private CidadeDTODisassembler cidadeDTODisassembler;
 
     @Deprecated
-    @Override
     @CheckSecurity.Cidades.PodeConsultar
     @GetMapping
     public CollectionModel<CidadeDTO> listar() {
         return cidadeDTOAssembler.toCollectionModel(cidadeRepository.findAllCidades());
     }
 
-    @Override
     @CheckSecurity.Cidades.PodeConsultar
     @GetMapping(value = "/{cidadeId}")
     public CidadeDTO buscar(@PathVariable Long cidadeId) {
         return cidadeDTOAssembler.toModel(cadastroCidadeService.buscaOuFalha(cidadeId));
     }
 
-    @Override
     @CheckSecurity.Cidades.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -70,7 +65,6 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
-    @Override
     @CheckSecurity.Cidades.PodeEditar
     @PutMapping("/{cidadeId}")
     public CidadeDTO atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeDTOInput cidadeDTOInput) {
@@ -84,7 +78,6 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
-    @Override
     @CheckSecurity.Cidades.PodeEditar
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -4,7 +4,6 @@ import br.com.juwer.algafoodapi.api.v1.model.dto.input.EnderecoDTOInput;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.formapagamentodtos.FormaPagamentoDTOIdInput;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.itempedidodtos.ItemPedidoInput;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.restaurantedtos.RestauranteDTOIdInput;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,7 +19,6 @@ import java.util.List;
 @ToString
 public class PedidoDTOInput {
 
-    @ApiModelProperty(example = "1", required = true)
     @Valid
     @NotNull
     private RestauranteDTOIdInput restaurante;

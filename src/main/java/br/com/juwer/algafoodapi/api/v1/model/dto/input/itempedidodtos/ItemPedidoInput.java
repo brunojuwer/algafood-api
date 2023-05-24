@@ -1,6 +1,5 @@
 package br.com.juwer.algafoodapi.api.v1.model.dto.input.itempedidodtos;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,15 +10,12 @@ import javax.validation.constraints.Positive;
 @Setter
 public class ItemPedidoInput {
 
-    @ApiModelProperty(example = "1", required = true)
     @NotNull
     private Long produtoId;
 
-    @ApiModelProperty(example = "2", required = true)
     @NotNull
     @Positive
     private Integer quantidade;
 
-    @ApiModelProperty(example = "Sem Alho")
     private String observacao;
 }

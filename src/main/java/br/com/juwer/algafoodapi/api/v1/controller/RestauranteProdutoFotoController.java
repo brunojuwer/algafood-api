@@ -3,7 +3,6 @@ package br.com.juwer.algafoodapi.api.v1.controller;
 import br.com.juwer.algafoodapi.api.v1.assembler.FotoProdutoDTOAssembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.FotoProdutoDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.FotoProdutoDTOInput;
-import br.com.juwer.algafoodapi.api.v1.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.juwer.algafoodapi.domain.model.FotoProduto;
@@ -27,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
-public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
+public class RestauranteProdutoFotoController {
 
     @Autowired
     private CadastroProdutoService cadastroProdutoService;
@@ -41,7 +40,6 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     @Autowired
     private FotoStorageService fotoStorageService;
 
-    @Override
     @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProdutoDTO atualizarFoto(
@@ -66,7 +64,6 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
         return fotoProdutoDTOAssembler.toModel(fotoProdutoSalva);
     }
 
-    @Override
     @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -74,7 +71,6 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
         catalogoFotoProdutoService.deletar(restauranteId, produtoId);
     }
 
-    @Override
     @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public FotoProdutoDTO buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId){
@@ -82,7 +78,6 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
         return fotoProdutoDTOAssembler.toModel(foto);
     }
 
-    @Override
     @GetMapping
     public ResponseEntity<?> servirFoto(@PathVariable Long restauranteId,
                                         @PathVariable Long produtoId,

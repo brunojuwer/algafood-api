@@ -1,6 +1,5 @@
 package br.com.juwer.algafoodapi.api.v1.controller;
 
-import br.com.juwer.algafoodapi.api.v1.openapi.controller.EstatisticasControllerOpenApi;
 import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.filter.VendaDiariaFilter;
@@ -21,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/v1/estatisticas")
-public class EstatisticasController implements EstatisticasControllerOpenApi {
+public class EstatisticasController {
 
     @Autowired
     private VendaQueryService vendaQueryService;
@@ -41,7 +40,6 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
         return vendasDiarias;
     }
 
-    @Override
     @CheckSecurity.Estatisticas.PodeConsultar
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<VendaDiaria> consultarVendasDiarias(
@@ -50,7 +48,6 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
         return vendaQueryService.consultarVendasDiarias(filter, timeOffSet);
     }
 
-    @Override
     @CheckSecurity.Estatisticas.PodeConsultar
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> consultarVendasDiariasPdf(

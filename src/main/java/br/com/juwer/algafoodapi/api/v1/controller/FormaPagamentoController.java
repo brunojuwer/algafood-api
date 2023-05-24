@@ -4,7 +4,6 @@ import br.com.juwer.algafoodapi.api.v1.assembler.FormaPagamentoDTOAssembler;
 import br.com.juwer.algafoodapi.api.v1.disassembler.FormaPagamentoDTODisassembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.FormaPagamentoDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.formapagamentodtos.FormaPagamentoDTOInput;
-import br.com.juwer.algafoodapi.api.v1.openapi.controller.FormaPagamentoControllerOpenApi;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.model.FormaPagamento;
 import br.com.juwer.algafoodapi.domain.repository.FormaPagamentoRepository;
@@ -26,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping(value = "/v1/formas-pagamento", produces = MediaType.APPLICATION_JSON_VALUE)
-public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
+public class FormaPagamentoController {
 
     @Autowired
     private FormaPagamentoRepository formaPagamentoRepository;
@@ -40,7 +39,6 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
     @Autowired
     private FormaPagamentoDTODisassembler  formaPagamentoDTODisassembler;
 
-    @Override
     @CheckSecurity.FormasPagamento.PodeConsultar
     @GetMapping
     public ResponseEntity<CollectionModel<FormaPagamentoDTO>> listar(ServletWebRequest request){
@@ -67,7 +65,6 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
                 .body(formaPagamentoDTOS);
     }
 
-    @Override
     @CheckSecurity.FormasPagamento.PodeConsultar
     @GetMapping("/{formaPagamentoId}")
     public ResponseEntity<FormaPagamentoDTO> buscar(@PathVariable Long formaPagamentoId) {
@@ -82,7 +79,6 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
                 .body(formaPagamentoDTO);
     }
 
-    @Override
     @CheckSecurity.FormasPagamento.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -93,7 +89,6 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
         return formaPagamentoDTOAssembler.toModel(cadastroFormaPagamentoService.salvar(formaPagamento));
     }
 
-    @Override
     @CheckSecurity.FormasPagamento.PodeEditar
     @PutMapping("/{formaPagamentoID}")
     public FormaPagamentoDTO atualizar(@PathVariable Long formaPagamentoID,
@@ -103,7 +98,6 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
         return formaPagamentoDTOAssembler.toModel(cadastroFormaPagamentoService.salvar(formaPagamento));
     }
 
-    @Override
     @CheckSecurity.FormasPagamento.PodeEditar
     @DeleteMapping("/{formaPagamentoID}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

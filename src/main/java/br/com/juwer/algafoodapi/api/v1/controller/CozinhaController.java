@@ -4,14 +4,10 @@ import br.com.juwer.algafoodapi.api.v1.assembler.CozinhaDTOAssembler;
 import br.com.juwer.algafoodapi.api.v1.disassembler.CozinhaDTODisassembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.CozinhaDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.CozinhaDTOInput;
-import br.com.juwer.algafoodapi.api.v1.openapi.controller.CozinhaControllerOpenApi;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.model.Cozinha;
 import br.com.juwer.algafoodapi.domain.repository.CozinhaRepository;
 import br.com.juwer.algafoodapi.domain.service.CadastroCozinhaService;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,15 +16,13 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/v1/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CozinhaController implements CozinhaControllerOpenApi {
+public class CozinhaController {
 
     @Autowired
     private CozinhaRepository cozinhaRepository;
@@ -45,7 +39,6 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     @Autowired
     private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
-    @Override
     @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping
     public PagedModel<CozinhaDTO> listar(@PageableDefault(size = 10) Pageable pageable) {
@@ -53,14 +46,12 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return pagedResourcesAssembler.toModel(cozinhasPage, cozinhaDTOAssembler);
     }
 
-    @Override
     @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping("/{cozinhaId}")
     public CozinhaDTO buscar(@PathVariable Long cozinhaId){
         return cozinhaDTOAssembler.toModel(cozinhaService.buscaOuFalha(cozinhaId));
     }
 
-    @Override
     @CheckSecurity.Cozinhas.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -69,7 +60,6 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return cozinhaDTOAssembler.toModel(cozinhaService.salvar(cozinha));
     }
 
-    @Override
     @CheckSecurity.Cozinhas.PodeEditar
     @PutMapping("/{cozinhaId}")
     public CozinhaDTO atualizar(@PathVariable Long cozinhaId,
@@ -81,7 +71,6 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return cozinhaDTOAssembler.toModel(cozinhaService.salvar(cozinhaAtual));
     }
 
-    @Override
     @CheckSecurity.Cozinhas.PodeEditar
     @DeleteMapping("/{cozinhaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

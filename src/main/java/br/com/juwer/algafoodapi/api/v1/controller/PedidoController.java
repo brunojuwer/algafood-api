@@ -6,7 +6,6 @@ import br.com.juwer.algafoodapi.api.v1.disassembler.PedidoDTODisassembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.PedidoDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.PedidoResumoDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.pedidosdto.PedidoDTOInput;
-import br.com.juwer.algafoodapi.api.v1.openapi.controller.PedidoControllerOpenApi;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.core.security.SecurityUtils;
 import br.com.juwer.algafoodapi.domain.filter.PedidoFilter;
@@ -28,7 +27,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/v1/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
-public class PedidoController implements PedidoControllerOpenApi {
+public class PedidoController {
 
     @Autowired
     private PedidoRespository pedidoRespository;
@@ -51,7 +50,6 @@ public class PedidoController implements PedidoControllerOpenApi {
     @Autowired
     private SecurityUtils securityUtils;
 
-    @Override
     @GetMapping
     @CheckSecurity.Pedidos.PodePesquisar
     public PagedModel<PedidoResumoDTO> pesquisar(
@@ -62,7 +60,6 @@ public class PedidoController implements PedidoControllerOpenApi {
         return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoDTOAssembler);
     }
 
-    @Override
     @CheckSecurity.Pedidos.PodeBuscar
     @GetMapping("/{codigo}")
     public PedidoDTO buscar(@PathVariable String codigo) {
@@ -70,7 +67,6 @@ public class PedidoController implements PedidoControllerOpenApi {
         return pedidoDTOAssembler.toModel(pedido);
     }
 
-    @Override
     @CheckSecurity.Pedidos.PodeCriar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

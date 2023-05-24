@@ -1,15 +1,9 @@
 package br.com.juwer.algafoodapi.api.v2.controller;
 
-import br.com.juwer.algafoodapi.api.v1.assembler.CozinhaDTOAssembler;
-import br.com.juwer.algafoodapi.api.v1.disassembler.CozinhaDTODisassembler;
-import br.com.juwer.algafoodapi.api.v1.model.dto.CozinhaDTO;
-import br.com.juwer.algafoodapi.api.v1.model.dto.input.CozinhaDTOInput;
-import br.com.juwer.algafoodapi.api.v1.openapi.controller.CozinhaControllerOpenApi;
 import br.com.juwer.algafoodapi.api.v2.assembler.CozinhaDTOAssemblerV2;
 import br.com.juwer.algafoodapi.api.v2.disassembler.CozinhaDTODisassemblerV2;
 import br.com.juwer.algafoodapi.api.v2.model.dto.CozinhaDTOV2;
 import br.com.juwer.algafoodapi.api.v2.model.dtoinput.CozinhaDTOInputV2;
-import br.com.juwer.algafoodapi.api.v2.openapi.controller.CozinhaControllerV2OpenApi;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.model.Cozinha;
 import br.com.juwer.algafoodapi.domain.repository.CozinhaRepository;
@@ -28,7 +22,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/v2/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CozinhaControllerV2 implements CozinhaControllerV2OpenApi {
+public class CozinhaControllerV2 {
 
     @Autowired
     private CozinhaRepository cozinhaRepository;
@@ -45,7 +39,6 @@ public class CozinhaControllerV2 implements CozinhaControllerV2OpenApi {
     @Autowired
     private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
-    @Override
     @GetMapping
     @CheckSecurity.Cozinhas.PodeConsultar
     public PagedModel<CozinhaDTOV2> listar(@PageableDefault(size = 10) Pageable pageable) {
@@ -53,14 +46,12 @@ public class CozinhaControllerV2 implements CozinhaControllerV2OpenApi {
         return pagedResourcesAssembler.toModel(cozinhas, cozinhaDTOAssembler);
     }
 
-    @Override
     @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping("/{cozinhaId}")
     public CozinhaDTOV2 buscar(@PathVariable Long cozinhaId) {
         return cozinhaDTOAssembler.toModel(cozinhaService.buscaOuFalha(cozinhaId));
     }
 
-    @Override
     @CheckSecurity.Cozinhas.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -69,7 +60,6 @@ public class CozinhaControllerV2 implements CozinhaControllerV2OpenApi {
         return cozinhaDTOAssembler.toModel(cozinhaService.salvar(cozinha));
     }
 
-    @Override
     @CheckSecurity.Cozinhas.PodeEditar
     @PutMapping("/{cozinhaId}")
     public CozinhaDTOV2 atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid CozinhaDTOInputV2 cozinha) {
@@ -79,7 +69,6 @@ public class CozinhaControllerV2 implements CozinhaControllerV2OpenApi {
         return cozinhaDTOAssembler.toModel(cozinhaService.salvar(cozinhaAtual));
     }
 
-    @Override
     @CheckSecurity.Cozinhas.PodeEditar
     @DeleteMapping("/{cozinhaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

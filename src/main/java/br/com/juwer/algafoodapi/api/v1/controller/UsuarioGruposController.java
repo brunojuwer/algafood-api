@@ -1,10 +1,9 @@
 package br.com.juwer.algafoodapi.api.v1.controller;
 
 
+import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
 import br.com.juwer.algafoodapi.api.v1.assembler.GrupoDTOAssembler;
 import br.com.juwer.algafoodapi.api.v1.model.dto.GrupoDTO;
-import br.com.juwer.algafoodapi.api.v1.openapi.controller.UsuarioGruposControllerOpenApi;
-import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
 import br.com.juwer.algafoodapi.domain.model.Grupo;
 import br.com.juwer.algafoodapi.domain.repository.GrupoRepository;
@@ -19,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/usuarios/{usuarioId}/grupos")
-public class UsuarioGruposController implements UsuarioGruposControllerOpenApi {
+public class UsuarioGruposController {
 
     @Autowired
     private CadastroUsuarioService cadastroUsuarioService;
@@ -33,7 +32,6 @@ public class UsuarioGruposController implements UsuarioGruposControllerOpenApi {
     @Autowired
     private HateoasAlgaLinks hateoasAlgaLinks;
 
-    @Override
     @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<GrupoDTO> listar(@PathVariable Long usuarioId) {
@@ -50,7 +48,6 @@ public class UsuarioGruposController implements UsuarioGruposControllerOpenApi {
         return gruposDTO;
     }
 
-    @Override
     @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PutMapping("/{grupoId}")
     public ResponseEntity<Void> associar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
@@ -58,7 +55,6 @@ public class UsuarioGruposController implements UsuarioGruposControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
-    @Override
     @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @DeleteMapping("/{grupoId}")
     public ResponseEntity<Void> desassociar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
