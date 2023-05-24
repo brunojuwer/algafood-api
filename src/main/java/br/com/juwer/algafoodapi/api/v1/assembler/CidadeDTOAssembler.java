@@ -1,8 +1,8 @@
 package br.com.juwer.algafoodapi.api.v1.assembler;
 
+import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
 import br.com.juwer.algafoodapi.api.v1.controller.CidadeController;
 import br.com.juwer.algafoodapi.api.v1.model.dto.CidadeDTO;
-import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
 import br.com.juwer.algafoodapi.domain.model.Cidade;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
