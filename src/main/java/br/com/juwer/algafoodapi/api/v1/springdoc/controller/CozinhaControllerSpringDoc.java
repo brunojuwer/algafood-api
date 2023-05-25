@@ -3,6 +3,12 @@ package br.com.juwer.algafoodapi.api.v1.springdoc.controller;
 import br.com.juwer.algafoodapi.api.v1.model.dto.CozinhaDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.CozinhaDTOInput;
 import br.com.juwer.algafoodapi.core.security.CheckSecurity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
@@ -17,13 +23,30 @@ import javax.validation.Valid;
 @Tag(name = "Cozinha", description = "Gerencia as cozinhas")
 public interface CozinhaControllerSpringDoc {
 
-    PagedModel<CozinhaDTO> listar(Pageable pageable);
+    @Operation(summary = "Lista todas as cozinhas")
+    PagedModel<CozinhaDTO> listar(
+        @RequestBody(description = "Paginação da lista")
+        Pageable pageable);
 
-    CozinhaDTO buscar(Long cozinhaId);
+    @Operation(summary = "Busca uma cozinha por ID")
+    CozinhaDTO buscar(
+        @Parameter(description = "ID de uma cozinha", example = "1", required = true)
+        Long cozinhaId);
 
-    CozinhaDTO adicionar(CozinhaDTOInput cozinhaIdDTOInput);
+    @Operation(summary = "Adiciona uma nova cozinha")
+    CozinhaDTO adicionar(
+        @RequestBody(description = "Representação de uma nova cozinha" , required = true)
+        CozinhaDTOInput cozinhaIdDTOInput);
 
-    CozinhaDTO atualizar(Long cozinhaId, CozinhaDTOInput cozinha);
+    @Operation(summary = "Atualiza uma cozinha")
+    CozinhaDTO atualizar(
+        @Parameter(description = "ID de uma cozinha", example = "1", required = true)
+        Long cozinhaId,
+        @RequestBody(description = "Representação de uma nova cozinha" , required = true)
+        CozinhaDTOInput cozinha);
 
-    void remover(Long cozinhaId);
+    @Operation(summary = "Remove uma cozinha")
+    void remover(
+        @Parameter(description = "ID de uma cozinha", example = "1", required = true)
+        Long cozinhaId);
 }

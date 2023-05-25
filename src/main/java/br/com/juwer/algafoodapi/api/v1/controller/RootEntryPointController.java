@@ -1,6 +1,7 @@
 package br.com.juwer.algafoodapi.api.v1.controller;
 
 import br.com.juwer.algafoodapi.api.v1.HateoasAlgaLinks;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ public class RootEntryPointController {
     private HateoasAlgaLinks hateoasAlgaLinks;
 
     @GetMapping
+    @Operation(summary = "Lista todos os links para a V1")
     public RootEntryPointModel root() {
         var rootEntryPointModel = new RootEntryPointModel();
             rootEntryPointModel.add(hateoasAlgaLinks.linkToRestaurante().withRel("restaurantes"));
