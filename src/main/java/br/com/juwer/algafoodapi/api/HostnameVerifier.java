@@ -12,6 +12,6 @@ public class HostnameVerifier {
     @GetMapping("/hostcheck")
     public String verificarHost() throws UnknownHostException {
         return InetAddress.getLocalHost().getHostAddress()
-                + "-" + InetAddress.getLocalHost().getHostName();
+                + " - " + InetAddress.getLocalHost().getHostName();
     }
 }
