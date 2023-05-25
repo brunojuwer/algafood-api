@@ -4,11 +4,13 @@ import br.com.juwer.algafoodapi.api.v1.controller.EstatisticasController;
 import br.com.juwer.algafoodapi.domain.filter.VendaDiariaFilter;
 import br.com.juwer.algafoodapi.domain.model.dto.VendaDiaria;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 @SecurityRequirement(name = "security_auth")
+@Tag(name = "Estatísticas", description = "Realiza consultas estatísticas")
 public interface EstatisticasControllerSpringDoc {
 
     EstatisticasController.VendaDiariaLink vendaDiariaLink();

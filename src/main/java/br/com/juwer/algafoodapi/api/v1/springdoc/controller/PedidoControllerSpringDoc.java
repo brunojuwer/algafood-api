@@ -5,10 +5,12 @@ import br.com.juwer.algafoodapi.api.v1.model.dto.PedidoResumoDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.input.pedidosdto.PedidoDTOInput;
 import br.com.juwer.algafoodapi.domain.filter.PedidoFilter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 
 @SecurityRequirement(name = "security_auth")
+@Tag(name = "Pedido", description = "Gerencia os pedidos")
 public interface PedidoControllerSpringDoc {
     PagedModel<PedidoResumoDTO> pesquisar(
             PedidoFilter filter,

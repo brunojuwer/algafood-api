@@ -5,6 +5,7 @@ import br.com.juwer.algafoodapi.api.v1.model.dto.projections.RestauranteBasicoDT
 import br.com.juwer.algafoodapi.api.v1.model.dto.projections.RestauranteDTO;
 import br.com.juwer.algafoodapi.api.v1.model.dto.projections.RestauranteResumoDTO;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.List;
 
 @SecurityRequirement(name = "security_auth")
+@Tag(name = "Restaurante", description = "Gerencia os restaurantes")
 public interface RestauranteControllerSpringDoc {
     CollectionModel<RestauranteBasicoDTO> listar();
 
