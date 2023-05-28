@@ -2,11 +2,10 @@ package br.com.juwer.algafoodapi.infrastructure.repository;
 
 import br.com.juwer.algafoodapi.domain.model.FotoProduto;
 import br.com.juwer.algafoodapi.domain.repository.FotoProdutoRepositoryQueries;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 @Repository
 public class ProdutoRepositoryImpl implements FotoProdutoRepositoryQueries {

@@ -43,7 +43,6 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.*;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 public class AuthorizationServerConfig {
 
@@ -64,15 +63,11 @@ public class AuthorizationServerConfig {
     @Bean
     @Order(2)
     public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/oauth2/**").authenticated()
-                .and()
-                .csrf().disable()
-                .cors()
-                .and()
-                .oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
+        http.authorizeHttpRequests(authorize -> {
+            authorize.anyRequest().authenticated();
+        }).formLogin(customizer -> customizer.loginPage("/login"));
 
-        return http.formLogin(customizer -> customizer.loginPage("/login")).build();
+        return http.build();
     }
 
     @Bean

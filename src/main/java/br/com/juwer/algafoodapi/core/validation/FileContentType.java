@@ -1,9 +1,8 @@
 package br.com.juwer.algafoodapi.core.validation;
 
-import org.springframework.http.MediaType;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;

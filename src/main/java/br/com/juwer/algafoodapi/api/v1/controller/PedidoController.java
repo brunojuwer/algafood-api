@@ -14,6 +14,7 @@ import br.com.juwer.algafoodapi.domain.model.Pedido;
 import br.com.juwer.algafoodapi.domain.repository.PedidoRespository;
 import br.com.juwer.algafoodapi.domain.service.CadastroPedidoService;
 import br.com.juwer.algafoodapi.infrastructure.service.specs.PedidoSpecs;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,8 +24,6 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/v1/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)

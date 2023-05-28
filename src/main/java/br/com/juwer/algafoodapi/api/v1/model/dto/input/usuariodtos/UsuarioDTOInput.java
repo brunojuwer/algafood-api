@@ -3,8 +3,8 @@ package br.com.juwer.algafoodapi.api.v1.model.dto.input.usuariodtos;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 @Setter
 @Getter

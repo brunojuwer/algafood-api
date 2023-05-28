@@ -14,12 +14,12 @@ public class EmailConfig {
     @Autowired
     private EmailProperties emailProperties;
 
-    @Bean
-    public EnvioEmailService envioEmailService() {
-        return switch (emailProperties.getImpl()) {
-            case FAKE -> new FakeEnvioEmailService();
-            case SMTP -> new SmtpEnvioEmailService();
-            case SANDBOX -> new SandboxEnvioEmailService();
-        };
-    }
+//    @Bean
+//    public EnvioEmailService envioEmailService() {
+//        return switch (emailProperties.getImpl()) {
+//            case FAKE -> new FakeEnvioEmailService();
+//            case SMTP -> new SmtpEnvioEmailService();
+//            case SANDBOX -> new SandboxEnvioEmailService();
+//        };
+//    }
 }

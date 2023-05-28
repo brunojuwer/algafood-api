@@ -1,10 +1,10 @@
 package br.com.juwer.algafoodapi.infrastructure.service.specs;
 
-import br.com.juwer.algafoodapi.domain.model.Pedido;
 import br.com.juwer.algafoodapi.domain.filter.PedidoFilter;
+import br.com.juwer.algafoodapi.domain.model.Pedido;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 
 public class PedidoSpecs {
@@ -22,7 +22,7 @@ public class PedidoSpecs {
                 predicates.add(builder.equal(root.get("cliente"), filter.getClienteId()));
             }
             if(filter.getRestauranteId() != null) {
-                predicates.add(builder.equal(root.get("restaurante"), filter.getRestauranteId()));
+                predicates.add(builder.equal(root.get("restaurante").get("id"), filter.getRestauranteId()));
             }
             if(filter.getApartirData() != null) {
                 predicates.add(builder.greaterThanOrEqualTo(root.get("dataCriacao"), filter.getApartirData()));

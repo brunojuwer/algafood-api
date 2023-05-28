@@ -3,12 +3,12 @@ package br.com.juwer.algafoodapi.domain.model;
 import br.com.juwer.algafoodapi.domain.event.PedidoCanceladoEvent;
 import br.com.juwer.algafoodapi.domain.event.PedidoConfirmadoEvent;
 import br.com.juwer.algafoodapi.domain.exception.NegocioException;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;

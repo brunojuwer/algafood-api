@@ -5,12 +5,12 @@ import br.com.juwer.algafoodapi.domain.model.Pedido;
 import br.com.juwer.algafoodapi.domain.model.StatusPedido;
 import br.com.juwer.algafoodapi.domain.model.dto.VendaDiaria;
 import br.com.juwer.algafoodapi.domain.service.VendaQueryService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.Predicate;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class VendaQueryServiceImpl implements VendaQueryService {
         query.groupBy(functionDateDataCriacao);
 
         if(filter.getRestauranteId() != null) {
-            predicates.add(builder.equal(root.get("restaurante"), filter.getRestauranteId()));
+            predicates.add(builder.equal(root.get("restaurante").get("id"), filter.getRestauranteId()));
         }
         if(filter.getApartirData() != null) {
             predicates.add(builder.greaterThanOrEqualTo(root.get("dataCriacao"), filter.getApartirData()));
